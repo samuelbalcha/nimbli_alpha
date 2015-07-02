@@ -1,0 +1,106 @@
+<div  class="panel panel-default vcard">
+    <div class="panel-body">
+        <div class="media">
+            <a  class="thumbnail pull-left">
+                <img class="media-object" ng-src="{{ user.avatar }}">
+                <i ng-show="editMode" ng-click="openModal()"   class="glyphicon glyphicon-pencil pull-right">
+                </i>
+            </a>
+
+            <div class="media-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4 id="displayName"
+                           e-form="displayNameBtn"
+                           editable-text="user.displayName">
+                            {{ user.displayName }}
+
+                        </h4>
+                    </div>
+                    <div class="col-xs-1">
+                        <a>
+                            <!--ng-hide="displayNameBtn.$visible" -->
+                            <i id="displayNameIcon"
+                               ng-show="editMode"
+                               ng-hide="displayNameBtn.$visible || 'undefined'"
+                               ng-click="displayNameBtn.$show()"
+                               class="glyphicon glyphicon-pencil pull-right">
+                            </i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p title="This is your personal pitch."
+                           editable-textarea="user.about"
+                           e-form="aboutBtn" class="text"
+                           onbeforesave="truncateAbout($data)">
+
+                            {{ user.about || 'Tell the world what you are made of!' | limitTo : 140 }}
+                            <a>
+                                <i id="aboutBtnIcon" ng-show="editMode"
+                                   ng-click="aboutBtn.$show()"
+                                   class="glyphicon glyphicon-pencil pull-right">
+                                </i>
+                            </a>
+
+                        </p>
+                    </div>
+                </div>
+                <hr>
+                <p class="text-muted pads"> My Skills </p>
+
+                <div class="row">
+
+                    <div ng-if="editMode" class="col-xs-6">
+                        <input class="form-control" ng-model="newskill" placeholder="Add skill" type="text">
+                    </div>
+                    <div ng-if="editMode" class="col-xs-6">
+                        <a class="btn btn-md btn-default" ng-click="addSkill()"><span class="glyphicon glyphicon-ok"></span> Add</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="list-inline">
+                            <br>
+                            <li ng-repeat="skill in user.skills"
+                                editable-text="skill"
+                                onaftersave="updateProfile()"
+                                e-form="skillBtn"  class="label label-info tags pads">
+
+                                {{ skill.name || "empty" }}
+                            <a>
+                                <i ng-show="editMode"
+                                   ng-click="removeSkill($index)"
+                                   class="pads glyphicon glyphicon-remove pull-right">
+                                </i>
+                            </a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr>
+                <p class="text-muted"
+                   editable-text="user.location"
+                   e-form="locationBtn">
+                    <span class="glyphicon glyphicon-map-marker"> </span>
+                    {{ user.location || "Helsinki" }}
+                    <a>
+                        <i id="locationBtnIcon"
+                           ng-show="editMode"
+                           ng-click="locationBtn.$show()"
+                           class="glyphicon glyphicon-pencil pull-right">
+                        </i>
+                    </a>
+                </p>
+                <!-- <p><span class="label label-info">10 photos</span> <span class="label label-primary">89 followers</span></p> -->
+              <p>
+                  <a ng-hide="editMode" class="btn btn-md btn-default" ng-click="edit()"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                  <a ng-show="editMode" class="btn btn-md btn-success" ng-click="save()"><span class="glyphicon glyphicon-floppy-disk"></span> Save changes</a>
+              </p>
+            </div>
+        </div>
+    </div>
+</div>

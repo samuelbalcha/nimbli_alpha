@@ -1,0 +1,39 @@
+<div ng-controller="UploadCtrl"  class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" ng-model="title">
+                <h4 class="modal-title"> {{ title }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-11">
+                        <div class="row">
+                            <div class="col-xs-8 col-sm-6">
+                                <div class="thumbnail cropArea">
+                                    <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+                                </div>
+                            </div>
+                            <div class="col-xs-4 col-sm-6">
+                               <div  class="thumbnail">
+                                    <img ng-src="{{ myCroppedImage }}" />
+                               </div>
+                            </div>
+                        </div>
+                         <span class="btn btn-default btn-file">
+                                Browse   <input id="fileInput" type="file">
+                         </span>
+
+                        <input ng-disabled="(canUpload === true)" ng-click="submit()"  class="btn btn-default" type="submit" value="Save" />
+                        <div id="progressNumber"></div>
+                        <form method="post"  enctype="multipart/form-data">
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+
+    <form class="form-control upload-form" method="post" action="https://samppa.s3.amazonaws.com/" enctype="multipart/form-data">
+
+        <input type="hidden" name="AWSAccessKeyId" value="{{ aws.keyid }}" />
+        <input type="hidden" name="key" value="{{ aws.keyname }}" />
+        <input type="hidden" name="Content-Type" value="image/jpeg" />
+        <input type="hidden" name="acl" value="public-read" />
+        <input type="hidden" name="Policy" value="{{ aws.policy }}"/>
+        <input type="hidden" name="Signature" value="{{ aws.signature }}" />
+        <p>
+            Select your file:
+        </p>
+
+        <!---
+            NOTE: The file upload must be the LAST field in the
+            form post and must be called "file".
+        --->
+        <p>
+            <input name="file" type="file" size="40" />
+        </p>
+
+        <p>
+            <input type="submit" value="Upload Image" />
+        </p>
+
+    </form>
+

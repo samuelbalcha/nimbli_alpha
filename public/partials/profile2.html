@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+               <div class="panel-body">
+                <div class="col-xs-12 col-sm-10 text-center">
+                <img src="http://api.randomuser.me/portraits/men/49.jpg" alt=""  class="center-block  img-responsive">
+               </div>
+             </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="col-xs-12 col-sm-6">
+                <a href="#"> <h2 editable-text="user.displayName"> {{ user.displayName || "empty" }} </h2> </a>
+                <a href="#" editable-textarea="user.about" e-rows="7" e-cols="40">
+                    <pre>{{ user.about || 'Tell the world what you are made of!' }}</pre>
+                </a>
+                <p class="text-muted"> My Skills </p>
+                <p>
+                   <span class="label label-info tags" data-ng-repeat="skill in user.skills" editable-text="user.skills">
+                       <a href="#"> {{ skill || "empty" }} </a>
+                   </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

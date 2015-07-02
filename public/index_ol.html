@@ -1,0 +1,109 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <title>Welcome to nimbli</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="stylesheets/style.css" rel="stylesheet">
+</head>
+<body ng-app="nimbliApp">
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">nimbli</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#">Explore</a></li>
+
+            </ul>
+            <ul class="nav pull-right">
+                <li class="dropdown" id="menuLogin">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">Login</a>
+                    <div class="dropdown-menu" style="padding:7px;">
+                        <form data-ng-controller="LoginController as login" class="form" id="formLogin">
+
+                            <input type="text" ng-model="login.email" class="form-control" id="email" placeholder="Email"/>
+                            <input name="password" ng-model="login.password" class="form-control" id="password" type="password" placeholder="Password"><br>
+                            <button type="button" id="btnLogin" ng-click="login.loginUser()" class="btn">Login</button>
+                        </form>
+
+                    </div>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+
+<div class="container" ng-controller="IndexController">
+    <a class="btn btn-primary" href="/#/users/create"><span class="glyphicon glyphicon-plus"></span> Add User</a>
+    <br/>
+   <table class="table table-striped">
+    <thead>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Operations</th>
+    </thead>
+    <tbody>
+    <tr data-ng-repeat="user in users">
+        <td><a ng-href="/#/users/{{ user._id }}">{{ user.firstname }}</a></td>
+        <td>{{ user.firstname }}</td>
+        <td>{{ user.email }}</td>
+
+        <td>
+            <div class="button-group">
+                <a ng-href="/#/users/{{ user._id }}/edit" class="btn btn-default"><span class="glyphicon glyphicon-edit"></span></a>
+                <a ng-href="/#/users/{{ user._id }}/delete" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle"></span></a>
+            </div>
+        </td>
+    </tr>
+
+    </tbody>
+
+</table>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Home Page</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Heading</h2>
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus,
+                    tellus ac cursus commodo, tortor mauris condimentum nibh, ut
+                    fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                    magna mollis euismod. Donec sed odio dui.</p>
+                <p><a class="btn btn-primary" href="#">View details »</a></p>
+            </div>
+            <div class="col-sm-6">
+                <h2>Heading</h2>
+                <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus,
+                    tellus ac cursus commodo, tortor mauris condimentum nibh, ut
+                    fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                    magna mollis euismod. Donec sed odio dui.</p>
+                <p><a class="btn btn-primary" href="#">View details »</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+<script src="//cdn.jsdelivr.net/satellizer/0.11.2/satellizer.min.js"></script>
+<script src="angularApp.js"></script>
+</body>
+</html>
