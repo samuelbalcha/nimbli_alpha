@@ -12,7 +12,7 @@ var cors = require('cors');
 var logger = require('morgan');
 
 // configuration =================
-var config = require('./config');
+var config = require('./config_local');
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));

@@ -1,8 +1,9 @@
+'use strict';
+
 var moment = require('moment');
 var jwt = require('jwt-simple');
 var request = require('request');
-
-var config = require('./config');
+var config = require('./config_local');
 
 /*
  |--------------------------------------------------------------------------
@@ -45,7 +46,7 @@ exports.signUp = function(User){
                 res.send({ token : createJWT(user) });
             });
         });
-    }
+    };
 };
 
 /*
@@ -67,7 +68,7 @@ exports.logIn = function(User){
                 res.send({ token: createJWT(user) });
             });
         });
-    }
+    };
 };
 
 
@@ -139,5 +140,5 @@ exports.googleLogin = function(User){
                 }
             });
         });
-    }
+    };
 };
