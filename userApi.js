@@ -5,11 +5,6 @@ var User = require('./models/user');
 var auth = require('./authentication');
 
 
-/*
- |--------------------------------------------------------------------------
- | GET /api/me
- |--------------------------------------------------------------------------
- */
 exports.getProfile = function(req, res) {
 
     User.findById(req.user, function(err, user) {
@@ -26,11 +21,6 @@ exports.getProfile = function(req, res) {
     });
 };
 
-/*
- |--------------------------------------------------------------------------
- | PUT /api/me
- |--------------------------------------------------------------------------
- */
 exports.updateProfile = function(req, res) {
     User.findById(req.user, function(err, user) {
         if (!user) {
@@ -80,7 +70,6 @@ exports.user =  function(req, res) {
     });
 };
 
-
 exports.delUser =  function(req, res){
     User.findOneAndRemove({ _id : req.params.id }, function(err, user){
         if(err){
@@ -91,43 +80,40 @@ exports.delUser =  function(req, res){
     res.send(200);
 };
 
-
 exports.aws = function(keyId, secret, bucket, acl){
 
     return function(req, res){
 
-    var id = req.params.id;
-    var keyname = id + ".jpg";
-    var policy2 = {
-        expiration: getExpiryTime(),
-        conditions: [
-            {bucket: bucket },
-            ["starts-with", "$key", keyname],
-            {"acl": acl },
-            ["starts-with", "$Content-Type", ""],
-            ["content-length-range", 0, 524288000]
-        ]
-    };
+        var id = req.params.id;
+        var keyname = id + ".jpg";
+        var policy2 = {
+            expiration: getExpiryTime(),
+            conditions: [
+                {bucket: bucket },
+                ["starts-with", "$key", keyname],
+                {"acl": acl },
+                ["starts-with", "$Content-Type", ""],
+                ["content-length-range", 0, 524288000]
+            ]
+        };
+        //v2_uploader
+        // stringify and encode the policy
+        var stringPolicy = JSON.stringify(policy2);
+        var base64Policy = new Buffer(stringPolicy, 'utf-8').toString('base64');
 
-    //v2_uploader
-    // stringify and encode the policy
-    var stringPolicy = JSON.stringify(policy2);
-    var base64Policy = new Buffer(stringPolicy, 'utf-8').toString('base64');
+        // sign the base64 encoded policy
+        var signature = crypto.createHmac('sha1', secret)
+                              .update(new Buffer(base64Policy, 'utf-8')).digest('base64');
 
-    // sign the base64 encoded policy
-    var signature = crypto.createHmac('sha1', secret)
-                          .update(new Buffer(base64Policy, 'utf-8')).digest('base64');
+        var aws = {
+            keyid: keyId,
+            policy: base64Policy,
+            signature: signature,
+            keyname: keyname
 
-    var aws = {
-        keyid: keyId,
-        policy: base64Policy,
-        signature: signature,
-        keyname: keyname
-
-    };
-
-    res.json(aws);
-  };
+        };
+        res.json(aws);
+   };
 };
 
 function getExpiryTime () {
