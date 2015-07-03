@@ -329,11 +329,14 @@ textarea {
     .jumbotron {
         border-bottom: 0;
     }
+
 }
+
 
 body {
     font-family: 'Open Sans', sans-serif;
     background: #e4e7ec;
+    margin-top: 60px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -371,6 +374,11 @@ a {
 .navbar-nav > li > a {
     padding: 15px;
 }
+.navbar-nav > li > a > .create-project{
+    color: #ffffff;
+    padding: 10px;
+    margin: 5px;
+}
 
 .navbar-default {
     color: #fff;
@@ -379,7 +387,8 @@ a {
 
 .navbar-default .navbar-brand {
     color: #333;
-    background-color: #ffe939;
+    /*  margin-top: -20px;
+    background-color: #ffe939; */
 }
 
 .navbar-default .navbar-brand:hover {
@@ -388,7 +397,7 @@ a {
 }
 
 .navbar-brand {
-    margin-left: -15px;
+  /*  margin-left: -15px; */
     transition: 0.25s all;
 }
 
@@ -577,6 +586,7 @@ h4[contenteditable='true']:hover{
 .locationSpanEdit{
     background: #E6E6E6;
 }
+
 /* Commented out */
 
 /*

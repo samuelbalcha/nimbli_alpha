@@ -8,6 +8,5 @@ angular.module('nimbliApp')
             updateProfile: function(profileData) {
                 return $http.put('/api/me', profileData);
             }
-
         };
     });

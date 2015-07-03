@@ -1,10 +1,12 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
 // ProjectSchema
 var projectSchema = new mongoose.Schema({
-    title : { type: String, trim : true },
+    title : { type: String, trim : true, unique : true },
     company : String,
     coverPicture: { type: String, trim: true },
     driveLink : String,
@@ -12,17 +14,19 @@ var projectSchema = new mongoose.Schema({
         name : String,
         id : Number
     }],
-    brief : { type: ObjectId },
+    brief : { type: mongoose.Schema.Types.ObjectId, ref: 'Brief'},
     location : { type: String, trim: true },
-    owners : [],
-    createdBy: { type : ObjectId },
+    owners : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     likesCount : Number,
     viewsCount : Number,
     dateCreated : Date,
     dateStarted : Date,
     dateCompleted : Date,
     dateCancelled : Date,
-    status : Number
+    dateUpdated : Date,
+    status : Number,
+    description : { type: String, trim: true }
 });
 
 /* project status
@@ -36,9 +40,9 @@ var projectSchema = new mongoose.Schema({
 
 projectSchema.pre('save', function(next) {
     var project = this;
-    var currentDate = Date.now();
-    project.dateCreated = currentDate;
+    project.dateCreated = Date.now();
     project.status = 0;
+
     next();
 });
 
@@ -56,8 +60,7 @@ var briefSchema = new mongoose.Schema({
     monitoring : String,
     performanceIndicators : String,
     riskAssessment : String,
-    startDate : Date,
-    endDate : Date
+    dateUpdated : Date
 });
 
 var Project = mongoose.model('Project', projectSchema);

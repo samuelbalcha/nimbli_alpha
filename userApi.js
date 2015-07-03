@@ -1,3 +1,5 @@
+'use strict';
+
 var crypto = require('crypto');
 var User = require('./models/user');
 var auth = require('./authentication');
@@ -18,8 +20,9 @@ exports.getProfile = function(req, res) {
         if(!user){
             res.status(401).send({ message: 'User not found' });
         }
-        else
+        else{
             res.send(user);
+        }
     });
 };
 
@@ -47,7 +50,6 @@ exports.updateProfile = function(req, res) {
             if(err){
                 console.log(err);
             }
-
             res.status(200).end();
         });
     });
@@ -59,9 +61,9 @@ exports.users = function(req, res) {
     //get all users in the database
     User.find(function(err, users) {
         // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-        if (err)
-            res.send(err)
-
+        if (err){
+            res.send(err);
+        }
         res.json(users); // return all users in JSON format
     });
 };
@@ -71,9 +73,9 @@ exports.user =  function(req, res) {
     User.findOne({'_id' : req.params.id},function(err, user) {
 
         // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-        if (err)
-            res.send(err)
-
+        if (err){
+            res.send(err);
+        }
         res.json(user); // return all users in JSON format
     });
 };
@@ -81,11 +83,12 @@ exports.user =  function(req, res) {
 
 exports.delUser =  function(req, res){
     User.findOneAndRemove({ _id : req.params.id }, function(err, user){
-        if(err)
-            console.log(err)
+        if(err){
+            console.log(err);
+        }
         console.log("removed: " + user._id);
     });
-    res.send(200)
+    res.send(200);
 };
 
 
@@ -124,11 +127,11 @@ exports.aws = function(keyId, secret, bucket, acl){
     };
 
     res.json(aws);
-  }
-}
+  };
+};
 
-getExpiryTime = function () {
+function getExpiryTime () {
     var _date = new Date();
     return '' + (_date.getFullYear()) + '-' + (_date.getMonth() + 1) + '-' +
         (_date.getDate() + 1) + 'T' + (_date.getHours() + 3) + ':' + '00:00.000Z';
-};
+}
