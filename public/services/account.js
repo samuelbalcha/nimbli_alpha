@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('nimbliApp')
     .factory('Account', function($http) {
 
@@ -8,6 +10,5 @@ angular.module('nimbliApp')
             updateProfile: function(profileData) {
                 return $http.put('/api/me', profileData);
             }
-
         };
     });

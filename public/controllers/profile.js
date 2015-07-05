@@ -1,18 +1,20 @@
+'use strict';
+
 angular.module('nimbliApp')
     .controller('ProfileCtrl',  function($scope, $auth, $alert, Account, $location, $modal) {
+
+        $scope.editMode = false;
+
         /**
          * Get user's profile information.
          */
         $scope.getProfile = function() {
-
-           // $scope.viewMode = true;
-            $scope.editMode = false;
-
             Account.getProfile()
                 .success(function(data) {
                     $scope.user = data;
-                    if($scope.user.avatar === null || $scope.user.avatar === undefined)
-                       $scope.user.avatar = '//placehold.it/230'
+                    if($scope.user.avatar === null || $scope.user.avatar === undefined){
+                        $scope.user.avatar = '//placehold.it/230';
+                    }
                 })
                 .error(function(error) {
                     $auth.logout().then(function(){
@@ -27,7 +29,6 @@ angular.module('nimbliApp')
                     });
                  });
         };
-
 
         /**
          * Update user's profile information.
@@ -105,26 +106,25 @@ angular.module('nimbliApp')
         $scope.getProfile();
 
         $scope.truncateAbout = function(about){
-            if(about.length > 140)
-               return "Maximum allowed character is 140";
+            if(about.length > 140){
+                return 'Maximum allowed character is 140';
+            }
         };
 
         $scope.addSkill = function(){
 
-            if($scope.newSkill.name.length === '')
-            return;
-
-            //var name = angular.copy($scope.newSkill.trim());
-
-             var skill = {
+            if($scope.newSkill.name.length === 0){
+                return;
+            }
+            var skill = {
                  id : $scope.user.skills.length + 1,
                  name : $scope.newSkill.name.trim()
-             };
+            };
 
             $scope.user.skills.push(skill);
-           // this.updateProfile();
             $scope.newSkill.name = '';
         };
+
         $scope.removeSkill = function(index){
             $scope.user.skills.splice(index, 1);
             this.updateProfile();
@@ -141,26 +141,24 @@ angular.module('nimbliApp')
                 show: true
             });
            $scope.showModal = function() {
-
                 theModal.$promise.then(theModal.show);
            };
            $scope.closeModal = function(){
                 theModal.$promise.then(theModal.hide);
            };
-        }
+        };
 
         $scope.edit = function(){
             this.editMode = true;
-        }
+        };
 
         $scope.save = function(){
             this.updateProfile();
             this.editMode = false;
-        }
+        };
 
         $scope.cancel = function(){
             this.editMode = false;
-        }
-
+        };
 
     });
