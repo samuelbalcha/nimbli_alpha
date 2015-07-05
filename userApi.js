@@ -110,7 +110,6 @@ exports.aws = function(keyId, secret, bucket, acl){
             policy: base64Policy,
             signature: signature,
             keyname: keyname
-
         };
         res.json(aws);
    };

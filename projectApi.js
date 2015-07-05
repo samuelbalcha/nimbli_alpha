@@ -68,7 +68,7 @@ exports.updateProject = function(req, res){
 };
 
 exports.getProjects = function(req, res){
-
+console.log("get projects");
     Project.find(function(err, projects) {
         if (err){
             res.status(404).send(err);
@@ -90,7 +90,8 @@ exports.deleteProject = function(req, res){
 };
 
 exports.getProject = function(req, res) {
-
+    console.log("metahu", req.params);
+    
     Project.findOne({ '_id' : req.params.id}, function(err, project) {
         if(err){
             console.log(err);

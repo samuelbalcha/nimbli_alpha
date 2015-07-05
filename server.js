@@ -12,7 +12,7 @@ var cors = require('cors');
 var logger = require('morgan');
 
 // configuration =================
-var config = require('./config_local');
+var config = require('./config');
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
@@ -39,6 +39,7 @@ var Brief = ProjectSchema.Brief;
  | Login Required Middleware
  |--------------------------------------------------------------------------
  */
+ 
 function ensureAuthenticated(req, res, next) {
     if (!req.headers.authorization) {
         return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
@@ -73,7 +74,7 @@ app.get('/api/me', ensureAuthenticated, userApi.getProfile);
 app.post('/api/projects', ensureAuthenticated, projectApi.createProject);
 app.get('/api/projects', projectApi.getProjects);
 app.get('/api/projects/:id', projectApi.getProject);
-app.del('/api/projects/:id', projectApi.deleteProject);
+app.delete('/api/projects/:id', projectApi.deleteProject);
 app.put('/api/projects/:id', ensureAuthenticated, projectApi.updateProject);
 
 // Brief
@@ -104,7 +105,7 @@ app.post('/api/projects/:id/briefs', function(req, res){
                 if(err){
                     console.log(err);
                 }
-                res.status(200).end();
+                res.status(200).send(newBrief);
             });
         }
     });
@@ -112,16 +113,12 @@ app.post('/api/projects/:id/briefs', function(req, res){
 
 // Test APIs
 app.get('/api/users', userApi.users);
-app.get('/api/users/:id', userApi.user);
-<<<<<<< HEAD
-app.delete('/api/users/:id',userApi.delUser);
+//app.get('/api/users/:id', userApi.user);
+app.delete('/api/users/:id', userApi.delUser);
 app.get('/api/aws/:id', userApi.aws(config.AWS_KEYID, config.AWS_SECRET, config.AWS_BUCKET, config.AWS_ACL));
-=======
-app.del('/api/users/:id',userApi.delUser);
+app.delete('/api/users/:id',userApi.delUser);
 app.get('/api/aws/:id', ensureAuthenticated, userApi.aws(config.AWS_KEYID, config.AWS_SECRET, config.AWS_BUCKET, config.AWS_ACL));
->>>>>>> 9f819001329c872bf935a23c11a4918ae1387f56
-
 
 // listen (start app with node server.js) ======================================
-app.listen(8080);
+app.listen(process.env.PORT);
 console.log("App listening on port 8080");

@@ -49,6 +49,10 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 url: '/projects',
                 templateUrl: 'partials/list-project.html',
                 controller: 'ProjectCtrl'
+            }).state('projectview', {
+                url : '/projects/:id',
+                templateUrl : 'partials/view-project.html',
+                controller : 'ProjectCtrl'
             });
 
         $urlRouterProvider.otherwise('/');

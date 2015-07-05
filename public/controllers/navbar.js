@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('nimbliApp')
        .controller('NavbarCtrl', function($scope, $auth)
         {

@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('ProjectCtrl', function($scope, $auth, $http)
+    .controller('ProjectCtrl',  function($scope, $stateParams, projectService, $location)
     {
         // Create New Project
-        $scope.project =  {
+        $scope.newProject =  {
             title : '',
             company : '',
             coverPicture: 'http://placehold.it/1250x250',
@@ -15,16 +15,28 @@ angular.module('nimbliApp')
 
        $scope.editMode = false;
 
-       $scope.save = function(){
-           $http.post('/api/projects', { project : $scope.project });
+       $scope.create = function(){
+          // $http.post('/api/projects', { project : $scope.project });
+          projectService.createProject($scope.newProject)
+                        .then(function (data) {
+                              $location.path('/projects/' + data._id);
+                        }).error(function(err){
+                             //err
+                        });
        };
-    // create ProjectService and do all the querying there
-       $scope.projects = $http.get('/api/projects/')
-                                   .success(function(data){
-
-                                   })
-                                   .error(function(err){
-
-                                   });
-
+   
+     
+      projectService.listProjects().then(function(data){
+            $scope.projects = data;
+      });
+     
+      $scope.id = $stateParams.id;
+      
+      projectService.viewProject($stateParams.id).then(function(data){
+           console.log($stateParams.id);
+            $scope.project = data;
+      });
+     
+    
+       
     });
