@@ -64,7 +64,7 @@ app.get('/api/me', ensureAuthenticated, userApi.getProfile);
 // Test APIs
 app.get('/api/users', userApi.users);
 app.get('/api/users/:id', userApi.user);
-app.del('/api/users/:id',userApi.delUser);
+app.delete('/api/users/:id',userApi.delUser);
 app.get('/api/aws/:id', userApi.aws(config.AWS_KEYID, config.AWS_SECRET, config.AWS_BUCKET, config.AWS_ACL));
 
 
