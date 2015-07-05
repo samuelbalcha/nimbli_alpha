@@ -22,14 +22,15 @@
     <div>
         <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
-            <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
+            <li><a href="/#/projects">Projects</a></li>
         </ul>
         <ul ng-if="!isAuthenticated()" class="nav navbar-nav pull-right">
             <li><a href="/#/login">Login</a></li>
             <li><a href="/#/signup">Sign up</a></li>
         </ul>
         <ul ng-if="isAuthenticated()" class="nav navbar-nav pull-right">
-            <li><a class="create-project btn btn-lg btn-success" href="/#/createproject">Create project</a></li>
+            <li><a href="/#/profile">Profile</a></li>
+            <li><a id="create-project" class="btn btn-lg btn-success" href="/#/createproject">Create project</a></li>
             <li><a href="/#/logout">Logout</a></li>
         </ul>
     </div>

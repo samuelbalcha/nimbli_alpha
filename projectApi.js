@@ -62,7 +62,7 @@ exports.updateProject = function(req, res){
                 console.log(err);
             }
 
-            res.status(200).end();
+            res.status(200).send(project);
         });
     });
 };
@@ -73,7 +73,7 @@ exports.getProjects = function(req, res){
         if (err){
             res.status(404).send(err);
         }
-        res.json(projects);
+        res.status(200).send(projects);
     });
 };
 

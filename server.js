@@ -76,6 +76,7 @@ app.get('/api/projects/:id', projectApi.getProject);
 app.del('/api/projects/:id', projectApi.deleteProject);
 app.put('/api/projects/:id', ensureAuthenticated, projectApi.updateProject);
 
+// Brief
 app.post('/api/projects/:id/briefs', function(req, res){
     var br = req.body.brief;
 

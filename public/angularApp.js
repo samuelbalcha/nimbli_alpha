@@ -41,9 +41,13 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 url :'/upload',
                 templateUrl: 'partials/avatar_uploader.html',
                 controller: 'UploadCtrl'
-            }).state('project',{
+            }).state('projectcreate',{
                 url: '/createproject',
                 templateUrl: 'partials/create-project.html',
+                controller: 'ProjectCtrl'
+            }).state('projectlist', {
+                url: '/projects',
+                templateUrl: 'partials/list-project.html',
                 controller: 'ProjectCtrl'
             });
 
