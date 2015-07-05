@@ -1,8 +1,10 @@
+'use strict';
+
 var bcrypt = require('bcryptjs');
 var mongoose = require('mongoose');
 
 // SkillSchema
-var SkillSchema = new mongoose.Schema({ id: Number, name: String });
+//var SkillSchema = new mongoose.Schema({ id: Number, name: String });
 
 // UserSchema
 var userSchema = new mongoose.Schema({
@@ -41,5 +43,4 @@ userSchema.methods.comparePassword = function(password, done) {
 };
 
 var User = mongoose.model('User', userSchema);
-
 module.exports = User;

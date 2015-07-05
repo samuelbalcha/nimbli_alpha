@@ -15,22 +15,26 @@
 </head>
 <body>
 
-  <div ng-controller="NavbarCtrl" class="clearfix navbar navbar-default navbar-static-top">
+<nav ng-controller="NavbarCtrl" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="navbar-header">
-        <a class="navbar-brand" href="/"><i class=""></i> nimbli</a>
+        <a class="navbar-brand" href="/"> nimbli</a>
     </div>
-    <ul class="nav navbar-nav">
-        <li><a href="/#/">Home</a></li>
-        <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
-    </ul>
-    <ul ng-if="!isAuthenticated()" class="nav navbar-nav pull-right">
-        <li><a href="/#/login">Login</a></li>
-        <li><a href="/#/signup">Sign up</a></li>
-    </ul>
-    <ul ng-if="isAuthenticated()" class="nav navbar-nav pull-right">
-        <li><a href="/#/logout">Logout</a></li>
-    </ul>
-</div>
+    <div>
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/#/projects">Projects</a></li>
+        </ul>
+        <ul ng-if="!isAuthenticated()" class="nav navbar-nav pull-right">
+            <li><a href="/#/login">Login</a></li>
+            <li><a href="/#/signup">Sign up</a></li>
+        </ul>
+        <ul ng-if="isAuthenticated()" class="nav navbar-nav pull-right">
+            <li><a href="/#/profile">Profile</a></li>
+            <li><a id="create-project" class="btn btn-lg btn-success" href="/#/createproject">Create project</a></li>
+            <li><a href="/#/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
 
 
   <div ui-view class="fadeZoom"></div>
@@ -56,6 +60,7 @@
 
   <script src="vendors/ng-img-crop.js"></script>
 <script src="angularApp.js"></script>
+<script src="controllers/project.js"></script>
 <script src="/controllers/login.js"></script>
 <script src="/controllers/signup.js"></script>
 <script src="/controllers/logout.js"></script>

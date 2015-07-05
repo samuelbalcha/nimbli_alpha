@@ -170,30 +170,6 @@ textarea {
     background-color: #0069a4;
 }
 
-.btn-twitter {
-    color: #fff;
-    background-color: #00aced;
-    border: 1px solid #009fdb;
-}
-
-.btn-twitter:hover,
-.btn-twitter:focus {
-    color: #fff;
-    background-color: #0090c7;
-}
-
-.btn-foursquare {
-    color: #fff;
-    background-color: #f94877;
-    border: 1px solid #f8215a;
-}
-
-.btn-foursquare:hover,
-.btn-foursquare:focus {
-    color: #fff;
-    background-color: #f71752;
-}
-
 .btn-github {
     color: #fff;
     background-color: #444;
@@ -204,29 +180,6 @@ textarea {
 .btn-github:focus {
     color: #fff;
     background-color: #303030;
-}
-
-.btn-yahoo {
-    color: #fff;
-    background-color: #720e9e;
-    border: 1px solid #580b75;
-}
-
-.btn-yahoo:hover,
-.btn-yahoo:focus {
-    color: #fff;
-    background-color: #303030;
-}
-
-.btn-live {
-    color: #fff;
-    background-color: #2672ec;
-}
-
-.btn-live:hover,
-.btn-live:focus {
-    color: #fff;
-    background-color: #125acd;
 }
 
 /*********************
@@ -329,11 +282,14 @@ textarea {
     .jumbotron {
         border-bottom: 0;
     }
+
 }
+
 
 body {
     font-family: 'Open Sans', sans-serif;
     background: #e4e7ec;
+    margin-top: 60px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -379,7 +335,8 @@ a {
 
 .navbar-default .navbar-brand {
     color: #333;
-    background-color: #ffe939;
+    /*  margin-top: -20px;
+    background-color: #ffe939; */
 }
 
 .navbar-default .navbar-brand:hover {
@@ -388,7 +345,7 @@ a {
 }
 
 .navbar-brand {
-    margin-left: -15px;
+  /*  margin-left: -15px; */
     transition: 0.25s all;
 }
 
@@ -551,7 +508,7 @@ a {
     text-overflow: ellipsis;
 }
 .ok{
-display: inline-block;
+ display: inline-block;
 }
 div[contenteditable='true']:hover{
     background: #E6E6E6;
@@ -574,22 +531,19 @@ h4[contenteditable='true']:hover{
 
 }
 
-.locationSpanEdit{
+.location-span-edit{
     background: #E6E6E6;
 }
-/* Commented out */
 
-/*
-
-.btn {
-    font-weight: bold;
-    border-radius: 2px;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26);
+#create-project{
+    padding: 10px;
+    margin: 5px;
+    color: white;
+    border: 1px solid white;
 }
-
-.btn {
-    font-size: 21px;
-    padding: 14px 24px;
+#create-project:hover{
+    padding: 10px;
+    margin: 5px;
+    color: green;
+    border: 1px solid green;
 }
-
-*/
