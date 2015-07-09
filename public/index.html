@@ -11,7 +11,7 @@
     <link href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.css" rel="stylesheet">
     <link href="/stylesheets/vendors/xeditable.css" rel="stylesheet">
     <link href="/stylesheets/vendors/ng-img-crop.css" rel="stylesheet">
-   <!-- <link media='screen and (min-width: 768px) and (max-width: 992px)' href="/stylesheets/style2.css" rel="stylesheet">  -->
+    <link media='screen and (min-width: 768px) and (max-width: 992px)' href="/stylesheets/style2.css" rel="stylesheet"> 
   
   <style type="text/css">
     .bs-pad{
@@ -54,8 +54,8 @@
             </ul>
         </div>
     </nav>
-</div>
-  <div ui-view class="fadeZoom"></div>
+ </div>
+  <div ui-view class="bs-pad fadeZoom"></div>
 
 
 
@@ -76,17 +76,24 @@
 <script src="vendors/ng-file-upload-all.min.js"></script>
 <script src="vendors/xeditable.min.js"></script>
 
-  <script src="vendors/ng-img-crop.js"></script>
+<script src="vendors/ng-img-crop.js"></script>
 <script src="angularApp.js"></script>
-<script src="controllers/project.js"></script>
+
+<script src="/services/appConstants.js"></script>
 <script src="/controllers/login.js"></script>
 <script src="/controllers/signup.js"></script>
 <script src="/controllers/logout.js"></script>
 <script src="/controllers/profile.js"></script>
 <script src="/controllers/navbar.js"></script>
-<script src="/services/account.js"></script>
+<script src="/services/accountService.js"></script>
+<script src="/services/authorizationService.js"></script>
+
+<!-- project controllers -->
 <script src="/services/projectService.js"></script>
-<script src="/controllers/upload.js"></script>
+<script src="/controllers/project/projectCreate.js"></script>
+<script src="/controllers/project/projectList.js"></script>
+<script src="/controllers/project/projectDetail.js"></script>
+<script src="/controllers/project/projectUpdate.js"></script>
 <script src="/controllers/upload.js"></script>
 <script src="/directives/passwordMatch.js"></script>
 <script src="/directives/passwordStrength.js"></script>

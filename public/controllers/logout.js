@@ -1,5 +1,5 @@
 angular.module('nimbliApp')
-    .controller('LogoutCtrl', function($auth, $alert) {
+    .controller('LogoutCtrl', function($auth, $alert, AccountService) {
         if (!$auth.isAuthenticated()) {
             return;
         }
@@ -11,5 +11,7 @@ angular.module('nimbliApp')
                     type: 'material',
                     duration: 3
                 });
+                
+                AccountService.setCurrentUserAndRoles(null);
             });
     });

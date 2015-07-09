@@ -2,35 +2,42 @@
 
 angular.module('nimbliApp').service('projectService', function ($http, $q) {
     
-    function handleSuccess(response){
-        return response.data;
-    };
-    
-    function handleError(err){
-        return $q.reject(err);
-    };
+   var url = '/api/projects';
     
    return ({
-       listProjects : function (){
-           return  $http.get('/api/projects').then(handleSuccess, handleError);
+       
+       getProjects : function (){
+           return  $http.get(url).then(handleSuccess, handleError);
         },
         
-        viewProject : function(id){
-            return $http.get('/api/projects/' + id).then(handleSuccess, handleError);
+        getProject : function(id){
+            return $http.get(url + '/'+ id).then(handleSuccess, handleError);
         },
         
         createProject : function(project){
-           return $http.post('/api/projects', { project : project }).then(handleSuccess, handleError);
+           return $http.post(url, project).then(handleSuccess, handleError);
         },
         
         updateProject : function(project){
-              return $http.put('/api/projects', { project : project }).then(handleSuccess, handleError);
+             log("update project service");
+              return $http.put(url, project).then(handleSuccess, handleError);
         },
         
         removeProject : function(id){
-            return $http.delete('/api/projects/' + id).then(handleSuccess, handleError);
+            return $http.delete(url + '/' + id).then(handleSuccess, handleError);
         },
    });
    
+    function handleSuccess(response){
+        return response.data;
+    }
+    
+    function handleError(err){
+        return $q.reject(err);
+    }
+    
+    function log(msg){
+       console.log(msg);
+    }
     
 });

@@ -26,7 +26,8 @@ var projectSchema = new mongoose.Schema({
     dateCancelled : Date,
     dateUpdated : Date,
     status : Number,
-    description : { type: String, trim: true }
+    description : { type: String, trim: true },
+    team : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
 /* project status

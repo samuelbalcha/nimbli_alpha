@@ -69,6 +69,7 @@ app.post('/auth/google', auth.googleLogin(User));
 // Profile
 app.put('/api/me', ensureAuthenticated, userApi.updateProfile);
 app.get('/api/me', ensureAuthenticated, userApi.getProfile);
+app.get('/api/access', ensureAuthenticated, userApi.getAccess);
 
 // Project
 app.post('/api/projects', ensureAuthenticated, projectApi.createProject);
@@ -121,4 +122,4 @@ app.get('/api/aws/:id', ensureAuthenticated, userApi.aws(config.AWS_KEYID, confi
 
 // listen (start app with node server.js) ======================================
 app.listen(process.env.PORT);
-console.log("App listening on port 8080");
+console.log("App listening on port ", process.env.PORT);

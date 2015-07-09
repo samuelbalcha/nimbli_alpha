@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('ProfileCtrl',  function($scope, $auth, $alert, Account, $location, $modal) {
+    .controller('ProfileCtrl',  function($scope, $auth, $alert, AccountService, $location, $modal) {
 
         $scope.editMode = false;
 
@@ -9,9 +9,10 @@ angular.module('nimbliApp')
          * Get user's profile information.
          */
         $scope.getProfile = function() {
-            Account.getProfile()
+            AccountService.getProfile()
                 .success(function(data) {
                     $scope.user = data;
+                    
                     if($scope.user.avatar === null || $scope.user.avatar === undefined){
                         $scope.user.avatar = '//placehold.it/230';
                     }
@@ -35,7 +36,7 @@ angular.module('nimbliApp')
          */
         $scope.updateProfile = function() {
 
-            Account.updateProfile({
+            AccountService.updateProfile({
                 displayName: $scope.user.displayName,
                 about: $scope.user.about,
                 skills : $scope.user.skills,

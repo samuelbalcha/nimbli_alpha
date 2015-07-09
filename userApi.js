@@ -3,7 +3,54 @@
 var crypto = require('crypto');
 var User = require('./models/user');
 var auth = require('./authentication');
+var ProjectSchema = require('./models/project');
+var Project = ProjectSchema.Project;
 
+exports.getAccess = function(req, res){
+
+    
+     User.findById(req.user, function(err, user) {
+        if(err){
+            console.log(err);
+            res.status(401).send({ message: err });
+        }
+        if(!user){
+            res.status(401).send({ message: 'User not found' });
+        }
+        else{
+            
+            Project.where('createdBy', req.user).find({}, function(err, projects){
+                if(err){
+                    console.log(err);
+                    res.status(401).send({ message: 'User has no projects' });
+                }
+                console.log(projects.length)
+                
+                for (var i =0; i < projects.length; i++) {
+                    //console.log(project);
+                    user.roles.owner.push(projects[i]._id);
+                    console.log(user.roles.owner)
+                }
+                 
+                res.send(user);
+            });
+        }
+        
+     });
+};
+
+function isPartOf(owners, user){
+    console.log(owners);
+    
+    for(var i=0; i < owners.length; i++){
+        var id = owners[i];
+        if(id === user){
+            return true;
+        }
+    }
+    
+    return false;
+}
 
 exports.getProfile = function(req, res) {
 

@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row">
+        <ul class="thumbnails">
+
+            <li ng-repeat="project in projects" class="span4">
+                <div class="thumbnail">
+                   
+                    <div class="caption">
+                        <h3>{{ project.title }}</h3>
+                        <p>{{ project.company }}</p>
+                        <p align="center"><a ui-sref="projectview({ id: project._id })" class="btn btn-primary btn-block">Open</a></p>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>

@@ -26,6 +26,7 @@ exports.createProject = function(req, res){
             if(err){
                 console.log(err);
             }
+            console.log("project created " + project);
             res.status(201).send(project);
         });
     });
@@ -60,6 +61,7 @@ exports.updateProject = function(req, res){
         project.save(function(err) {
             if(err){
                 console.log(err);
+                res.status(500).send(err);
             }
 
             res.status(200).send(project);
@@ -90,7 +92,7 @@ exports.deleteProject = function(req, res){
 };
 
 exports.getProject = function(req, res) {
-    console.log("metahu", req.params);
+    console.log("detail", req.params);
     
     Project.findOne({ '_id' : req.params.id}, function(err, project) {
         if(err){

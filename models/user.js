@@ -20,7 +20,11 @@ var userSchema = new mongoose.Schema({
         id : Number
     }],
     about : { type: String, trim: true},
-    location : { type: String, trim: true}
+    location : { type: String, trim: true},
+    roles : {
+        owner : [ { type: mongoose.Schema.Types.ObjectId, ref: 'Project'}],
+        teamMember : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project'}]
+    }
 });
 
 userSchema.pre('save', function(next) {

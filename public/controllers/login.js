@@ -1,5 +1,5 @@
 angular.module('nimbliApp')
-       .controller('LoginCtrl', function($scope, $alert, $auth, $location)
+       .controller('LoginCtrl', function($scope, $alert, $auth, $location, AccountService)
     {
 
         $scope.login = function() {
@@ -11,8 +11,12 @@ angular.module('nimbliApp')
                         type: 'material',
                         duration: 3
                     });
-
-                    $location.path('/profile');
+                    
+                    AccountService.getUserRoles().then(function(data) {
+                       AccountService.setCurrentUserAndRoles(data);    
+                    });
+                    
+                   $location.path('/profile');
                 })
                 .catch(function(response) {
 

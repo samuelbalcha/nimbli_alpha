@@ -1,5 +1,8 @@
-angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'xeditable', 'ngImgCrop'])
-    .config(function($stateProvider, $urlRouterProvider, $authProvider) {
+'use strict';
+
+
+angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'ngImgCrop'])
+    .config(function($stateProvider, $urlRouterProvider, $authProvider, USER_ROLES, AUTH_EVENTS) {
         $stateProvider
             .state('home', {
                 url: '/',
@@ -24,18 +27,9 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 url: '/profile',
                 templateUrl: 'partials/profile.html',
                 controller: 'ProfileCtrl',
-                resolve: {
-                    authenticated: function($q, $location, $auth) {
-                        var deferred = $q.defer();
-
-                        if (!$auth.isAuthenticated()) {
-                            $location.path('/login');
-                        } else {
-                            deferred.resolve();
-                        }
-
-                        return deferred.promise;
-                    }
+                access : {
+                    loginRequired : true,
+                    permissions : USER_ROLES.owner
                 }
             }).state('upload', {
                 url :'/upload',
@@ -43,16 +37,30 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 controller: 'UploadCtrl'
             }).state('projectcreate',{
                 url: '/createproject',
-                templateUrl: 'partials/create-project.html',
-                controller: 'ProjectCtrl'
+                templateUrl: 'partials/project/create-project.html',
+                controller: 'ProjectCreateCtrl',
+                resolve :{
+                    authenticated : canAccess
+                }
             }).state('projectlist', {
                 url: '/projects',
-                templateUrl: 'partials/list-project.html',
-                controller: 'ProjectCtrl'
+                templateUrl: 'partials/project/list-project.html',
+                controller: 'ProjectListCtrl',
+                access : {
+                    loginRequired : true,
+                    permissions : USER_ROLES.owner
+                }
             }).state('projectview', {
                 url : '/projects/:id',
-                templateUrl : 'partials/view-project.html',
-                controller : 'ProjectCtrl'
+                templateUrl : 'partials/project/view-project.html',
+                controller : 'ProjectDetailCtrl',
+                access : {
+                    loginRequired : true
+                }
+            }).state('projectupdate', {
+                url : '/projects/:id/update',
+                templateUrl : 'partials/project/update-project.html',
+                controller : 'ProjectUpdateCtrl'
             });
 
         $urlRouterProvider.otherwise('/');
@@ -73,6 +81,50 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
         angular.extend($modalProvider.defaults, {
             html: true
         });
-    }).run(function(editableOptions){
-        editableOptions.theme = 'bs3';
-    });
+    }).run(['$rootScope','$location','$stateParams', 'AuthorizationService','AUTH_EVENTS', 'AccountService', 
+    function($rootScope, $location, $stateParams, AuthorizationService, AUTH_EVENTS, AccountService){
+          $rootScope.$on('$stateChangeStart', function(event, next){
+            var id = ($stateParams !== null) ? $stateParams.id : null;
+            
+            if(next.access !== undefined){
+                
+               var user = AccountService.currentUser();
+               
+               if(user === undefined){
+                    AccountService.getUserRoles().then(function(data) {
+                        user = data; 
+                    });     
+               }
+               
+                var authorizationResult = new AuthorizationService(user);
+                    
+                if(authorizationResult.canAccess(id, next.access.loginRequired, next.access.permissions) === AUTH_EVENTS.notAuthenticated){
+                    $location.path('/login').replace();
+                }
+                if(authorizationResult.canAccess(id, next.access.loginRequired, next.access.permissions) === AUTH_EVENTS.notAuthorized){
+                    $location.path('/notallowed').replace();
+                }      
+            }
+         });
+    }]);
+ 
+ 
+
+function isAuthenticated($q, $location, $auth) {
+    var deferred = $q.defer();
+
+    if (!$auth.isAuthenticated()) {
+        $location.path('/login');
+    } else {
+        deferred.resolve();
+    }
+    
+    return deferred.promise;
+}
+
+
+
+ 
+
+
+ 
