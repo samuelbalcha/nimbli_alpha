@@ -12,10 +12,6 @@ angular.module('nimbliApp')
                         duration: 3
                     });
                     
-                    AccountService.getUserRoles().then(function(data) {
-                       AccountService.setCurrentUserAndRoles(data);    
-                    });
-                    
                    $location.path('/profile');
                 })
                 .catch(function(response) {

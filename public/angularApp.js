@@ -28,8 +28,7 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 templateUrl: 'partials/profile.html',
                 controller: 'ProfileCtrl',
                 access : {
-                    loginRequired : true,
-                    permissions : USER_ROLES.owner
+                    loginRequired : true
                 }
             }).state('upload', {
                 url :'/upload',
@@ -39,28 +38,29 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 url: '/createproject',
                 templateUrl: 'partials/project/create-project.html',
                 controller: 'ProjectCreateCtrl',
-                resolve :{
-                    authenticated : canAccess
-                }
+                
             }).state('projectlist', {
                 url: '/projects',
                 templateUrl: 'partials/project/list-project.html',
                 controller: 'ProjectListCtrl',
                 access : {
-                    loginRequired : true,
-                    permissions : USER_ROLES.owner
+                    loginRequired : true
                 }
             }).state('projectview', {
                 url : '/projects/:id',
                 templateUrl : 'partials/project/view-project.html',
                 controller : 'ProjectDetailCtrl',
                 access : {
-                    loginRequired : true
+                   loginRequired : true,
+                   permissions : USER_ROLES.owner
                 }
             }).state('projectupdate', {
                 url : '/projects/:id/update',
                 templateUrl : 'partials/project/update-project.html',
                 controller : 'ProjectUpdateCtrl'
+            }).state('notAllowed', {
+                url : '/notallowed',
+                template: '<h1>You are not allowed to view this!</h1>'
             });
 
         $urlRouterProvider.otherwise('/');
@@ -81,47 +81,45 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
         angular.extend($modalProvider.defaults, {
             html: true
         });
-    }).run(['$rootScope','$location','$stateParams', 'AuthorizationService','AUTH_EVENTS', 'AccountService', 
-    function($rootScope, $location, $stateParams, AuthorizationService, AUTH_EVENTS, AccountService){
-          $rootScope.$on('$stateChangeStart', function(event, next){
-            var id = ($stateParams !== null) ? $stateParams.id : null;
+    }).run(['$rootScope','$location','$state', 'AuthorizationService','AUTH_EVENTS', 'AccountService', 
+   
+     function($rootScope, $location, $state, AuthorizationService, AUTH_EVENTS, AccountService){
+         
+          var bypass = false;
+         
+          $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+           
+            if(bypass){
+                return;
+            }
             
-            if(next.access !== undefined){
-                
-               var user = AccountService.currentUser();
+            if(toState.access !== undefined && toState.access.loginRequired && toState.access.permissions !== undefined){
                
-               if(user === undefined){
-                    AccountService.getUserRoles().then(function(data) {
-                        user = data; 
-                    });     
-               }
-               
-                var authorizationResult = new AuthorizationService(user);
+                event.preventDefault();
+                AccountService.currentUser().then(function(user){
                     
-                if(authorizationResult.canAccess(id, next.access.loginRequired, next.access.permissions) === AUTH_EVENTS.notAuthenticated){
+                    var authorizationResult = new AuthorizationService(user);
+                    var canAccess =  authorizationResult.canAccess(toParams.id, toState.access.loginRequired, toState.access.permissions);
+                    console.log(canAccess)   
+                   
+                    if( canAccess === AUTH_EVENTS.notAuthenticated){
+                        $location.path('/login').replace();
+                    }
+                    if(canAccess === AUTH_EVENTS.notAuthorized){
+                        $location.path('/notallowed').replace();
+                    }
+                    if(canAccess === AUTH_EVENTS.authorized){
+                        bypass = true;
+                        $state.go(toState, toParams);
+                    }
+                }).catch(function(response){
                     $location.path('/login').replace();
-                }
-                if(authorizationResult.canAccess(id, next.access.loginRequired, next.access.permissions) === AUTH_EVENTS.notAuthorized){
-                    $location.path('/notallowed').replace();
-                }      
+                });
+              
             }
          });
-    }]);
+  }]);
  
- 
-
-function isAuthenticated($q, $location, $auth) {
-    var deferred = $q.defer();
-
-    if (!$auth.isAuthenticated()) {
-        $location.path('/login');
-    } else {
-        deferred.resolve();
-    }
-    
-    return deferred.promise;
-}
-
 
 
  

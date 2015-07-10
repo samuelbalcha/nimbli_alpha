@@ -8,36 +8,35 @@ angular.module('nimbliApp').factory('AuthorizationService', ['USER_ROLES', 'AUTH
        return {
            
            canAccess : function(resourceId,loginRequired, requiredPermissions){
-                var result = AUTH_EVENTS.authorized;
-                
-                    console.log(resourceId);
-                    
                     //login required
                     if(user === undefined && loginRequired){
-                        return (result = AUTH_EVENTS.notAuthenticated);
+                        return AUTH_EVENTS.notAuthenticated;
                     }
                     
                     //user is owner
-                    if(user.roles.owner !== null && user.roles.owner.indexOf(resourceId) !== -1){
-                        if(requiredPermissions.owner){
-                            
-                            console.log(user.roles.owner);
-                            return result;
-                        }
+                    if((requiredPermissions === USER_ROLES.owner) && user.roles.owner !== undefined){
+                        return isInRole(user.roles.owner, resourceId);
                     }
                     
                     //user is teamMember
-                    if(user.roles.teamMember !== null && user.roles.teamMember.indexOf(resourceId) !== -1){
-                        if(requiredPermissions.teamMember){
-                            return result;
-                        }
+                    if((requiredPermissions === USER_ROLES.teamMember) && user.roles.teamMember !== undefined){
+                         return isInRole(user.roles.teamMember, resourceId);
                     }
                     
-                    //return not authorized
-                    return (result = AUTH_EVENTS.notAuthorized);
+                   //return not authorized
+                   return AUTH_EVENTS.notAuthorized;
            }
-          
+       };
+       
+        function isInRole(roles, resId){
+          for(var i=0; i < roles.length; i++){ 
+             if(roles[i] === resId){
+                return AUTH_EVENTS.authorized;
+             }
+          } 
+          return AUTH_EVENTS.notAuthorized;
        }
+       
   };
   
  }]);
