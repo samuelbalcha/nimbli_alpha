@@ -30,6 +30,10 @@
 <script src="vendors/ng-file-upload-all.min.js"></script>
 <script src="vendors/xeditable.min.js"></script>
 
+<!-- tabs 
+<script src="vendors/ui-bootstrap-tabs-tpl.js"></script>
+<script src="vendors/tabs.js"></script>-->
+
 <script src="vendors/ng-img-crop.js"></script>
 <script src="angularApp.js"></script>
 
@@ -47,12 +51,14 @@
 <script src="/controllers/project/projectCreate.js"></script>
 <script src="/controllers/project/projectList.js"></script>
 <script src="/controllers/project/projectDetail.js"></script>
-<script src="/controllers/project/projectUpdate.js"></script>
+<script src="/controllers/project/projectTabs.js"></script>
+
 <script src="/controllers/upload.js"></script>
 <script src="/directives/passwordMatch.js"></script>
 <script src="/directives/passwordStrength.js"></script>
 <script src="/directives/contentEditable.js"></script>
-  
+
+ 
   
   <style type="text/css">
     .bs-pad{
@@ -90,6 +96,7 @@
          <!-- logged in -->  
            <ul  ng-if="isAuthenticated()" class="nav navbar-nav navbar-right">
               <li><a href="/#/createproject" id="create-project" class="btn btn-lg btn-success">Create project</a></li>
+             
               <li><a href="/#/profile">Profile</a></li>
               <li><a href="/#/logout">Logout</a></li>
             </ul>

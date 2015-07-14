@@ -62,6 +62,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 // Authentication
+app.get('/api/emailcheck/:email', auth.checkEmail(User)); 
 app.post('/auth/signup', auth.signUp(User));
 app.post('/auth/login', auth.logIn(User));
 app.post('/auth/google', auth.googleLogin(User));

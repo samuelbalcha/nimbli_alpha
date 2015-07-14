@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('nimbliApp').service('projectService', function ($http, $q) {
+angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
     
    var url = '/api/projects';
-    
+   var currentProject = {};
+      
    return ({
        
        getProjects : function (){
@@ -26,9 +27,14 @@ angular.module('nimbliApp').service('projectService', function ($http, $q) {
         removeProject : function(id){
             return $http.delete(url + '/' + id).then(handleSuccess, handleError);
         },
+        
+        getCurrentProject : function(){
+            return currentProject;
+        }
    });
    
     function handleSuccess(response){
+        currentProject = response.data;
         return response.data;
     }
     

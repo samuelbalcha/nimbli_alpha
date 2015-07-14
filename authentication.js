@@ -20,6 +20,20 @@ function createJWT(user) {
     return jwt.encode(payload, config.TOKEN_SECRET);
 }
 
+
+exports.checkEmail = function(User){
+    return function(req, res){
+              
+         User.findOne({ email: req.params.email }, function(err, existingUser) {
+                    if (existingUser) {
+                        return res.status(409).send({ message: 'Email is already taken' });
+                    }
+         });
+         
+        res.status(200).send('Email not found');
+    }
+};
+
 /*
  |--------------------------------------------------------------------------
  | Create Email and Password Account
@@ -34,7 +48,7 @@ exports.signUp = function(User){
                 return res.status(409).send({ message: 'Email is already taken' });
             }
             if(err){
-                return res.status(403).send({ message : err });
+                return res.status(403).send({ message : 'User could not be registered. Please try again.' });
             }
             var user = new User({
                 displayName: req.body.displayName,

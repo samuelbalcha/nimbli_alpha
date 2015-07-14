@@ -92,6 +92,15 @@ exports.deleteProject = function(req, res){
 };
 
 exports.getProject = function(req, res) {
+    /**
+    
+    Project
+   .findById( req.params.id)
+   .populate('createdBy', 'email').populate('members', 'displayName')
+   .exec(function(err,project) {
+    
+    */
+    
     console.log("detail", req.params);
     
     Project.findOne({ '_id' : req.params.id}, function(err, project) {

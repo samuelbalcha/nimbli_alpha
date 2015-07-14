@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('ProjectListCtrl',  function($scope, projectService, $location)
+    .controller('ProjectListCtrl',  function($scope, ProjectService, $location)
     {
         
        $scope.projects = [];
@@ -10,7 +10,7 @@ angular.module('nimbliApp')
        
       function listProjects(){
          console.log("list projects");
-         projectService.getProjects().then(function(projects){
+         ProjectService.getProjects().then(function(projects){
              $scope.projects = projects;
          });
       }

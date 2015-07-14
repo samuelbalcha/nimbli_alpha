@@ -9,17 +9,16 @@ angular.module('nimbliApp')
          * Get user's profile information.
          */
         $scope.getProfile = function() {
-            AccountService.getProfile()
-                .success(function(data) {
-                    $scope.user = data;
-                    
-                    if($scope.user.avatar === null || $scope.user.avatar === undefined){
-                        $scope.user.avatar = '//placehold.it/230';
-                    }
+            AccountService.getProfile().then(function(data) {
+                 $scope.user = data;
+                 if($scope.user.avatar === null || $scope.user.avatar === undefined){
+                    $scope.user.avatar = '//placehold.it/230';
+                  }
+                   
                 })
-                .error(function(error) {
+                .catch(function(error) {
                     $auth.logout().then(function(){
-                        $location.path('/signup');
+                        $location.path('/login');
 
                         $alert({
                             content: error.message,

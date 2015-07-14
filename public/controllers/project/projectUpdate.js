@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('ProjectUpdateCtrl',  function($scope, projectService, $stateParams, $location)
+    .controller('ProjectUpdateCtrl',  function($scope, ProjectService, $stateParams, $location)
     {
         $scope.project = {};
      

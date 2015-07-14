@@ -8,24 +8,57 @@ var mongoose = require('mongoose');
 
 // UserSchema
 var userSchema = new mongoose.Schema({
-    email : { type: String, unique: true, lowercase: true },
+   email: {
+        type: String,
+        unique : true,
+        trim: true,
+        match: [/.+\@.+\..+/, 'Please fill a valid email address']
+    },
     password : { type: String, select: false },
+    firstName: {
+        type: String,
+        trim: true
+    },
+    lastName: {
+        type: String,
+        trim: true
+    },
     displayName :{ type: String, trim: true},
     avatar: { type: String, trim: true},
     google : String,
-    github : String,
     linkedin : String,
+    
     skills : [{
         name : String,
         id : Number
     }],
-    about : { type: String, trim: true},
+    about : { type: String, trim: true },
     location : { type: String, trim: true},
     roles : {
         owner : [ { type: mongoose.Schema.Types.ObjectId, ref: 'Project'}],
-        teamMember : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project'}]
-    }
+        teamMember : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project'}],
+        supervisor : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project'}]
+    },
+    
+    userType :  [{
+            type: String,
+            enum: ['Student', 'Teacher', 'Organization personnel']
+        }],
+   
+    school :  { type: mongoose.Schema.Types.ObjectId, ref: 'School'},
+    program : String,
+    degree : {
+            type: [{
+                type: String,
+                enum: ['Bachelors', 'Masters', 'Phd']
+            }],
+            default: ['Bachelors']
+        },
+    title : String,
+    organization: String,
+    userRole: String
 });
+
 
 userSchema.pre('save', function(next) {
     var user = this;

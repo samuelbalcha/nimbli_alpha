@@ -96,7 +96,7 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
             if(toState.access !== undefined && toState.access.loginRequired && toState.access.permissions !== undefined){
                
                 event.preventDefault();
-                AccountService.currentUser().then(function(user){
+                AccountService.getUserAccess().then(function(user){
                     
                     var authorizationResult = new AuthorizationService(user);
                     var canAccess =  authorizationResult.canAccess(toParams.id, toState.access.loginRequired, toState.access.permissions);

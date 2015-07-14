@@ -13,33 +13,22 @@
                </div>
             </div>
         </div>   
+   
+    <section ng-controller="ProjectTabsCtrl" class="row">
+       <section class="tab">
+        <ul class="nav nav-pills">
+          <li ng-repeat="tab in tabs"  
+              ng-class="{active:isActiveTab(tab.content)}" 
+              ng-click="onClickTab(tab)">
+            <a href="">{{ tab.heading }}</a>
+          </li>
+        </ul>
+       <div id="tabView">
+            <div ng-include="currentTab"></div>
+        </div>
+     
+    </section>    
     
     
-    <div class="row">
-            <div class="panel with-nav-tabs panel-default">
-                <div class="panel-heading">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#brief" data-toggle="tab">Brief</a></li>
-                        <li><a href="#teamSpace" data-toggle="tab">Team Workspace</a></li>
-                        <li><a href="#publicFront" data-toggle="tab">Public page</a></li>
-                    </ul>
-                </div>
-                <div class="panel-body">
-                    <div class="tab-content">
-                        <!-- Project Brief  -->
-                        <div class="tab-pane fade in active" id="brief">
-                            
-                        </div>
-                        <!-- Team Space -->
-                        <div class="tab-pane fade" id="teamSpace">
-                            Team collaboration area
-                        </div>
-                        <!-- Public area -->
-                        <div class="tab-pane fade" id="tab3default">
-                            Public can see this
-                        </div>
-                    </div>
-                </div>
-           </div>
-    </div>
+    
 </div>
