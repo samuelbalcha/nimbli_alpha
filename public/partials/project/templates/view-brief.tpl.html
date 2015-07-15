@@ -1,0 +1,91 @@
+
+<!-- Outcome -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5 col-md-5">
+            <h4>Project Outcome</h4>
+            <div id="outcome"
+             ng-model="brief.outcome"
+             class="form-control"
+             name="outcome" style="margin-bottom:15px;">
+            </div>  
+        </div>
+    </div>
+</div>
+<!-- Objective -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5 col-md-5">
+            <h4>Objective</h4>
+            <div id="objective"
+             ng-model="brief.objective"
+             class="form-control"
+             name="objective">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Deliverables -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5 col-md-5">
+            <h4>Project deliverable</h4>
+            <div id="deliverable"
+             ng-model="brief.deliverable"
+             class="form-control"
+             name="deliverable">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Approach -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5 col-md-5">
+            <h4>Project approach</h4>
+            <div id="approach"
+            ng-model="brief.approach"
+            class="form-control"
+            name="approach">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Time table -->
+<div class="container">
+    <div class="row">
+    <div class="col-sm-5 col-md-5">
+          <h4>Time table</h4>
+          <label>Start date -  End date </label> <br>
+          <label ng-model="timeTable"></label>
+         </div>
+    </div>
+</div>
+<!-- Updated -->
+<div class="container">
+    <div class="row">
+    <div class="col-sm-5 col-md-5">
+          <h4>Time table</h4>
+          <label>Updated </label> <br>
+          <label ng-model="brief.dateUpdated"></label>
+         </div>
+    </div>
+</div>
+
+<!-- Buttons -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5 col-md-5">
+            <p>
+            <button type="submit"  ng-click="edit()" class="btn btn-md btn-info" style="margin-right: 10px;">
+                <span class="glyphicon glyphicon-edit"></span>
+                Edit
+            </button>
+            <a class="btn btn-md btn-danger"  ng-click="cancel()" style="margin-left: 10px">
+                <span class="glyphicon glyphicon-floppy-remove"></span>
+                Cancel
+            </a>
+            </p>
+        </div>
+    </div>
+</div>

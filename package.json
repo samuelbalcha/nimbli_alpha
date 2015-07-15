@@ -2,7 +2,7 @@
   "name": "nimbliAlpha",
   "version": "1.0.0",
   "description": "Light weight MEAN app for nimbli.org",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

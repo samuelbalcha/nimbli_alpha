@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, ProjectService, AccountService) {
+angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, AccountService, ProjectService, USER_ROLES) {
   
-  //$scope.canView = false;
+ 
   var templates = [];
   
   var briefTemplate = 'partials/project/templates/brief.tpl.html';
@@ -10,19 +10,22 @@ angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, Proj
   var processTemplate = 'partials/project/templates/process.tpl.html';
   
    var user = AccountService.getCurrentUser();
-   console.log(user);
-   templates = [briefTemplate, teamTemplate, processTemplate];
-   
-   $scope.tabs = [
-                    { heading : 'Brief' , content : 'partials/project/templates/brief.tpl.html'},
-                    { heading : 'Team Space' , content : 'partials/project/templates/teamspace.tpl.html'},
-                    { heading : 'Process' , content : 'partials/project/templates/process.tpl.html'}
+  
+   if(user.userRole === USER_ROLES.owner){
+       templates = [ briefTemplate, teamTemplate, processTemplate];
+       
+        $scope.tabs = [
+                    { heading : 'Brief' , content : briefTemplate, id : 'tabBrief' },
+                    { heading : 'Team Space' , content : teamTemplate, id : 'tabTeamSpeace' },
+                    { heading : 'Process' , content : processTemplate, id : 'tabProcess' }
                 ];
+                
+        
+    }
     
-   // $scope.tabs = { heading : 'Tab 1' , content : 'This is where we place the brief'};
-    
-   $scope.currentTab = 'partials/project/templates/brief.tpl.html';
-
+    $scope.status = false; //controll notifiction icon 
+    $scope.currentTab = briefTemplate;
+   
     $scope.onClickTab = function (tab) {
         $scope.currentTab = tab.content;
     }
@@ -30,4 +33,5 @@ angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, Proj
     $scope.isActiveTab = function(tabUrl) {
         return tabUrl == $scope.currentTab;
     }
+    
 });

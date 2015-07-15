@@ -1,0 +1,35 @@
+<form>
+	<div class="col-md-3">
+	   <img src="project.coverPicture" class="img-thumbnail picture hidden-xs" />
+        <input  class="btn-file" type="file" id="coverPicture">
+        <p class="help-block">Update cover picture.</p>
+	</div>
+    <div class="col-md-7">
+        <label for="title"> Project title</label>
+        <input type="text" class="form-control" ng-model="project.title" id="title" required>
+        <br>
+        <label for="company">Company</label>
+        <input type="text" class="form-control" ng-model="project.company" id="company" required>
+        <br>
+        <label for="description"> Description</label>
+        <textarea id="description" ng-model="project.description" class="form-control" name="description" rows="5" style="margin-bottom:15px;" required>
+        </textarea>
+        
+        <p>
+            <button type="submit"  
+                    ng-click="save()" 
+                    class="btn btn-md btn-info"
+                    style="margin-right: 10px;">
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                   Save
+            </button>
+            <a      class="btn btn-md btn-default"
+                    ng-click="cancel()" 
+                    style="margin-left: 10px">
+                    Cancel
+            </a>
+        </p>
+    </div>
+</form>
+
+

@@ -90,6 +90,7 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
           $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
            
             if(bypass){
+                bypass = false;
                 return;
             }
             

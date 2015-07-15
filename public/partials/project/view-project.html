@@ -1,34 +1,31 @@
-<div class="container">
-    <div class="row well">
-    		<div class="col-md-4">
-        	    <a href="#" class="follow_btn hidden-xs">Follow</a>
-    		</div>
-            <div class="col-md-8  col-xs-12">
-               <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail picture hidden-xs" />
-               <img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="img-thumbnail visible-xs picture_mob" />
-               <div class="header">
-                    <h1>{{ project.title }}</h1>
-                    <h4>{{ project.company }}</h4>
-                    <span>{{ project.description }}</span>
-               </div>
-            </div>
-        </div>   
-   
-    <section ng-controller="ProjectTabsCtrl" class="row">
-       <section class="tab">
+<section ng-controller="ProjectDetailCtrl" class="row">
+   	
+    <div ng-include="editMode && 'partials/project/edit-mini.tpl.html' || 'partials/project/view-mini.tpl.html' ">
+        
+    </div>
+    <div class="col-md-2">
+        <!-- add social stuff -->
+        <div ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
+    </div>
+</section>
+<br>
+<hr>
+<section ng-controller="ProjectTabsCtrl" class="row">
+    <div class="tab">
         <ul class="nav nav-pills">
-          <li ng-repeat="tab in tabs"  
-              ng-class="{active:isActiveTab(tab.content)}" 
-              ng-click="onClickTab(tab)">
-            <a href="">{{ tab.heading }}</a>
-          </li>
+            <li ng-repeat="tab in tabs" 
+                class="col-xs-3"
+                ng-class="{active:isActiveTab(tab.content)}" 
+                ng-click="onClickTab(tab)">
+              <a>
+                {{ tab.heading }}
+                <i id="{{ tab.id }}" class="glyphicon glyphicon-check"></i>
+              </a>
+            </li>
         </ul>
-       <div id="tabView">
+        <div id="tabView">
             <div ng-include="currentTab"></div>
         </div>
-     
-    </section>    
+    </div>
+</section>    
     
-    
-    
-</div>

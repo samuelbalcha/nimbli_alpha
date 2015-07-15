@@ -1,5 +1,14 @@
-<script type="text/ng-template" id="brief.tpl.html">
-		<div id="viewOne">
-			<h1>View One</h1>
-		</div>
-</script>
+<div ng-controller="BriefCtrl" id="briefView">
+     <h2></h2>
+	  <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <section ng-include="editMode && 'partials/project/templates/edit-brief.tpl.html' 
+                                              || 'partials/project/templates/view-brief.tpl.html'">
+                </section>
+            </div>
+        </div>
+    </div>
+	
+	
+</div>

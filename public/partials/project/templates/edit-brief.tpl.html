@@ -1,0 +1,93 @@
+<form>
+	<!-- Outcome -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-md-5">
+                 <h4>Project Outcome</h4>
+                 <textarea id="outcome"
+                     ng-model="brief.outcome"
+                     class="form-control"
+                     name="outcome"
+                     placeholder="What is the project outcome?"
+                     rows="5" style="margin-bottom:15px;" required>
+                 </textarea>  
+              </div>
+        </div>
+    </div>
+   <!-- Objective -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-md-5">
+                <h4>Objective</h4>
+                <textarea id="objective"
+                     ng-model="brief.objective"
+                     class="form-control"
+                     name="objective"
+                     placeholder="What is the objective of the project?"
+                     rows="5" style="margin-bottom:15px;" required>
+                </textarea>
+             </div>
+        </div>
+    </div>
+    <!-- Deliverables -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-md-5">
+                <h4>Project deliverable</h4>
+                <textarea id="deliverable"
+                     ng-model="brief.deliverable"
+                     class="form-control"
+                     name="deliverable"
+                     placeholder="What are the list of deliverables expected?"
+                     rows="5" style="margin-bottom:15px;" required>
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <!-- Approach -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-md-5">
+                <h4>Project approach</h4>
+                <textarea id="approach"
+                          ng-model="brief.approach"
+                          class="form-control"
+                          name="approach"
+                          placeholder="What kind of approach is needed ofr the project?"
+                          rows="5" style="margin-bottom:15px;" required>
+
+                </textarea>
+            </div>
+        </div>
+    </div>
+     <!-- Time table -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-md-5">
+                <h4>Time table</h4>
+                Start date:<br>
+				<input contenteditabe="{{ editMode }}" type="date" name="startDate" ng-model="brief.startDate"><br><br>
+				End date:<br>
+				<input contenteditabe="{{ editMode }}" type="date" name="endDate" ng-model="brief.endDate"><br><br>
+            </div>
+        </div>
+    </div>
+    <!-- Buttons -->
+    <div class="container">
+        <div class="row">
+           <div class="col-sm-5 col-md-5">
+            <p>
+                 <button type="submit"  ng-click="save()"
+                         class="btn btn-md btn-info" style="margin-right: 10px;">
+                         <span class="glyphicon glyphicon-floppy-disk"></span>
+                     Save
+                 </button>
+                 <a class="btn btn-md btn-danger"  ng-click="cancel()" style="margin-left: 10px">
+                   <span class="glyphicon glyphicon-floppy-remove"></span>
+                   Cancel
+                 </a>
+            </p>
+          </div>
+        </div>
+    </div>
+</form>

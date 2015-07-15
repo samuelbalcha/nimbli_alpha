@@ -3,7 +3,7 @@
 angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
     
    var url = '/api/projects';
-   var currentProject = {};
+   var currentProject;
       
    return ({
        
@@ -12,7 +12,16 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
         },
         
         getProject : function(id){
-            return $http.get(url + '/'+ id).then(handleSuccess, handleError);
+              var deferred = $q.defer();
+              
+               $http.get(url + '/'+ id).success(function(data){
+                  currentProject = data;
+                  deferred.resolve(data);
+               }).error(function(data){
+                   deferred.reject("project was not found");
+               });
+               
+               return deferred.promise;
         },
         
         createProject : function(project){
@@ -21,7 +30,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
         
         updateProject : function(project){
              log("update project service");
-              return $http.put(url, project).then(handleSuccess, handleError);
+              return $http.put(url + '/' + project._id, project).then(handleSuccess, handleError);
         },
         
         removeProject : function(id){
@@ -30,6 +39,13 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
         
         getCurrentProject : function(){
             return currentProject;
+        },
+        setCurrentProject : function(project){
+            currentProject = project;
+        },
+        
+        saveBrief : function(brief){
+            return $http.put(url + '/' + currentProject._id + '/brief', brief).then(handleSuccess, handleError);
         }
    });
    

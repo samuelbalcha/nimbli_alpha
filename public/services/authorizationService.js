@@ -9,7 +9,7 @@ angular.module('nimbliApp').factory('AuthorizationService', ['USER_ROLES', 'AUTH
            
            canAccess : function(resourceId,loginRequired, requiredPermissions){
                     
-                     user.userRole = USER_ROLES.anonymous;
+                     
                     //login required
                     if(user === undefined && loginRequired){
                         return AUTH_EVENTS.notAuthenticated;
