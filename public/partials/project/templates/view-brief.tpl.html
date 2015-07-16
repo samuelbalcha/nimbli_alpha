@@ -5,9 +5,11 @@
         <div class="col-sm-5 col-md-5">
             <h4>Project Outcome</h4>
             <div id="outcome"
-             ng-model="brief.outcome"
-             class="form-control"
-             name="outcome" style="margin-bottom:15px;">
+                 ng-model="brief.outcome"
+                 class=""
+                 name="outcome" style="margin-bottom:15px;">
+                
+                {{ brief.outcome }}
             </div>  
         </div>
     </div>
@@ -18,9 +20,11 @@
         <div class="col-sm-5 col-md-5">
             <h4>Objective</h4>
             <div id="objective"
-             ng-model="brief.objective"
-             class="form-control"
-             name="objective">
+                 ng-model="brief.objective"
+                 class=""
+                 name="objective" style="margin-bottom:15px;">
+                
+                 {{ brief.objective }}
             </div>
         </div>
     </div>
@@ -31,9 +35,11 @@
         <div class="col-sm-5 col-md-5">
             <h4>Project deliverable</h4>
             <div id="deliverable"
-             ng-model="brief.deliverable"
-             class="form-control"
-             name="deliverable">
+                 ng-model="brief.deliverable"
+                 class=""
+                 name="deliverable" style="margin-bottom:15px;">
+                
+                 {{ brief.deliverable }}
             </div>
         </div>
     </div>
@@ -44,9 +50,11 @@
         <div class="col-sm-5 col-md-5">
             <h4>Project approach</h4>
             <div id="approach"
-            ng-model="brief.approach"
-            class="form-control"
-            name="approach">
+                 ng-model="brief.approach"
+                 class=""
+                 name="approach" style="margin-bottom:15px;">
+                
+                {{ brief.approach }}
             </div>
         </div>
     </div>
@@ -56,8 +64,9 @@
     <div class="row">
     <div class="col-sm-5 col-md-5">
           <h4>Time table</h4>
-          <label>Start date -  End date </label> <br>
-          <label ng-model="timeTable"></label>
+          <div style="margin-bottom:15px;">
+               {{ brief.startDate | amDateFormat:'dddd, MMMM Do YYYY' }} - {{ brief.endDate | amDateFormat:'dddd, MMMM Do YYYY' }}
+          </div>
          </div>
     </div>
 </div>
@@ -65,9 +74,10 @@
 <div class="container">
     <div class="row">
     <div class="col-sm-5 col-md-5">
-          <h4>Time table</h4>
-          <label>Updated </label> <br>
-          <label ng-model="brief.dateUpdated"></label>
+          <label>Updated </label> 
+          <p ng-model="brief.dateUpdated" style="margin-bottom:15px;"> 
+                {{ brief.dateUpdated | amDateFormat:'dddd, MMMM Do YYYY HH:mm' }} 
+          </p>
          </div>
     </div>
 </div>

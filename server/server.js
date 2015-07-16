@@ -80,11 +80,21 @@ app.delete('/api/projects/:id', projectApi.deleteProject);
 app.put('/api/projects/:id', ensureAuthenticated, projectApi.updateProject);
 
 // Brief
+app.get('/api/briefs', function(req, res){
+    
+    Brief.find(function(err, briefs) {
+        if (err){
+            res.status(404).send(err);
+        }
+        res.status(200).send(briefs);
+    }); 
+});
+
 app.put('/api/projects/:id/brief', function(req, res){
     var br = req.body;
     
     console.log(req.body);
-    Brief.findById(req.body.projectId, function(err, brief){
+    Brief.findById(br._id, function(err, brief){
         if(err){
             res.status(401).send({ message : err });
         }
@@ -102,7 +112,7 @@ app.put('/api/projects/:id/brief', function(req, res){
             brief.save(function(err){
                 if(err){
                     console.log(err);
-                    res.se
+                    res.status(401).send({ message : err});
                 }
                 res.status(200).send(brief);
             });

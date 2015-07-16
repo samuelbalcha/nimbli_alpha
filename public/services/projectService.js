@@ -45,7 +45,11 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
         },
         
         saveBrief : function(brief){
-            return $http.put(url + '/' + currentProject._id + '/brief', brief).then(handleSuccess, handleError);
+            return $http.put(url + '/' + currentProject._id + '/brief', brief).then(function(response){
+                return response.data;
+            }, function(err){
+                $q.reject(err);
+            });
         }
    });
    

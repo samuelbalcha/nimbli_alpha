@@ -1,0 +1,16 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" ng-model="title">
+                <h4 class="modal-title"> Confirm delete </h4>
+            </div>
+            <div class="modal-body">
+                    <p> {{ deleteTitle }}</p>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="closeModal()" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button ng-click="deleteConfirmed()" type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

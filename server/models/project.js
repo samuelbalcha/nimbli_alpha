@@ -25,24 +25,21 @@ var projectSchema = new mongoose.Schema({
     dateCompleted : Date,
     dateCancelled : Date,
     dateUpdated : Date,
-    status : Number,
+    status : {
+            type: [{
+                type: String,
+                enum: ['Private', 'Published', 'Started', 'InProgress', 'Completed', 'Accepted']
+            }],
+            default: ['Private']
+        },
     description : { type: String, trim: true },
     team : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
-/* project status
-  0 : Created
-  1 : Published
-  2 : Accepted
-  3 : Cancelled
-  4 : InProgress
-  5 : Completed
- */
-
 projectSchema.pre('save', function(next) {
     var project = this;
     project.dateCreated = Date.now();
-    project.status = 0;
+    //project.status = 0;
 
     next();
 });

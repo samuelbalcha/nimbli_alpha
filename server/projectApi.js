@@ -2,39 +2,48 @@
 
 var ProjectSchema = require('./models/project');
 var Project = ProjectSchema.Project;
-
+    
 exports.createProject = function(req, res){
-
+    
     var pr = req.body;
     var br = ProjectSchema.Brief;
     
     Project.findOne({ title : pr.title}, function(err, existingProject){
         if (existingProject) {
-             res.status(409).send({ message: 'The project title is already taken' });
+            res.status(409).send({ message: 'The project title is already taken' });
         }
         if(err){
-             res.status(403).send({ message : err });
+            res.status(403).send({ message : err });
         }
-        
+    
         //Create Brief 
-        var brf = new br({ briefCreatedByUser : false });
-       
+        var brf = new br({ 
+                briefCreatedByUser : false,
+                outcome   : '',
+                objective : '',
+                deliverable: '',
+                approach  : '',
+                startDate : '',
+                endDate : '',
+                formattedDate : ''
+            });
+    
         brf.save(function(err){
             if(err){
                 console.log(err);
             }
         });
-
+    
         var project = new Project({
-            title : pr.title,
-            company : pr.company,
-            description : pr.description,
-            createdBy : req.user,
-            brief : brf._id
-        });
-        
+                title : pr.title,
+                company : pr.company,
+                description : pr.description,
+                createdBy : req.user,
+                brief : brf._id
+            });
+    
         project.owners.push(req.user);
-        
+    
         project.save(function(err) {
             if(err){
                 console.log(err);
@@ -43,11 +52,10 @@ exports.createProject = function(req, res){
         });
     });
 };
-
-exports.updateProject = function(req, res){
-
-    var pr = req.body;
     
+exports.updateProject = function(req, res){
+    
+    var pr = req.body;
     Project.findById(req.params.id, function(err, project) {
         if(err){
             res.send(500).send({ message : err });
@@ -55,8 +63,7 @@ exports.updateProject = function(req, res){
         if (!project) {
             res.status(404).send({ message: 'Project not found' });
         }
-        //console.log(req.user); // returns id
-
+    
         project.title = pr.title || project.title;
         project.company = pr.company || project.company;
         project.coverPicture = pr.coverPicture || project.coverPicture;
@@ -72,20 +79,19 @@ exports.updateProject = function(req, res){
         project.dateStarted = pr.dateStarted || project.dateStarted;
         project.dateCancelled = pr.dateCancelled || project.dateCancelled;
         project.dateCompleted = pr.dateCompleted || project.dateCompleted;
-
+    
         project.save(function(err) {
             if(err){
                 console.log(err);
                 res.status(500).send(err);
             }
-
             res.status(200).send(project);
         });
     });
 };
-
+    
 exports.getProjects = function(req, res){
-
+    
     Project.find(function(err, projects) {
         if (err){
             res.status(404).send(err);
@@ -93,30 +99,37 @@ exports.getProjects = function(req, res){
         res.status(200).send(projects);
     });
 };
-
+    
 exports.deleteProject = function(req, res){
-
+    
     Project.findOneAndRemove({ _id : req.params.id }, function(err, pr){
         if(err){
             console.log(err);
             res.status(404).send(err);
         }
         console.log("removed: " + pr._id);
+        var brf = ProjectSchema.Brief;
+        
+        brf.findOneAndRemove({ _id : pr.brief }, function(err, br){
+            if(err){
+                console.log("could not remove brief");
+            }
+            console.log("removed brief" + br._id);
+        });
     });
+    
     res.send(200);
 };
-
+    
 exports.getProject = function(req, res) {
     /**
     
     Project
-   .findById( req.params.id)
-   .populate('createdBy', 'email').populate('members', 'displayName')
-   .exec(function(err,project) {
+    .findById( req.params.id)
+    .populate('createdBy', 'email').populate('members', 'displayName')
+    .exec(function(err,project) {
     
     */
-    
-    //var brf = ProjectSchema.Brief;
     
     Project.findOne({ '_id' : req.params.id}).populate('brief').exec(function(err, project) {
         if(err){
@@ -127,7 +140,6 @@ exports.getProject = function(req, res) {
             res.status(401).send({ message: 'Project not found' });
         }
         else{
-            console.log(project);
             res.status(200).send(project);
         }
     });
