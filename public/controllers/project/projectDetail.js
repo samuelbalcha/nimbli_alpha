@@ -11,9 +11,19 @@ angular.module('nimbliApp')
     $scope.editMode = false;
     $scope.save = save;
     $scope.cancel = cancel;
+    $scope.statusChanged = statusChanged;
+    
+    $scope.projectStatus = [ { name : 'Private', value : 0 },
+                             { name : 'Published', value : 1 },
+                             { name : 'Started', value : 2 },
+                             { name : 'InProgress', value : 3 },
+                             { name : 'Completed', value : 4 },
+                             { name : 'Accepted', value : 5 }
+                           ];
+                           
+    $scope.selectedItem = null;
     
     var user = AccountService.getCurrentUser();
-    
     
     if(user !== undefined && user.userRole === USER_ROLES.owner){
         $scope.isOwner = true;
@@ -30,6 +40,7 @@ angular.module('nimbliApp')
     
     function edit(){
         $scope.editMode = true;
+        $scope.selectedItem = $scope.getSelection();
     }
 
     function deleteProject(){
@@ -53,11 +64,12 @@ angular.module('nimbliApp')
         $location.path('/projects');
     }
     
-    function publish(){
-        console.log("publish");
+    function publish(status){
+        console.log("publish" , status);
     }
     
     function save(){
+        console.log($scope.selectedOption);
         ProjectService.updateProject($scope.project);
         $scope.editMode = false;
     }
@@ -69,5 +81,20 @@ angular.module('nimbliApp')
     
     function handleSuccess(project){
         $scope.project = project;
+        //$scope.selectedOption = $scope.project.status;
     }
+    
+    $scope.getSelection = function(){
+        for(var i = 0; i < $scope.projectStatus.length; i++){
+            if($scope.projectStatus[i].name === $scope.project.status[0]){
+                console.log($scope.projectStatus[i]);
+                return $scope.projectStatus[i];
+            }
+        }
+    }
+    
+    function statusChanged(ele){
+      $scope.project.status[0] = ele.selectedItem.name;    
+    }
+    
 });

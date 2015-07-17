@@ -28,9 +28,9 @@ var projectSchema = new mongoose.Schema({
     status : {
             type: [{
                 type: String,
-                enum: ['Private', 'Published', 'Started', 'InProgress', 'Completed', 'Accepted']
+                enum: [ 'Private', 'Published', 'Started', 'InProgress', 'Completed', 'Accepted']
             }],
-            default: ['Private']
+            default: 'Private'
         },
     description : { type: String, trim: true },
     team : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}]

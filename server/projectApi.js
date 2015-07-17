@@ -63,6 +63,7 @@ exports.updateProject = function(req, res){
         if (!project) {
             res.status(404).send({ message: 'Project not found' });
         }
+        console.log(pr.status)
     
         project.title = pr.title || project.title;
         project.company = pr.company || project.company;
@@ -92,7 +93,7 @@ exports.updateProject = function(req, res){
     
 exports.getProjects = function(req, res){
     
-    Project.find(function(err, projects) {
+    Project.find().sort({ dateCreated : 'desc'}).exec(function(err, projects) {
         if (err){
             res.status(404).send(err);
         }

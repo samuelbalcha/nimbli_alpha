@@ -1,16 +1,18 @@
-<section ng-controller="ProjectDetailCtrl" class="row">
+<div ng-controller="ProjectDetailCtrl" class="col-md-12 panel project-panel" style="margin-bottom:5px">
    	
     <div ng-include="editMode && 'partials/project/edit-mini.tpl.html' || 'partials/project/view-mini.tpl.html' ">
         
     </div>
     <div class="col-md-2">
-        <!-- add social stuff -->
-        <div ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
+        <div class="row">
+            <h5 class="label label-primary">{{ project.status[0] }}</h5>
+        </div>
+        <div class="row" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
     </div>
-</section>
+</div>
 <br>
 <hr>
-<section ng-controller="ProjectTabsCtrl" class="row">
+<div ng-controller="ProjectTabsCtrl" class="col-md-12 panel" style="margin-bottom:5px">
     <div class="tab">
         <ul class="nav nav-pills">
             <li ng-repeat="tab in tabs" 
@@ -27,5 +29,5 @@
             <div ng-include="currentTab"></div>
         </div>
     </div>
-</section>    
-    
+</div>    
+

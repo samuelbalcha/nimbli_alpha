@@ -11,9 +11,9 @@
     <link href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.css" rel="stylesheet">
     <link href="/stylesheets/vendors/xeditable.css" rel="stylesheet">
     <link href="/stylesheets/vendors/ng-img-crop.css" rel="stylesheet">
-    <link media='screen and (min-width: 768px) and (max-width: 992px)' href="/stylesheets/style2.css" rel="stylesheet"> 
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.css" type="text/css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.0/ui-bootstrap-tpls.min.js"></script>
@@ -56,62 +56,58 @@
 <script src="/controllers/project/projectList.js"></script>
 <script src="/controllers/project/projectDetail.js"></script>
 <script src="/controllers/project/projectTabs.js"></script>
+<script src="/controllers/dashboard.js"></script>
 <!-- project tabs -->
-<script src="/controllers/project/briefCreate.js"></script>
+<script src="/controllers/project/briefCtrl.js"></script>
 
 <script src="/controllers/upload.js"></script>
 <script src="/directives/passwordMatch.js"></script>
 <script src="/directives/passwordStrength.js"></script>
-<script src="/directives/contentEditable.js"></script>
+<script src="/directives/truncate.js"></script>
  
-  
   <style type="text/css">
-    .bs-pad{
-    	margin-left: 20px;
-    	margin-right: 20px;
+       .bs-pad{
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 80px;
     }
-</style>
+    .label,.glyphicon { margin-right:5px; }
+     ul
+    {
+        list-style-type: none;
+    }
+    .project-card{
+        margin-bottom : 10px;
+    }
+    .card .card-footer a {
+       margin: 0 !important;
+       position: relative;
+       bottom: 25px;
+       width: auto;
+    }
+    .project-panel{
+        min-height : 250px;
+        margin-bottom:10px;
+    }
+    .project-title{
+        text-align: center;
+        text-transform: uppercase;
+    }
+    .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+        color: #fff;
+        background-color: #009688;
+    }
+  </style>
+
 </head>
 <body>
     
-  <div class="bs-pad">
-    <nav ng-controller="NavbarCtrl" role="navigation" class="navbar navbar-default">
-  
-        <div class="navbar-header">
-            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="#" class="navbar-brand">nimbli</a>
-        </div>
-        <!-- Collection of nav links and other content for toggling -->
-        <div id="navbarCollapse" class="collapse navbar-collapse">
-         <!-- left -->  
-           <ul class="nav navbar-nav">
-              <li class="active"><a href="/#/">Home</a></li> 
-              <li><a href="/#/projects">Projects</a></li>
-           </ul>
-        <!-- open -->    
-           <ul ng-if="!isAuthenticated()" class="nav navbar-nav navbar-right">
-              <li><a href="/#/login">Login</a></li>
-              <li><a href="/#/signup">Sign up</a></li>
-           </ul>
-         <!-- logged in -->  
-           <ul  ng-if="isAuthenticated()" class="nav navbar-nav navbar-right">
-              <li><a href="/#/createproject" id="create-project" class="btn btn-lg btn-success">Create project</a></li>
-             
-              <li><a href="/#/profile">Profile</a></li>
-              <li><a href="/#/logout">Logout</a></li>
-            </ul>
-        </div>
-    </nav>
+  <div>
+      <div ng-controller="NavbarCtrl" 
+            ng-include="isAuthenticated() && 'partials/navbar/admin-tpl.html' || 'partials/navbar/public-tpl.html' ">
+      </div>
+       <div ui-view class="bs-pad fadeZoom"></div>
  </div>
-  <div ui-view class="bs-pad fadeZoom"></div>
-
-
-
-
+  
 </body>
 </html>

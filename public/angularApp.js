@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'ngImgCrop', 'angularMoment'])
+angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'ngImgCrop', 'angularMoment', 'truncate'])
     .config(function($stateProvider, $urlRouterProvider, $authProvider, USER_ROLES, AUTH_EVENTS) {
         $stateProvider
             .state('home', {
@@ -61,6 +61,9 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
             }).state('notAllowed', {
                 url : '/notallowed',
                 template: '<h1>You are not allowed to view this!</h1>'
+            }).state('dashboard', {
+                url:'/dashboard',
+                templateUrl : 'partials/dashboard.html'
             });
 
         $urlRouterProvider.otherwise('/');
