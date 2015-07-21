@@ -1,0 +1,28 @@
+<ul ng-controller="UserDetailCtrl">
+  <li ng-repeat="project in userProjects" class="col-md-3 project-card grow">
+     <a href="/#/projects/{{ project._id}}"> 
+      <div class="card">
+        <div class="card-height-indicator"></div>
+        <div class="card-content">
+            <div class="card-image">
+                <img  src="https://placehold.it/368x200/20b392/ffffff/?text=." alt="Loading image...">
+                <h3 class="card-image-headline">{{ project.title }}</h3>
+            </div>
+            <div class="card-body">
+                <p style="font-size:12px">{{ project.description | characters:140 :true }}</p>
+            </div>
+            <footer class="card-footer">
+                <p style="font-size:10px; margin-top:-7px">
+                    <span class="glyphicon glyphicon-eye-close"></span>
+                    {{ project.status[0] }} 
+                    <span style="margin-left:3px; margin-right:3px;"> | </span>
+                    <span class="glyphicon glyphicon-time"></span>
+                    {{ project.dateCreated | amDateFormat:'dddd, MMMM Do YYYY '}}
+                </p>
+              
+            </footer>
+        </div>
+      </div>
+     </a>
+ </li>
+</ul>

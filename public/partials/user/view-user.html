@@ -1,0 +1,25 @@
+<div ng-controller="UserDetailCtrl" class="col-md-12 panel" style="margin-bottom:5px">
+    <div class="row" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
+    <div ng-include="editMode && 'partials/user/edit-min.tpl.html' || 'partials/user/view-min.tpl.html' "></div>
+</div>
+<br>
+<hr>
+<div ng-controller="UserTabsCtrl" class="col-md-12 panel" style="margin-bottom:5px">
+    <div class="tab">
+        <ul class="nav nav-pills">
+            <li ng-repeat="tab in tabs" 
+                class="col-xs-5"
+                ng-class="{active:isActiveTab(tab.content)}" 
+                ng-click="onClickTab(tab)">
+              <a>
+                {{ tab.heading }}
+                <i id="{{ tab.id }}" class="glyphicon glyphicon-check"></i>
+              </a>
+            </li>
+        </ul>
+        <div id="tabView">
+            <div ng-include="currentTab"></div>
+        </div>
+    </div>
+</div>    
+

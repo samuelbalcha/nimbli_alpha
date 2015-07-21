@@ -1,6 +1,6 @@
 <div class="col-md-3">
      <img   src="https://placehold.it/302x250/20b392/ffffff/?text=." 
-            alt="Loading image..." style="margin-left:-30px; ">
+            alt="Loading image..." ng-class="isOwner ? 'pull-project-image-neg' : 'pull-project-image-po'">
 </div>
 <div class="col-md-7">
         <h2 class="project-title">
@@ -8,13 +8,8 @@
             {{ project.title }}
         </h2>
         <hr class="divider"></hr>
-        <h4 class="text-muted"><span class="mdi-social-location-city"></span> {{ project.company }}</h4>
+        <h4 class="text-muted"><span class="mdi-social-domain"></span> {{ project.company }}</h4>
         <div>{{ project.description }}</div>
     </div>
 </div>
 
-<!--
-
-
-    
--->

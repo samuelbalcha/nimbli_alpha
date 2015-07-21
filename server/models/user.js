@@ -26,8 +26,6 @@ var userSchema = new mongoose.Schema({
     displayName :{ type: String, trim: true},
     avatar: { type: String, trim: true},
     google : String,
-    linkedin : String,
-    
     skills : [{
         name : String,
         id : Number
@@ -42,7 +40,8 @@ var userSchema = new mongoose.Schema({
     
     userType :  [{
             type: String,
-            enum: ['Student', 'Teacher', 'Organization personnel']
+            enum: ['Student', 'Teacher', 'Organization personnel'],
+            default : 'Student'
         }],
    
     school :  { type: mongoose.Schema.Types.ObjectId, ref: 'School'},
@@ -52,7 +51,7 @@ var userSchema = new mongoose.Schema({
                 type: String,
                 enum: ['Bachelors', 'Masters', 'Phd']
             }],
-            default: ['Bachelors']
+            default: 'Bachelors'
         },
     title : String,
     organization: String,
@@ -66,7 +65,13 @@ userSchema.pre('save', function(next) {
         return next();
     }
     bcrypt.genSalt(10, function(err, salt) {
+        if(err){
+            console.log(err);
+        }
         bcrypt.hash(user.password, salt, function(err, hash) {
+            if(err){
+                console.log(err);
+            }
             user.password = hash;
             next();
         });

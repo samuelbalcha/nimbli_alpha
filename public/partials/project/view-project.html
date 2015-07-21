@@ -1,14 +1,6 @@
 <div ng-controller="ProjectDetailCtrl" class="col-md-12 panel project-panel" style="margin-bottom:5px">
-   	
-    <div ng-include="editMode && 'partials/project/edit-mini.tpl.html' || 'partials/project/view-mini.tpl.html' ">
-        
-    </div>
-    <div class="col-md-2">
-        <div class="row">
-            <h5 class="label label-primary">{{ project.status[0] }}</h5>
-        </div>
-        <div class="row" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
-    </div>
+   	<div class="row" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
+    <div ng-include="editMode && 'partials/project/edit-mini.tpl.html' || 'partials/project/view-mini.tpl.html' "></div>
 </div>
 <br>
 <hr>
@@ -17,7 +9,7 @@
         <ul class="nav nav-pills">
             <li ng-repeat="tab in tabs" 
                 class="col-xs-3"
-                ng-class="{active:isActiveTab(tab.content)}" 
+                ng-class="{active:isActiveTab(tab.content), 'col-xs-2': tabs.length > 3}"
                 ng-click="onClickTab(tab)">
               <a>
                 {{ tab.heading }}
@@ -25,9 +17,12 @@
               </a>
             </li>
         </ul>
-        <div id="tabView">
-            <div ng-include="currentTab"></div>
+         <div id="tabView">
+            <div ng-include="currentTab">
+              
+            </div>
         </div>
     </div>
 </div>    
+
 

@@ -6,7 +6,8 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
         $stateProvider
             .state('home', {
                 url: '/',
-                templateUrl: 'partials/home.html'
+                templateUrl: 'partials/project/list-project.html',
+                controller: 'ProjectListCtrl'
             })
             .state('login', {
                 url: '/login',
@@ -38,36 +39,35 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 url: '/createproject',
                 templateUrl: 'partials/project/create-project.html',
                 controller: 'ProjectCreateCtrl',
+                access :{
+                    loginRequired : true
+                }
                 
             }).state('projectlist', {
                 url: '/projects',
                 templateUrl: 'partials/project/list-project.html',
-                controller: 'ProjectListCtrl',
-                access : {
-                    loginRequired : true
-                }
+                controller: 'ProjectListCtrl'
             }).state('projectview', {
                 url : '/projects/:id',
-                templateUrl : 'partials/project/view-project.html',
-                controller : 'ProjectDetailCtrl',
-                access : {
-                   loginRequired : true,
-                   permissions : USER_ROLES.owner
-                }
-            }).state('projectupdate', {
-                url : '/projects/:id/update',
-                templateUrl : 'partials/project/update-project.html',
-                controller : 'ProjectUpdateCtrl'
+                templateUrl : 'partials/project/view-project.html'
             }).state('notAllowed', {
                 url : '/notallowed',
                 template: '<h1>You are not allowed to view this!</h1>'
             }).state('dashboard', {
                 url:'/dashboard',
-                templateUrl : 'partials/dashboard.html'
+                templateUrl : 'partials/dashboard.html',
+                access : {
+                    loginRequired :true
+                }
+            }).state('userview', {
+                url:'/users/:id',
+                templateUrl: 'partials/user/view-user.html'
             });
 
         $urlRouterProvider.otherwise('/');
 
+        //$stickyStateProvider.enableDebug(true);
+        
         $authProvider.google({
             clientId: '631036554609-v5hm2amv4pvico3asfi97f54sc51ji4o.apps.googleusercontent.com'
         });
@@ -97,15 +97,14 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 return;
             }
             
-            if(toState.access !== undefined && toState.access.loginRequired && toState.access.permissions !== undefined){
+            if(toState.access !== undefined && toState.access.loginRequired !== undefined && toState.access.permissions !== undefined){
                
                 event.preventDefault();
                 AccountService.getUserAccess().then(function(user){
                     
                     var authorizationResult = new AuthorizationService(user);
                     var canAccess =  authorizationResult.canAccess(toParams.id, toState.access.loginRequired, toState.access.permissions);
-                    console.log(canAccess)   
-                   
+                    
                     if( canAccess === AUTH_EVENTS.notAuthenticated){
                         $location.path('/login').replace();
                     }

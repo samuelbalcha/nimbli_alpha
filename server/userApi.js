@@ -8,7 +8,6 @@ var Project = ProjectSchema.Project;
 
 exports.getAccess = function(req, res){
 
-    
      User.findById(req.user, function(err, user) {
         if(err){
             console.log(err);
@@ -19,16 +18,17 @@ exports.getAccess = function(req, res){
         }
         else{
             
-            Project.where('createdBy', req.user).find({}, function(err, projects){
+            Project.where('createdBy', req.user).find({}).distinct('_id', function(err, projects){
                 if(err){
                     console.log(err);
                     res.status(401).send({ message: 'User has no projects' });
                 }
                 
                 for (var i =0; i < projects.length; i++) {
-                    user.roles.owner.push(projects[i]._id);
+                    if(projects[i]._id !== undefined)
+                        user.roles.owner.push(projects[i]._id);
                 }
-                 
+                 console.log(user);
                 res.send(user);
             });
         }
@@ -66,10 +66,14 @@ exports.getProfile = function(req, res) {
 
 exports.updateProfile = function(req, res) {
     User.findById(req.user, function(err, user) {
-        if (!user) {
-            return res.status(400).send({ message: 'User not found' });
+        if(err){
+            console.log(err);
+            res.status(401).send({ message : err });
         }
-        //console.log(req.user); // returns id
+        if (!user) {
+            return res.status(401).send({ message: 'User not found' });
+        }
+        console.log(req.body); // returns id
 
         user.displayName = req.body.displayName || user.displayName;
         user.email = req.body.email || user.email;
@@ -92,24 +96,59 @@ exports.updateProfile = function(req, res) {
 exports.users = function(req, res) {
 
     //get all users in the database
-    User.find(function(err, users) {
+    User.find().select('displayName about skills' ).exec(function(err, users) {
         
         if (err){
-            res.send(err);
+            res.status(401).send({ message : err});
         }
-        res.json(users); 
+        res.status(200).send(users); 
     });
 };
 
 exports.user =  function(req, res) {
-
-    User.findOne({'_id' : req.params.id},function(err, user) {
+   
+    User.findOne({'_id' : req.params.id}).populate(({ path: 'Project' })).exec(function(err, user) {
         if (err){
-            res.send(err);
+            res.status(401).send({ message: err});
         }
-        res.json(user); 
+        
+         getUserProjects(user.roles.owner, function(data){
+             
+             res.status(200).send({ user: user, userProjects : data }); 
+         });
+         
     });
+   
 };
+
+
+function getUserProjects(pids, callback){
+    var userProjects = [];
+    
+    Project.find({_id : { $in: pids } }, function(err, projects){
+        if(err){
+            console.log(err);
+        }
+        if(!projects){
+        }
+        else{
+            projects.forEach(function(project, idx){
+                userProjects.push({
+                    _id : project._id,
+                    title : project.title,
+                    coverPicture : project.coverPicture,
+                    description : project.description,
+                    status : project.status,
+                    dateCreated: project.dateCreated
+                });
+            });
+             
+            callback(userProjects);
+        }
+    });
+   
+   
+}
 
 exports.delUser =  function(req, res){
     User.findOneAndRemove({ _id : req.params.id }, function(err, user){

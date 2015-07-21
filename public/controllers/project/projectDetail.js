@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('ProjectDetailCtrl', function($scope, $stateParams, ProjectService, AccountService, $location, USER_ROLES, $modal)
+    .controller('ProjectDetailCtrl', function ($scope, $stateParams, $location, ProjectService, AccountService, UtilityService , USER_ROLES, $modal)
 {
         
     $scope.isOwner = false;
@@ -12,7 +12,10 @@ angular.module('nimbliApp')
     $scope.save = save;
     $scope.cancel = cancel;
     $scope.statusChanged = statusChanged;
-    
+    $scope.detailProject = null;
+    $scope.project = null;
+    $scope.userRole = USER_ROLES.anonymous;
+ 
     $scope.projectStatus = [ { name : 'Private', value : 0 },
                              { name : 'Published', value : 1 },
                              { name : 'Started', value : 2 },
@@ -22,17 +25,8 @@ angular.module('nimbliApp')
                            ];
                            
     $scope.selectedItem = null;
-    
-    var user = AccountService.getCurrentUser();
-    
-    if(user !== undefined && user.userRole === USER_ROLES.owner){
-        $scope.isOwner = true;
-    }
-    
+   
     detailProject();
-    
-    $scope.id = $stateParams.id;
-    $scope.detail = detailProject;
     
     function detailProject(){
         ProjectService.getProject($stateParams.id).then(handleSuccess); 
@@ -62,26 +56,20 @@ angular.module('nimbliApp')
         ProjectService.removeProject($scope.project._id);
         $scope.closeModal();
         $location.path('/projects');
-    }
+    };
     
     function publish(status){
         console.log("publish" , status);
     }
     
     function save(){
-        console.log($scope.selectedOption);
         ProjectService.updateProject($scope.project);
         $scope.editMode = false;
     }
     
     function cancel(){
         $scope.editMode = false;
-        detailProject();
-    }
-    
-    function handleSuccess(project){
-        $scope.project = project;
-        //$scope.selectedOption = $scope.project.status;
+        $scope.detailProject();
     }
     
     $scope.getSelection = function(){
@@ -91,10 +79,46 @@ angular.module('nimbliApp')
                 return $scope.projectStatus[i];
             }
         }
-    }
+    };
     
     function statusChanged(ele){
       $scope.project.status[0] = ele.selectedItem.name;    
+    }
+    
+    function handleSuccess(project){
+       $scope.project = project;  
+       $scope.brief = project.brief;
+       
+       getUserAndCheckAccess(function(){
+           ProjectService.setBrief($scope.project.brief, $scope.isOwner);
+           UtilityService.setRole($scope.userRole);
+       });
+    }
+    
+    function getUserAndCheckAccess(callback){
+        AccountService.getUserAccess().then(function(user){
+            setUserAccess(user);
+            callback();
+        }); 
+    }
+    
+    function setUserAccess(user){
+        
+        if(user !== undefined){ 
+            if(UtilityService.isInRole(user.roles.owner, $stateParams.id) || user._id === $stateParams.id ){
+                $scope.isOwner = true;
+                $scope.userRole = USER_ROLES.owner;
+            }
+            else if(UtilityService.isInRole(user.roles.teamMember, $stateParams.id)){
+                $scope.userRole = USER_ROLES.teamMember;
+            }
+           else if(UtilityService.isInRole(user.roles.supervisor, $stateParams.id)){
+                $scope.userRole = USER_ROLES.supervisor; 
+            }
+            else{
+                $scope.userRole = USER_ROLES.anonymous;
+            }  
+        }
     }
     
 });

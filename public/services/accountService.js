@@ -38,24 +38,26 @@ angular.module('nimbliApp')
                 }
                 
                return deferred.promise;
-            }
-            /**
-            getUserRoles : function(){
-                var deferred = $q.defer();
-                $http.get('/api/access').success(function(data){
-                    this.setCurrentUserAndRoles(data);
-                    deferred.resolve(data);
-                });
-                return deferred.promise;
             },
-            */,
-            
+           
             //nullify when logout
             setCurrentUserAndRoles : function(user){
                 currentUser = user;
             },
             getCurrentUser : function(){
                 return currentUser;
+            },
+            getUser : function(id){
+                var deferred = $q.defer();
+                $http.get('/api/users/'+ id).success(function(data){
+                    deferred.resolve(data);
+                }).error(function(data){
+                    deferred.reject("user was not found");
+                });
+                return deferred.promise;
+            },
+            isUserAuthenticated : function(){
+                return $auth.isAuthenticated();
             }
             
         };

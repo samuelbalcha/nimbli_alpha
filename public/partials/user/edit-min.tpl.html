@@ -1,0 +1,41 @@
+<form>
+	<div class="col-md-3">
+	   <img src="http://api.adorable.io/avatars/285/abott@adorable.io.png" class="img-thumbnail picture hidden-xs" />
+        <input  class="btn-file" type="file" id="avatar">
+        <p class="help-block">Update profile picture.</p>
+	</div>
+    <div class="col-md-7">
+        <label for="displayName"> Display name</label>
+        <input type="text" class="form-control" ng-model="user.displayName" id="displayName" required>
+        <br>
+        <label for="firstName">First name</label>
+        <input type="text" class="form-control" ng-model="user.firstName" id="firstName" required>
+        <br>
+        <label for="lastName">Last name</label>
+        <input type="text" class="form-control" ng-model="user.lastName" id="lastName" required>
+        <br>
+        <label for="about"> Bio</label>
+        <textarea id="about" ng-model="user.about" class="form-control" name="about" rows="5" style="margin-bottom:15px;" required>
+        </textarea>
+        <label for="location">Location</label>
+        <input type="text" class="form-control" ng-model="user.location" id="location" required>
+          
+        
+        <p>
+            <button type="submit"  
+                    ng-click="save()" 
+                    class="btn btn-md btn-info"
+                    style="margin-right: 10px;">
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                   Save
+            </button>
+            <a      class="btn btn-md btn-default"
+                    ng-click="cancel()" 
+                    style="margin-left: 10px">
+                    Cancel
+            </a>
+        </p>
+    </div>
+</form>
+
+

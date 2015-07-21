@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
+angular.module('nimbliApp').service('ProjectService', function ($http, $q, $rootScope) {
 
     var url = '/api/projects';
     var currentProject;
-
+    var currentBrief;
+    
     return ({
     
         getProjects : function (){
@@ -12,6 +13,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
         },
         
         getProject : function(id){
+            
             var deferred = $q.defer();
             $http.get(url + '/'+ id).success(function(data){
                 currentProject = data;
@@ -55,7 +57,15 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q) {
                         }, function(err){
                             $q.reject(err);
                     });
+        },
+        getBrief : function(){
+            return currentBrief;
+        },
+        setBrief : function(br, isOwner){
+            currentBrief = br;
+            $rootScope.$broadcast('currentBriefChanged', [currentBrief, isOwner]);
         }
+        
     });
     
     function handleSuccess(response){

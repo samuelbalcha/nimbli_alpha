@@ -4,7 +4,7 @@ angular.module('nimbliApp')
     .controller('ProfileCtrl',  function($scope, $auth, $alert, AccountService, $location, $modal) {
 
         $scope.editMode = false;
-
+        $scope.user = {};
         /**
          * Get user's profile information.
          */
@@ -36,7 +36,7 @@ angular.module('nimbliApp')
         $scope.updateProfile = function() {
 
             AccountService.updateProfile({
-                displayName: $scope.user.displayName,
+                displayName : $scope.user.displayName,
                 about: $scope.user.about,
                 skills : $scope.user.skills,
                 location: $scope.user.location,
@@ -132,7 +132,7 @@ angular.module('nimbliApp')
 
         $scope.newSkill = { name : '' };
 
-        var template = 'partials/modal/modal_upload_avatar.tpl.html';
+        var template = 'partials/modal/modal-upload-avatar.tpl.html';
         $scope.openModal = function(){
 
             var theModal =  $modal({
@@ -153,6 +153,7 @@ angular.module('nimbliApp')
         };
 
         $scope.save = function(){
+            console.log($scope.user);
             this.updateProfile();
             this.editMode = false;
         };

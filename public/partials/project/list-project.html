@@ -1,20 +1,33 @@
-<ul>
-  <li ng-repeat="project in projects" class="col-md-4 project-card">
-  <div class="card">
-    <div class="card-height-indicator"></div>
-    <div class="card-content">
-        <div class="card-image">
-            <img  src="https://placehold.it/368x200/20b392/ffffff/?text=." alt="Loading image...">
-            <h3 class="card-image-headline">{{ project.title }}</h3>
+   
+<div class="well">
+    <h1 class="heading"> Latest projects</h1>
+</div>
+ <ul>
+    <li ng-repeat="project in projects" class="col-md-4 project-card grow">
+     <a href="/#/projects/{{ project._id}}"> 
+      <div class="card">
+        <div class="card-height-indicator"></div>
+        <div class="card-content">
+            <div class="card-image">
+                <img  src="https://placehold.it/368x200/20b392/ffffff/?text=." alt="Loading image...">
+                <h3 class="card-image-headline">{{ project.title }}</h3>
+            </div>
+            <div class="card-body">
+                <p>{{ project.description | characters:140 :true }}</p>
+            </div>
+            <footer class="card-footer">
+                <a href="/#/organizations/:id" class="btn btn-flat project-btn">
+                    <span class="glyphicon glyphicon-briefcase"></span>
+                    {{ project.company }} 
+                </a>
+                <a href="/#/users/{{ project.createdBy._id }}" class="btn btn-flat btn-warning project-btn">
+                    <span class="glyphicon glyphicon-user"></span>
+                    {{ project.createdBy.displayName }}
+                </a>
+            </footer>
         </div>
-        <div class="card-body">
-            <p>{{ project.description | characters:140 :true }}</p>
-        </div>
-        <footer class="card-footer">
-            <button class="btn btn-flat">{{ project.company }}</button>
-            <a href="/#/projects/{{ project._id}}" class="btn btn-flat btn-warning">Learn More</a>
-        </footer>
-    </div>
-  </div>
- </li>
+      </div>
+     </a>
+  </li>
 </ul>
+

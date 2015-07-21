@@ -9,7 +9,7 @@
                  class=""
                  name="outcome" style="margin-bottom:15px;">
                 
-                {{ brief.outcome }}
+                {{ $parent.brief.outcome }}
             </div>  
         </div>
     </div>
@@ -83,18 +83,15 @@
 </div>
 
 <!-- Buttons -->
-<div class="container">
+<div ng-if="$parent.isOwner" class="container">
     <div class="row">
         <div class="col-sm-5 col-md-5">
             <p>
-            <button type="submit"  ng-click="edit()" class="btn btn-md btn-info" style="margin-right: 10px;">
+            <button type="submit"  ng-click="edit()" class="btn btn-md btn-primary" style="margin-right: 10px;">
                 <span class="glyphicon glyphicon-edit"></span>
                 Edit
             </button>
-            <a class="btn btn-md btn-danger"  ng-click="cancel()" style="margin-left: 10px">
-                <span class="glyphicon glyphicon-floppy-remove"></span>
-                Cancel
-            </a>
+          
             </p>
         </div>
     </div>

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('nimbliApp').factory('AuthorizationService', ['USER_ROLES', 'AUTH_EVENTS', function(USER_ROLES, AUTH_EVENTS){
+angular.module('nimbliApp').factory('AuthorizationService', ['USER_ROLES', 'AUTH_EVENTS', function(USER_ROLES, AUTH_EVENTS, UtilityService){
  
  
   return function(user){
@@ -9,7 +9,6 @@ angular.module('nimbliApp').factory('AuthorizationService', ['USER_ROLES', 'AUTH
            
            canAccess : function(resourceId,loginRequired, requiredPermissions){
                     
-                     
                     //login required
                     if(user === undefined && loginRequired){
                         return AUTH_EVENTS.notAuthenticated;
@@ -18,21 +17,19 @@ angular.module('nimbliApp').factory('AuthorizationService', ['USER_ROLES', 'AUTH
                     //user is owner
                     if((requiredPermissions === USER_ROLES.owner) && user.roles.owner !== undefined){
                         
-                        var allowed = isInRole(user.roles.owner, resourceId);
-                        if( allowed === AUTH_EVENTS.authorized){
-                            user.userRole = USER_ROLES.owner;
-                        }
-                       return allowed;   
-                    }
-                    
+                         if(UtilityService.isInRole(user.roles.owner, resourceId)){
+                                user.userRole = USER_ROLES.owner;
+                                return AUTH_EVENTS.authorized;   
+                         }
+                     }
+           
                     //user is teamMember
                     if((requiredPermissions === USER_ROLES.teamMember) && user.roles.teamMember !== undefined){
                         
-                        var allowed =  isInRole(user.roles.teamMember, resourceId);
-                        if( allowed === AUTH_EVENTS.authorized){
-                            user.userRole = USER_ROLES.teamMember;
-                        }
-                       return allowed; 
+                        if(UtilityService.isInRole(user.roles.teamMember, resourceId)){
+                                user.userRole = USER_ROLES.teamMember;
+                                return AUTH_EVENTS.authorized; 
+                        } 
                     }
                     
                    //return not authorized

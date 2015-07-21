@@ -1,6 +1,8 @@
 'use strict';
 
 var ProjectSchema = require('./models/project');
+var User = require('./models/user');
+
 var Project = ProjectSchema.Project;
     
 exports.createProject = function(req, res){
@@ -48,7 +50,21 @@ exports.createProject = function(req, res){
             if(err){
                 console.log(err);
             }
-            res.status(201).send(project);
+        });
+        
+        User.findOne({_id : req.user }, function(err, user){
+            if(err){
+                console.log(err);
+            }
+            
+            user.roles.owner.push(project._id);
+                 user.save(function(err) {
+                    if(err){
+                        console.log(err);
+                    }
+                    
+                res.status(201).send({ user : user , project : project });  // return project 
+            });
         });
     });
 };
@@ -93,7 +109,7 @@ exports.updateProject = function(req, res){
     
 exports.getProjects = function(req, res){
     
-    Project.find().sort({ dateCreated : 'desc'}).exec(function(err, projects) {
+    Project.find().populate('createdBy', 'displayName').sort({ dateCreated : 'desc'}).exec(function(err, projects) {
         if (err){
             res.status(404).send(err);
         }
@@ -117,6 +133,11 @@ exports.deleteProject = function(req, res){
             }
             console.log("removed brief" + br._id);
         });
+        
+        // Remove project from the owners
+         removeProjectFromUsers(pr.owners, pr._id);
+         // Remove from the team members
+         removeProjectFromUsers(pr.team, pr._id);
     });
     
     res.send(200);
@@ -132,7 +153,7 @@ exports.getProject = function(req, res) {
     
     */
     
-    Project.findOne({ '_id' : req.params.id}).populate('brief').exec(function(err, project) {
+    Project.findOne({ '_id' : req.params.id}).populate('brief').populate('createdBy', 'displayName').exec(function(err, project) {
         if(err){
             console.log(err);
             res.status(401).send({ message: err });
@@ -145,3 +166,26 @@ exports.getProject = function(req, res) {
         }
     });
 };
+
+function removeProjectFromUsers(userIds, prId){
+    // Remove project from users
+     User.find({_id : {$in: userIds } }, function(err, users){
+        if(err){
+            console.log(err);
+        }
+        if(!users){
+            return;
+        }
+        else{
+            users.forEach(function(user, idx){
+                console.log("removed from user", user._id);
+                 user.roles.owner.pop(prId);
+                 user.save(function(err) {
+                    if(err){
+                        console.log(err);
+                    }
+                 });
+           });
+        }
+     });
+}
