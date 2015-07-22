@@ -18,6 +18,16 @@ exports.getAccess = function(req, res){
         }
         else{
             
+             var userId = req.user;
+            Project.find().or([{ createdBy: userId, team: userId, supervisors :userId }], function(err, projects){
+                if(err){
+                    console.log(err);
+                    res.status(401).send({ message: 'User has no projects' });
+                }
+                
+                console.log("with or", projects);
+            });
+            
             Project.where('createdBy', req.user).find({}).distinct('_id', function(err, projects){
                 if(err){
                     console.log(err);

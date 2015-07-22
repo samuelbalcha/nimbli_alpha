@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .factory('AccountService', function($q, $http, $auth) {
+    .factory('AccountService', function($q, $http, $auth, store) {
         var currentUser;
         
         function handleSuccess(response){
             currentUser = response.data;
-            return response.data;
+            store.set('currentUser', currentUser);
+            return currentUser;
         }
     
         function handleError(err){
@@ -24,19 +25,20 @@ angular.module('nimbliApp')
                 
                 var isAuthen = $auth.isAuthenticated();
                 var deferred = $q.defer();
-                
+                 
                 if(currentUser === undefined && isAuthen){
-                   $http.get('/api/access').success(function(data){
-                      currentUser = data;
-                      deferred.resolve(data);
-                   }).error(function(data){
-                       deferred.reject("user not logged in");
-                   });
+                    currentUser = store.get('currentUser');
+                    if(currentUser === undefined || currentUser === null){
+                            $http.get('/api/access').success(function(data){
+                                  currentUser = data;
+                                  deferred.resolve(data);
+                             }).error(function(data){
+                                   deferred.reject("user not logged in");
+                            });
+                    }
                 }
-                else {
-                    deferred.resolve(currentUser);
-                }
-                
+               
+               deferred.resolve(currentUser);
                return deferred.promise;
             },
            
@@ -45,7 +47,10 @@ angular.module('nimbliApp')
                 currentUser = user;
             },
             getCurrentUser : function(){
-                return currentUser;
+                if (!currentUser) {
+                    currentUser = store.get('currentUser');
+                }
+                return currentUser;  
             },
             getUser : function(id){
                 var deferred = $q.defer();

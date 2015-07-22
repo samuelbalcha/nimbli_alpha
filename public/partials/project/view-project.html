@@ -1,5 +1,6 @@
 <div ng-controller="ProjectDetailCtrl" class="col-md-12 panel project-panel" style="margin-bottom:5px">
-   	<div class="row" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
+   	<div class="col-md-2 pull-right" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' 
+   	                                     || 'partials/project/apply-follow.tpl.html' "></div>
     <div ng-include="editMode && 'partials/project/edit-mini.tpl.html' || 'partials/project/view-mini.tpl.html' "></div>
 </div>
 <br>

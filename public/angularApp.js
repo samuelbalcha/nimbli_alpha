@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'ngImgCrop', 'angularMoment', 'truncate'])
+angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'angular-storage', 'angularMoment', 'truncate'])
     .config(function($stateProvider, $urlRouterProvider, $authProvider, USER_ROLES, AUTH_EVENTS) {
         $stateProvider
             .state('home', {
@@ -66,8 +66,6 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
 
         $urlRouterProvider.otherwise('/');
 
-        //$stickyStateProvider.enableDebug(true);
-        
         $authProvider.google({
             clientId: '631036554609-v5hm2amv4pvico3asfi97f54sc51ji4o.apps.googleusercontent.com'
         });
@@ -83,7 +81,8 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
     }).config(function($modalProvider) {
         angular.extend($modalProvider.defaults, {
             html: true
-        });
+        });   
+        
     }).run(['$rootScope','$location','$state', 'AuthorizationService','AUTH_EVENTS', 'AccountService', 
    
      function($rootScope, $location, $state, AuthorizationService, AUTH_EVENTS, AccountService){

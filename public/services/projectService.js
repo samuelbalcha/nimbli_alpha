@@ -5,6 +5,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
     var url = '/api/projects';
     var currentProject;
     var currentBrief;
+    var currentProjectRequests;
     
     return ({
     
@@ -64,6 +65,31 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
         setBrief : function(br, isOwner){
             currentBrief = br;
             $rootScope.$broadcast('currentBriefChanged', [currentBrief, isOwner]);
+        },
+        
+        sendProjectRequest : function(projectRequest){
+            return $http.put(url + '/' + currentProject._id + '/request', projectRequest).then(function(response){
+                return response.data;
+            }, function(err){
+                $q.reject(err);
+            });
+        },
+        
+        getProjectRequests : function(id){
+            
+            return $http.get(url + '/' + id + '/request').then(function(response){
+                  currentProjectRequests = response.data;
+                return currentProjectRequests;
+            }, handleError);
+        },
+        getCurrentProjectRequests : function(){
+            return currentProjectRequests;
+        },
+        updateProjectRequest : function(id, projectRequest){
+            return $http.put(url + '/' + id + '/updaterequest', projectRequest).then(function(response) {
+                currentProjectRequests = response.data;
+                return currentProjectRequests;
+            }, handleError);
         }
         
     });

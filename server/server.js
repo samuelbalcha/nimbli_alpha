@@ -32,7 +32,7 @@ var userApi = require('./userApi');
 var projectApi = require('./projectApi');
 var auth = require('./authentication');
 var Project = ProjectSchema.Project;
-var Brief = ProjectSchema.Brief;
+
 
 /*
  |--------------------------------------------------------------------------
@@ -75,50 +75,17 @@ app.get('/api/access', ensureAuthenticated, userApi.getAccess);
 // Project
 app.post('/api/projects', ensureAuthenticated, projectApi.createProject);
 app.get('/api/projects', projectApi.getProjects);
-app.get('/api/projects/:id', projectApi.getProject);
-app.delete('/api/projects/:id', projectApi.deleteProject);
+app.get('/api/projects/:id', ensureAuthenticated, projectApi.getProject);
+app.delete('/api/projects/:id', ensureAuthenticated, projectApi.deleteProject);
 app.put('/api/projects/:id', ensureAuthenticated, projectApi.updateProject);
 
 // Brief
-app.get('/api/briefs', function(req, res){
-    
-    Brief.find(function(err, briefs) {
-        if (err){
-            res.status(404).send(err);
-        }
-        res.status(200).send(briefs);
-    }); 
-});
+app.put('/api/projects/:id/brief', projectApi.updateBrief);
 
-app.put('/api/projects/:id/brief', function(req, res){
-    var br = req.body;
-    
-    console.log(req.body);
-    Brief.findById(br._id, function(err, brief){
-        if(err){
-            res.status(401).send({ message : err });
-        }
-        if(brief){
-            
-                brief.outcome = br.outcome  || brief.outcome; 
-                brief.objective = br.objective || brief.objective; 
-                brief.deliverable = br.deliverable || brief.deliverable;
-                brief.approach = br.approach || brief.approach;
-                brief.startDate = br.startDate || brief.startDate;
-                brief.endDate = br.endDate || brief.endDate;
-                brief.dateUpdated = Date.now();
-                brief.briefCreatedByUser = true;
-
-            brief.save(function(err){
-                if(err){
-                    console.log(err);
-                    res.status(401).send({ message : err});
-                }
-                res.status(200).send(brief);
-            });
-        }
-    });
-});
+// ProjectRequest
+app.put('/api/projects/:id/request', projectApi.createProjectRequest);
+app.get('/api/projects/:id/request', projectApi.getProjectRequests);
+app.put('/api/projects/:id/updaterequest', projectApi.updateProjectRequest);
 
 // Test APIs
 app.get('/api/users', userApi.users);

@@ -9,8 +9,8 @@
     <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.css" rel="stylesheet">
-    <link href="/stylesheets/vendors/xeditable.css" rel="stylesheet">
-    <link href="/stylesheets/vendors/ng-img-crop.css" rel="stylesheet">
+   <!-- <link href="/stylesheets/vendors/xeditable.css" rel="stylesheet"> -->
+ <!--   <link href="/stylesheets/vendors/ng-img-crop.css" rel="stylesheet"> -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.css" type="text/css" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -24,11 +24,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-animate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-messages.min.js"></script>
 <script src="//cdn.jsdelivr.net/satellizer/0.11.2/satellizer.min.js"></script>
+<!--  angular store -->
+<script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-storage/master/dist/angular-storage.js"></script>
 
+<!--
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.36.min.js"></script>
 <script src="vendors/ng-file-upload-shim.min.js"></script>
 <script src="vendors/ng-file-upload-all.min.js"></script>
-<script src="vendors/xeditable.min.js"></script>
+<script src="vendors/xeditable.min.js"></script> -->
 
 <!-- moment -->
 <script src="vendors/moment.js"></script>
@@ -38,7 +41,6 @@
 <script src="vendors/ui-bootstrap-tabs-tpl.js"></script>
 <script src="vendors/tabs.js"></script>-->
 
-<script src="vendors/ng-img-crop.js"></script>
 <script src="angularApp.js"></script>
 
 <script src="/services/appConstants.js"></script>
@@ -61,6 +63,7 @@
 <!-- project tabs -->
 <script src="/controllers/project/briefCtrl.js"></script>
 <script src="/controllers/project/teamCtrl.js"></script>
+<script src="/controllers/project/projectPeople.js"></script>
 
 <!-- user controllers -->
 <script src="/controllers/user/userDetail.js"></script>
@@ -70,7 +73,8 @@
 <script src="/directives/passwordMatch.js"></script>
 <script src="/directives/passwordStrength.js"></script>
 <script src="/directives/truncate.js"></script>
- 
+<script src="/directives/textFilter.js"></script>
+
   <style type="text/css">
        .bs-pad{
         margin-left: 20px;
@@ -107,11 +111,16 @@
    .card a:hover, a:focus {
         text-decoration: none;
     }
-    .grow { transition: all .2s ease-in-out; }
+    
+    .grow {
+        transition: all .2s ease-in-out; 
+        }
     .grow:hover { 
-        -ms-transform: scale(1,1); /* IE 9 */
-        -webkit-transform: scale(1,1); /* Safari */
-        transform: scale(1.1); 
+        background-color: #009688;
+         color: #fff;
+      /*  -ms-transform: scale(1,1);  IE 9 
+        -webkit-transform: scale(1,1); /* Safari 
+        transform: scale(1.1); */
     }
     .project-btn{
         padding: 5px;
@@ -124,11 +133,10 @@
        margin-top: 5px;
     }
     .pull-project-image-neg{
-       margin-top: -56px;
        margin-left: -30px;
     }
     .pull-project-image-po{
-       margin-left:-30px;
+       margin-left:-30px; 
     }
     
     .form-horizontal input[type=file] {
@@ -171,7 +179,10 @@
         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.42);
     }
    .card { box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-   .panel { box-shadow : 0 0;}
+   .panel { box-shadow : 0 0; }
+   body .well { 
+       box-shadow : 0 0;
+   }
   </style>
 
 </head>

@@ -6,7 +6,8 @@ angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, USER
     var teamTemplate = { heading : 'Team Space', content : 'partials/project/templates/teamspace.tpl.html', id : 'tabTeamView' };
     var processTemplate = { heading : 'Process', content : 'partials/project/templates/process.tpl.html', id : 'tabProcess' };
     var reflectionTemplate = { heading : 'Reflection', content : 'partials/project/templates/reflection.tpl.html', id : 'tabReflection' };
-  
+    var applicantTemplate = { heading : 'Applicants', content : 'partials/project/templates/applicants.tpl.html', id : 'tabApplicantView' };
+
     $scope.status = false; //controll notifiction icon 
     $scope.currentTab = briefTemplate.content;
     
@@ -14,10 +15,16 @@ angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, USER
     $scope.brief = {};
     $scope.isOwner = false;
     $scope.editMode = false;
+    $scope.projectId = null;
+    
+    // ProjectRequest setup
+     $scope.projectTabs = [];
     
     $scope.onClickTab = function (tab) {
         $scope.currentTab = tab.content;
-        UtilityService.notifyTabClick($scope.currentTab);
+        $scope.projectTabs[tab.id] = $scope.$childScope;
+       
+        UtilityService.notifyTabClick($scope.projectTabs[tab.id]);
     };
     
     $scope.isActiveTab = function(tabUrl) {
@@ -26,6 +33,7 @@ angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, USER
    
     $scope.$on('userRoleReady', function(evt, role){
          $scope.userRole = role;
+         $scope.projectId = $scope.$parent.projectId;
          loadTabs();
     });
     
@@ -33,6 +41,7 @@ angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, USER
        var brief = args[0];
        $scope.brief = brief;
        $scope.isOwner = args[1];
+       
        if(!$scope.brief.briefCreatedByUser && $scope.isOwner){
             $scope.editMode = true;
        }
@@ -42,7 +51,7 @@ angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, USER
       
         switch ($scope.userRole) {
             case USER_ROLES.owner:
-                $scope.tabs = [ briefTemplate, teamTemplate, reflectionTemplate,processTemplate];
+                $scope.tabs = [ briefTemplate, applicantTemplate];
             break;
             case USER_ROLES.teamMember:
                 $scope.tabs = [ briefTemplate, teamTemplate, processTemplate];

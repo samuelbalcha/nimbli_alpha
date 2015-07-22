@@ -4,11 +4,13 @@ var ProjectSchema = require('./models/project');
 var User = require('./models/user');
 
 var Project = ProjectSchema.Project;
-    
+var Brief = ProjectSchema.Brief;
+var ProjectRequest = ProjectSchema.ProjectRequest;
+
 exports.createProject = function(req, res){
     
     var pr = req.body;
-    var br = ProjectSchema.Brief;
+   
     
     Project.findOne({ title : pr.title}, function(err, existingProject){
         if (existingProject) {
@@ -19,7 +21,7 @@ exports.createProject = function(req, res){
         }
     
         //Create Brief 
-        var brf = new br({ 
+        var brf = new  Brief({ 
                 briefCreatedByUser : false,
                 outcome   : '',
                 objective : '',
@@ -125,9 +127,8 @@ exports.deleteProject = function(req, res){
             res.status(404).send(err);
         }
         console.log("removed: " + pr._id);
-        var brf = ProjectSchema.Brief;
-        
-        brf.findOneAndRemove({ _id : pr.brief }, function(err, br){
+         
+        Brief.findOneAndRemove({ _id : pr.brief }, function(err, br){
             if(err){
                 console.log("could not remove brief");
             }
@@ -153,7 +154,10 @@ exports.getProject = function(req, res) {
     
     */
     
-    Project.findOne({ '_id' : req.params.id}).populate('brief').populate('createdBy', 'displayName').exec(function(err, project) {
+    Project.findOne({ '_id' : req.params.id}).populate('brief')
+                                             .populate('createdBy', 'displayName')
+                                             .populate('team', 'displayName')
+                                             .exec(function(err, project) {
         if(err){
             console.log(err);
             res.status(401).send({ message: err });
@@ -162,7 +166,23 @@ exports.getProject = function(req, res) {
             res.status(401).send({ message: 'Project not found' });
         }
         else{
-            res.status(200).send(project);
+            
+            if(req.user != undefined){
+                
+                ProjectRequest.findOne({'user' : req.user  , 'project' : project._id}, function(err, existingRequest){
+                    if(err){
+                     console.log(err);
+                    }
+                    if(!existingRequest){
+                        res.status(200).send(project);
+                    }
+                    else{
+                       project.projectRequest[0] = existingRequest;
+                       console.log(project);
+                       res.status(200).send(project);
+                    }
+                });
+            }
         }
     });
 };
@@ -188,4 +208,152 @@ function removeProjectFromUsers(userIds, prId){
            });
         }
      });
+}
+
+// Brief 
+exports.updateBrief = function(req, res){
+    var br = req.body;
+    
+    Brief.findById(br._id, function(err, brief){
+        if(err){
+            res.status(401).send({ message : err });
+        }
+        if(brief){
+            
+                brief.outcome = br.outcome  || brief.outcome; 
+                brief.objective = br.objective || brief.objective; 
+                brief.deliverable = br.deliverable || brief.deliverable;
+                brief.approach = br.approach || brief.approach;
+                brief.startDate = br.startDate || brief.startDate;
+                brief.endDate = br.endDate || brief.endDate;
+                brief.dateUpdated = Date.now();
+                brief.briefCreatedByUser = true;
+
+            brief.save(function(err){
+                if(err){
+                    console.log(err);
+                    res.status(401).send({ message : err});
+                }
+                res.status(200).send(brief);
+            });
+        }
+    });
+};
+
+//ProjectRequest
+exports.createProjectRequest = function(req, res){
+    var prReq = req.body;
+    
+    ProjectRequest.findOne({'project' : req.params.id  , 'user' : prReq.user}, function(err, existingRequest){
+        if(err){
+            res.status(401).send({ message : err });
+        }
+        if(existingRequest){
+            // modify with new request 
+           console.log(prReq , "and" , existingRequest);
+           
+            existingRequest.role = prReq.role || existingRequest.role;
+            existingRequest.note = prReq.note || existingRequest.note;
+            existingRequest.dateRequested = Date.now();
+            existingRequest.save(function(err){
+                if(err){
+                    console.log(err);
+                   res.status(401).send({ message : "could not add request"});
+                }
+               res.status(201).send(existingRequest);
+            });
+        }
+        else{
+              var newReq = new ProjectRequest({
+                     user : prReq.user,
+                     project : req.params.id,
+                     role : prReq.role,
+                     note : prReq.note
+                 });
+            console.log("new req", newReq);
+            newReq.save(function(err){
+                if(err){
+                    console.log(err);
+                    res.status(401).send({ message : "could not add request"});
+                }
+                res.status(201).send(newReq);
+            });  
+        }
+    });
+};
+
+exports.getProjectRequests = function(req, res){
+    
+     ProjectRequest.find({'project' : req.params.id }).populate('user', 'displayName avatar' ).sort({ dateRequested : 'desc'}).exec(function(err, projectRequests) {
+        if (err){
+            res.status(404).send(err);
+        }
+        //console.log(projectRequests);
+        res.status(200).send(projectRequests);
+    });
+    
+};
+
+exports.updateProjectRequest = function(req, res){
+    
+    var prReq = req.body;
+    console.log("dump", prReq);
+   ProjectRequest.findOne({_id : prReq.id }, function(err, existingRequest) {
+       if(err){
+           console.log(err);
+           res.send(err);
+       }
+       if(!existingRequest){
+           res.send(err);
+       }
+       else if(prReq.status === 1){
+           existingRequest.requestStatus = 1;
+           existingRequest.responseDate = Date.now();
+           updateProjectAfterRequest(existingRequest.project, existingRequest.user, existingRequest.role);
+       }
+       else if(prReq.status === 2){
+           existingRequest.requestStatus = 2;
+           existingRequest.responseDate = Date.now();
+       }
+       existingRequest.save(function(err){
+           if(err){
+               console.log(err);
+               res.send(err);
+           }
+       });
+       
+       res.send(existingRequest);
+   });
+    
+};
+
+function updateProjectAfterRequest(pid, user, role){
+    
+    Project.findById(pid, function(err, project) {
+        if(err || !project){
+            console.log(err);
+            return err;
+        }
+        if(role === 2){
+            if(project.owners.indexOf(user) === -1)
+                project.owners.push(user);
+        }
+       if(role === 1){
+           if(project.supervisor.indexOf(user) === -1)
+                project.supervisor.push(user);
+       }
+       if(role === 0){
+           if(project.team.indexOf(user) === -1)
+                project.team.push(user);
+       }
+       
+       project.save(function(err){
+           if(err){
+               console.log(err);
+               return err;
+           }
+       });
+       
+       console.log("proj ", project);
+    });
 }
