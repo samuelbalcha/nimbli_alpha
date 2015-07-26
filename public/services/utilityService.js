@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('nimbliApp').factory('UtilityService', function($rootScope){
-     var isOwner;
-     
+    
      return ({
          
          isInRole :  function (roles, resId){

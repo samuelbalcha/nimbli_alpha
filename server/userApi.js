@@ -17,46 +17,32 @@ exports.getAccess = function(req, res){
             res.status(401).send({ message: 'User not found' });
         }
         else{
-            
-             var userId = req.user;
-            Project.find().or([{ createdBy: userId, team: userId, supervisors :userId }], function(err, projects){
-                if(err){
-                    console.log(err);
-                    res.status(401).send({ message: 'User has no projects' });
-                }
-                
-                console.log("with or", projects);
-            });
-            
-            Project.where('createdBy', req.user).find({}).distinct('_id', function(err, projects){
-                if(err){
-                    console.log(err);
-                    res.status(401).send({ message: 'User has no projects' });
-                }
-                
-                for (var i =0; i < projects.length; i++) {
-                    if(projects[i]._id !== undefined)
-                        user.roles.owner.push(projects[i]._id);
-                }
-                 console.log(user);
+                Project.find({ createdBy : req.user, $or : [{ team : req.user, supervisor : req.user }] }).distinct('_id', function(err, projects){
+                    if(err){
+                        console.log(err);
+                        res.status(401).send({ message: 'User has no projects' });
+                    }
+                    
+                    for (var i =0; i < projects.length; i++) {
+                        if(projects[i]._id !== undefined){
+                            if(projects[i].team.indexOf(req.user) !== -1){
+                                user.roles.teamMember.push(projects[i]._id);
+                            }
+                            if(projects[i].supervisor.indexOf(req.user) !== -1){
+                                user.roles.supervisor.push(projects[i]._id);
+                            }
+                            if(projects[i].owners.indexOf(req.user) !== -1){
+                                user.roles.owner.push(projects[i]._id);
+                            }
+                        }   
+                    } 
+                     console.log(user);
+                });
+               
                 res.send(user);
-            });
-        }
-        
+            }
      });
 };
-
-function isPartOf(owners, user){
-    
-    for(var i=0; i < owners.length; i++){
-        var id = owners[i];
-        if(id === user){
-            return true;
-        }
-    }
-    
-    return false;
-}
 
 exports.getProfile = function(req, res) {
 
@@ -69,7 +55,8 @@ exports.getProfile = function(req, res) {
             res.status(401).send({ message: 'User not found' });
         }
         else{
-            res.send(user);
+            user.email = '';
+            res.status(200).send(user);
         }
     });
 };

@@ -339,7 +339,7 @@ function updateProjectAfterRequest(pid, user, role){
                 project.owners.push(user);
         }
        if(role === 1){
-           if(project.supervisor.indexOf(user) === -1)
+           if(project.supervisors.indexOf(user) === -1)
                 project.supervisor.push(user);
        }
        if(role === 0){

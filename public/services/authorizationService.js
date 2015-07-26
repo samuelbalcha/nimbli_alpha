@@ -7,7 +7,7 @@ angular.module('nimbliApp').factory('AuthorizationService', ['USER_ROLES', 'AUTH
        
        return {
            
-           canAccess : function(resourceId,loginRequired, requiredPermissions){
+           canAccess : function(resourceId, loginRequired, requiredPermissions){
                     
                     //login required
                     if(user === undefined && loginRequired){
@@ -32,19 +32,19 @@ angular.module('nimbliApp').factory('AuthorizationService', ['USER_ROLES', 'AUTH
                         } 
                     }
                     
+                     //user is supervisor
+                    if((requiredPermissions === USER_ROLES.supervisor) && user.roles.supervisor !== undefined){
+                        
+                        if(UtilityService.isInRole(user.roles.supervisor, resourceId)){
+                                user.userRole = USER_ROLES.supervisor;
+                                return AUTH_EVENTS.authorized; 
+                        } 
+                    }
+                    
                    //return not authorized
                    return AUTH_EVENTS.notAuthorized;
            }
        };
-       
-        function isInRole(roles, resId){
-          for(var i=0; i < roles.length; i++){ 
-             if(roles[i] === resId){
-                return AUTH_EVENTS.authorized;
-             }
-          } 
-          return AUTH_EVENTS.notAuthorized;
-       }
        
   };
   

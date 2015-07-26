@@ -24,14 +24,7 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 template: null,
                 controller: 'LogoutCtrl'
             })
-            .state('profile', {
-                url: '/profile',
-                templateUrl: 'partials/profile.html',
-                controller: 'ProfileCtrl',
-                access : {
-                    loginRequired : true
-                }
-            }).state('upload', {
+            .state('upload', {
                 url :'/upload',
                 templateUrl: 'partials/avatar_uploader.html',
                 controller: 'UploadCtrl'

@@ -15,7 +15,7 @@ function createJWT(user) {
     var payload = {
         sub: user._id,
         iat: moment().unix(),
-        exp: moment().add(14, 'days').unix()
+        exp: moment().add(1, 'day').unix()
     };
     return jwt.encode(payload, config.TOKEN_SECRET);
 }
@@ -79,6 +79,7 @@ exports.logIn = function(User){
                 if (!isMatch) {
                     return res.status(401).send({ message: 'Wrong email and/or password' });
                 }
+                
                 res.send({ token: createJWT(user) });
             });
         });

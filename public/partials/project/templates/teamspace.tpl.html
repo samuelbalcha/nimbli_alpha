@@ -1,3 +1,33 @@
-<div id="teamView" ng-controller="TeamCtrl">
-		<h1>{{ name }}</h1>
+<div id="teamView" class="col-md-9" ng-controller="TeamCtrl">
+    <br>
+    <br>
+	<div class="panel panel-default">
+	    
+            <ul class="list-group">
+                <li ng-repeat="chat in messages" class="list-group-item ">
+                    <div class="row-picture">
+                        <img class="circle" src="http://lorempixel.com/56/56/people/1" alt="icon">
+                    </div>
+                    <div class="row-content">
+                        <p class="list-group-item-text text-muted chat-top">  {{ chat.sent | amDateFormat:'dddd, MMMM Do YYYY' }} </p>
+                        <p class="chat-body">{{ chat.text }}</p>
+                    </div> 
+                </li>
+            </ul>
+        
+    	<div class="panel-body">
+                <form class="chat-form" role='form-horizontal' novalidate name='form'>
+                  <div class='form-group'>
+                     <div class="form-group" style="padding:14px;">
+                       <textarea ng-model="message" class="form-control" placeholder="Update your team about..." required></textarea>
+                       <button ng-click="postMessage()" 
+                               ng-disabled="form.$invalid"
+                               class="btn btn-success pull-right" type="button">Post
+                        </button>
+                    </div>
+                  </div>
+                </form>
+           </div>
+    </div>
+  
 </div>

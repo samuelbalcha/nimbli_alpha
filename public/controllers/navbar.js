@@ -7,13 +7,17 @@ angular.module('nimbliApp')
                 return $auth.isAuthenticated();
             };
             
+            $scope.$on('currentUserUpdated', function(evt, user){
+              setUserNameOnBar(user);
+            });
+            
             load();
             
             function load(){
                 if($auth.isAuthenticated()){
                     var currentUser = store.get('currentUser');
                     if(currentUser !== undefined && currentUser !== null){
-                         $scope.displayName = currentUser.displayName;
+                        setUserNameOnBar(currentUser)
                     }
                     else{
                         
@@ -22,5 +26,10 @@ angular.module('nimbliApp')
                         });
                     } 
                 }
+            }
+            
+            function setUserNameOnBar(user){
+                 $scope.displayName = user.displayName;
+                 $scope.userId = user._id;
             }
         });

@@ -11,8 +11,9 @@ angular.module('nimbliApp')
                         type: 'material',
                         duration: 3
                     });
-                    
-                   $location.path('/profile');
+                    AccountService.getProfile().then(function(user){
+                         $location.path('/users/' + user._id);
+                    });
                 })
                 .catch(function(response) {
 

@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .factory('AccountService', function($q, $http, $auth, store) {
+    .factory('AccountService', function($q, $http, $auth, store, $rootScope) {
         var currentUser;
         
         function handleSuccess(response){
             currentUser = response.data;
             store.set('currentUser', currentUser);
+            $rootScope.$broadcast('currentUserUpdated', currentUser);
             return currentUser;
         }
     
@@ -25,19 +26,14 @@ angular.module('nimbliApp')
                 
                 var isAuthen = $auth.isAuthenticated();
                 var deferred = $q.defer();
-                 
+                
                 if(currentUser === undefined && isAuthen){
                     currentUser = store.get('currentUser');
                     if(currentUser === undefined || currentUser === null){
-                            $http.get('/api/access').success(function(data){
-                                  currentUser = data;
-                                  deferred.resolve(data);
-                             }).error(function(data){
-                                   deferred.reject("user not logged in");
-                            });
+                        return $http.get('/api/access').then(handleSuccess, handleError);
                     }
                 }
-               
+              
                deferred.resolve(currentUser);
                return deferred.promise;
             },
@@ -45,6 +41,7 @@ angular.module('nimbliApp')
             //nullify when logout
             setCurrentUserAndRoles : function(user){
                 currentUser = user;
+                store.set('currentUser', user);
             },
             getCurrentUser : function(){
                 if (!currentUser) {

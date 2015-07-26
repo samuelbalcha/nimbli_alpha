@@ -24,3 +24,13 @@ run(function($rootScope, authorizationService, AUTH_EVENTS, AccountService, $aut
            }
        })
 });
+
+  var userId = req.user;
+            Project.find().or([{ createdBy: userId }, { team: userId}, { supervisors :userId }, {owners : userId}], function(err, projects){
+                if(err){
+                    console.log(err);
+                    res.status(401).send({ message: 'User has no projects' });
+                }
+                
+                console.log("with or", projects);
+            });
