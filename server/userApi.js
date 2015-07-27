@@ -5,6 +5,7 @@ var User = require('./models/user');
 var auth = require('./authentication');
 var ProjectSchema = require('./models/project');
 var Project = ProjectSchema.Project;
+var faker = require('faker');
 
 exports.getAccess = function(req, res){
 
@@ -56,6 +57,8 @@ exports.getProfile = function(req, res) {
         }
         else{
             user.email = '';
+            user.about = faker.lorem.sentence();
+            user.avatar = faker.image.avatar();
             res.status(200).send(user);
         }
     });
@@ -110,7 +113,9 @@ exports.user =  function(req, res) {
         }
         
          getUserProjects(user.roles.owner, function(data){
-             
+             user.email = '';
+             user.about = faker.lorem.sentence();
+             user.avatar = faker.image.avatar();
              res.status(200).send({ user: user, userProjects : data }); 
          });
          

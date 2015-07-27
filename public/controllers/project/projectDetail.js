@@ -38,7 +38,7 @@ angular.module('nimbliApp')
     };
     $scope.roleChanged = roleChanged;
     $scope.sendApplication = sendApplication;
-    $scope.applyBtn = true;
+    $scope.applyBtn = false;
     $scope.applyBtnText = '';
    
     detailProject();
@@ -76,7 +76,7 @@ angular.module('nimbliApp')
     
     function cancel(){
         $scope.editMode = false;
-        $scope.detailProject();
+        detailProject();
     }
     
     $scope.getSelection = function(){
@@ -112,7 +112,11 @@ angular.module('nimbliApp')
     
     function setUserAccess(user){
         
-        if(user !== undefined){ 
+        if(user == undefined){
+            $scope.userRole = USER_ROLES.anonymous;
+            $scope.applyBtn = true;
+        }
+        else{ 
             if($scope.project.owners.indexOf(user._id)  !== -1 || user._id === $scope.project.createdBy ){
                 $scope.isOwner = true;
                 $scope.userRole = USER_ROLES.owner;
@@ -125,6 +129,7 @@ angular.module('nimbliApp')
             }
             else{
                 $scope.userRole = USER_ROLES.anonymous;
+                $scope.applyBtn = true;
             }  
         }
     }
@@ -158,9 +163,9 @@ angular.module('nimbliApp')
            console.log("sendApplication", $scope.projectRequest.role);
            
            ProjectService.sendProjectRequest($scope.projectRequest, user._id).then(function(data){
-               $scope.applyBtn =  true;
+               $scope.applyBtn =  false;
            });
-           setApplyBtn();
+           //setApplyBtn();
         }
      
         $scope.closeModal();
@@ -180,6 +185,10 @@ angular.module('nimbliApp')
         else{
            
         }
+    }
+    
+    $scope.showButton = function(role){
+        return (role === USER_ROLES.anonymous);
     }
     
    

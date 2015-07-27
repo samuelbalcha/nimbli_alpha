@@ -2,6 +2,7 @@
 
 var ProjectSchema = require('./models/project');
 var User = require('./models/user');
+var faker = require('faker');
 
 var Project = ProjectSchema.Project;
 var Brief = ProjectSchema.Brief;
@@ -115,6 +116,11 @@ exports.getProjects = function(req, res){
         if (err){
             res.status(404).send(err);
         }
+        projects.forEach(function(project, idx){
+           
+            project.coverPicture = faker.image.business();
+            project.company = faker.company.companyName();
+        });
         res.status(200).send(projects);
     });
 };
@@ -166,9 +172,9 @@ exports.getProject = function(req, res) {
             res.status(401).send({ message: 'Project not found' });
         }
         else{
-            
+          
             if(req.user != undefined){
-                
+                console.log("nottt")
                 ProjectRequest.findOne({'user' : req.user  , 'project' : project._id}, function(err, existingRequest){
                     if(err){
                      console.log(err);
@@ -178,11 +184,13 @@ exports.getProject = function(req, res) {
                     }
                     else{
                        project.projectRequest[0] = existingRequest;
-                       console.log(project);
-                       res.status(200).send(project);
                     }
                 });
             }
+            
+              project.coverPicture = faker.image.business();
+              project.company = faker.company.companyName();
+             res.status(200).send(project);
         }
     });
 };

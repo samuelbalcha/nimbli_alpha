@@ -1,4 +1,4 @@
-<div class="pull-right">
+<div ng-if="showButton(userRole)" class="pull-right">
     <button  ng-click="applyToProject();" type="button" class="btn btn-primary">
         <span class="mdi-action-thumb-up">
         </span>{{ applyBtn | ifText : "Apply" : "Applied"}} </button>

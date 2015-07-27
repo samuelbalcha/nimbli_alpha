@@ -75,7 +75,7 @@ app.get('/api/access', ensureAuthenticated, userApi.getAccess);
 // Project
 app.post('/api/projects', ensureAuthenticated, projectApi.createProject);
 app.get('/api/projects', projectApi.getProjects);
-app.get('/api/projects/:id', ensureAuthenticated, projectApi.getProject);
+app.get('/api/projects/:id', projectApi.getProject);
 app.delete('/api/projects/:id', ensureAuthenticated, projectApi.deleteProject);
 app.put('/api/projects/:id', ensureAuthenticated, projectApi.updateProject);
 

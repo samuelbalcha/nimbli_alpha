@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'angular-storage', 'angularMoment', 'truncate'])
+angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'angular-storage', 'angularMoment', 'truncate', 'ngAnimate'])
     .config(function($stateProvider, $urlRouterProvider, $authProvider, USER_ROLES, AUTH_EVENTS) {
         $stateProvider
             .state('home', {
