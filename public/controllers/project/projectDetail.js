@@ -95,7 +95,7 @@ angular.module('nimbliApp')
     function handleSuccess(project){
        $scope.project = project;  
        $scope.brief = project.brief;
-        
+      
        getUserAndCheckAccess(function(){
            ProjectService.setBrief($scope.project.brief, $scope.isOwner);
            UtilityService.setRole($scope.userRole);
@@ -104,10 +104,9 @@ angular.module('nimbliApp')
     }
     
     function getUserAndCheckAccess(callback){
-        AccountService.getUserAccess().then(function(user){
-            setUserAccess(user);
-            callback();
-        }); 
+         var currentUser = AccountService.getCurrentUser();
+         setUserAccess(currentUser);
+         callback(); 
     }
     
     function setUserAccess(user){

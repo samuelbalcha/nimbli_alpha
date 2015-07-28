@@ -30,9 +30,11 @@
   "devDependencies": {
     "faker": "^3.0.0",
     "jasmine-core": "^2.3.4",
-    "karma": "^0.13.2",
+    "karma": "^0.13.3",
     "karma-chrome-launcher": "^0.2.0",
+    "karma-coverage": "^0.4.2",
     "karma-jasmine": "^0.3.6",
+    "karma-ng-html2js-preprocessor": "^0.1.2",
     "karma-phantomjs-launcher": "^0.2.0"
   }
 }

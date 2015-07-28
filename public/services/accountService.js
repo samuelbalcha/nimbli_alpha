@@ -1,19 +1,8 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .factory('AccountService', function($q, $http, $auth, store, $rootScope) {
+    .factory('AccountService', function($q, $http, $auth, store, NotificationService) {
         var currentUser;
-        
-        function handleSuccess(response){
-            currentUser = response.data;
-            store.set('currentUser', currentUser);
-            $rootScope.$broadcast('currentUserUpdated', currentUser);
-            return currentUser;
-        }
-    
-        function handleError(err){
-            return $q.reject(err);
-        }
         
         return {
             getProfile: function() {
@@ -22,26 +11,9 @@ angular.module('nimbliApp')
             updateProfile: function(profileData) {
                 return $http.put('/api/me', profileData).then(handleSuccess, handleError);
             },
-            getUserAccess : function(){
-                
-                var isAuthen = $auth.isAuthenticated();
-                var deferred = $q.defer();
-                
-                if(currentUser === undefined && isAuthen){
-                    currentUser = store.get('currentUser');
-                    if(currentUser === undefined || currentUser === null){
-                        return $http.get('/api/access').then(handleSuccess, handleError);
-                    }
-                }
-              
-               deferred.resolve(currentUser);
-               return deferred.promise;
-            },
-           
-            //nullify when logout
-            setCurrentUserAndRoles : function(user){
+            setCurrentUser : function(user){
                 currentUser = user;
-                store.set('currentUser', user);
+                notifyOthers();
             },
             getCurrentUser : function(){
                 if (!currentUser) {
@@ -57,12 +29,39 @@ angular.module('nimbliApp')
                     deferred.reject("user was not found");
                 });
                 return deferred.promise;
-            },
-            isUserAuthenticated : function(){
-                return $auth.isAuthenticated();
             }
+            /**
+            getUserAccess : function(){
+                
+                var isAuthen = $auth.isAuthenticated();
+                var deferred = $q.defer();
+                
+                if(currentUser === undefined && isAuthen){
+                    currentUser = store.get('currentUser');
+                    if(currentUser === undefined || currentUser === null){
+                        return $http.get('/api/access').then(handleSuccess, handleError);
+                    }
+                }
+              
+               deferred.resolve(currentUser);
+               return deferred.promise;
+            },
             
+            */
         };
+         
+        function handleSuccess(response){
+            currentUser = response.data;
+            notifyOthers();
+            return currentUser;
+        }
         
+        function handleError(err){
+            return $q.reject(err);
+        }
         
-    });
+        function notifyOthers(){
+            store.set('currentUser', currentUser);
+            NotificationService.publish('currentUserUpdated', currentUser);
+        }
+});

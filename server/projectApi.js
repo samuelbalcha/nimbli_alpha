@@ -111,13 +111,12 @@ exports.updateProject = function(req, res){
 };
     
 exports.getProjects = function(req, res){
-    
+      
     Project.find().populate('createdBy', 'displayName').sort({ dateCreated : 'desc'}).exec(function(err, projects) {
         if (err){
             res.status(404).send(err);
         }
         projects.forEach(function(project, idx){
-           
             project.coverPicture = faker.image.business();
             project.company = faker.company.companyName();
         });
@@ -159,7 +158,7 @@ exports.getProject = function(req, res) {
     .exec(function(err,project) {
     
     */
-    
+  
     Project.findOne({ '_id' : req.params.id}).populate('brief')
                                              .populate('createdBy', 'displayName')
                                              .populate('team', 'displayName')

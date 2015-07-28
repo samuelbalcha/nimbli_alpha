@@ -12,7 +12,7 @@
    <!-- <link href="/stylesheets/vendors/xeditable.css" rel="stylesheet"> -->
  <!--   <link href="/stylesheets/vendors/ng-img-crop.css" rel="stylesheet"> -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.css" type="text/css" />
-<link rel="stylesheet" href="stylesheets/styles.css" type="text/css" />
+<link rel="stylesheet" href="stylesheets/styles.css" type="text/css" /> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
@@ -23,23 +23,13 @@
 <script src="vendors/angular-strap.tpl.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-animate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-messages.min.js"></script>
-<script src="//cdn.jsdelivr.net/satellizer/0.11.2/satellizer.min.js"></script>
+<script src="vendors/core/satellizer.min.js"></script>
 <!--  angular store -->
 <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-storage/master/dist/angular-storage.js"></script>
-
-<!--
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.36.min.js"></script>
-<script src="vendors/ng-file-upload-shim.min.js"></script>
-<script src="vendors/ng-file-upload-all.min.js"></script>
-<script src="vendors/xeditable.min.js"></script> -->
 
 <!-- moment -->
 <script src="vendors/moment.js"></script>
 <script src="vendors/angular-moment.js"></script>
-
-<!-- tabs 
-<script src="vendors/ui-bootstrap-tabs-tpl.js"></script>
-<script src="vendors/tabs.js"></script>-->
 
 <script src="angularApp.js"></script>
 
@@ -52,6 +42,7 @@
 <script src="/services/accountService.js"></script>
 <script src="/services/authorizationService.js"></script>
 <script src="/services/utilityService.js"></script>
+<script src="/services/notificationService.js"></script>
 
 <!-- project controllers -->
 <script src="/services/projectService.js"></script>
@@ -74,6 +65,10 @@
 <script src="/directives/passwordStrength.js"></script>
 <script src="/directives/truncate.js"></script>
 <script src="/directives/textFilter.js"></script>
+<style>
+ 
+    
+</style>
 
 </head>
 <body>
@@ -83,7 +78,7 @@
             ng-include="isAuthenticated() && 'partials/navbar/admin-tpl.html' || 'partials/navbar/public-tpl.html' ">
       </div>
        <div ui-view class="bs-pad fadeZoom"></div>
- </div>
+  </div>
   
 </body>
 </html>

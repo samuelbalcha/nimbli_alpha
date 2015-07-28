@@ -59,6 +59,7 @@ exports.getProfile = function(req, res) {
             user.email = '';
             user.about = faker.lorem.sentence();
             user.avatar = faker.image.avatar();
+            user.location = faker.address.streetAddress();
             res.status(200).send(user);
         }
     });
@@ -87,7 +88,7 @@ exports.updateProfile = function(req, res) {
             if(err){
                 console.log(err);
             }
-            res.status(200).end();
+            res.status(200).send(user);
         });
     });
 };
@@ -116,6 +117,7 @@ exports.user =  function(req, res) {
              user.email = '';
              user.about = faker.lorem.sentence();
              user.avatar = faker.image.avatar();
+             user.location = faker.address.streetAddress();
              res.status(200).send({ user: user, userProjects : data }); 
          });
          

@@ -18,11 +18,13 @@ module.exports = function(config) {
       'public/vendors/core/angular.js',
       'public/vendors/core/angular*.js',
       'public/vendors/core/satellizer.min.js',
+      'public/vendors/angular-moment.js',
+      'public/directives/truncate.js',
       'public/angularApp.js',
-      'public/services/appConstants.js',
-      'public/services/authorizationService.js',
-      'public/services/accountService.js',
-      'test/accountServiceTest.js'
+      'public/services/*.js',
+      'public/controllers/*/*.js',
+      'test/*/*.js',
+      'public/partials//**/*.html'
     ],
 
 
@@ -34,7 +36,14 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        
+     
+    },
+
+    ngHtml2JsPreprocessor: {
+      // strip this from the file path
+      stripPrefix: 'public/partials/',
+      // create a single module that contains templates from all the files
+      moduleName: 'templates'
     },
 
 

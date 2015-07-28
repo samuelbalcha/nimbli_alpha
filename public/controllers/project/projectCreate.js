@@ -22,7 +22,7 @@ angular.module('nimbliApp')
                .success(function (data, status, headers, config) {
                     $scope.project = data.project;
                      // Update user roles
-                    AccountService.setCurrentUserAndRoles(data.user);
+                    AccountService.setCurrentUser(data.user);
                     $location.path('/projects/' + data.project._id);
                      
                }).error(function (data, status, headers, config) {

@@ -1,32 +1,28 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('UserDetailCtrl', function($scope, $stateParams, AccountService, $location, USER_ROLES)
+    .controller('UserDetailCtrl', function($scope, $stateParams, AccountService)
 {
-   
     $scope.user = {};
     $scope.editMode = false;
     $scope.edit = edit;
     $scope.save = save;
     $scope.isOwner = false;
     $scope.userProjects = [];
+    $scope.cancel = cancel;
     
-    loadUser();
-   
-    function loadUser(){
-       AccountService.getUser($stateParams.id).then(function(data){
-           $scope.user = data.user;
-           $scope.userProjects = data.userProjects;
+    AccountService.getUser($stateParams.id).then(function(data){
+       $scope.user = data.user;
+       $scope.userProjects = data.userProjects;
+       var currentUser = AccountService.getCurrentUser();
+       if(currentUser && ($stateParams.id === currentUser._id)){
+           $scope.isOwner = true;
+       }
            
        }, function(err){
-           //show modal
            console.log(err);
-       });
-       
-       isUserOwner();
-       
-    }
-    
+    });
+   
     function edit(){
         $scope.editMode = true;
     }
@@ -35,26 +31,8 @@ angular.module('nimbliApp')
         AccountService.updateProfile($scope.user);
         $scope.editMode = false;
     }
-    
-    function isUserOwner(){
-        
-        
-        if(AccountService.isUserAuthenticated()){
-            var currentUser = AccountService.getCurrentUser();
-            
-            if(currentUser === undefined){
-                AccountService.getProfile().then(function(user){
-                    if(user !== undefined && user._id === $stateParams.id){
-                        $scope.isOwner = true;
-                    }     
-                });
-            }
-            else{
-                if( currentUser._id === $stateParams.id){
-                    $scope.isOwner = true;
-                }
-            }
-        }
-        
+   
+    function cancel(){
+        $scope.editMode = false;
     }
 });

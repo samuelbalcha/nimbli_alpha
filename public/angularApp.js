@@ -8,34 +8,25 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 url: '/',
                 templateUrl: 'partials/project/list-project.html',
                 controller: 'ProjectListCtrl'
-            })
-            .state('login', {
+            }).state('login', {
                 url: '/login',
                 templateUrl: 'partials/login.html',
                 controller: 'LoginCtrl'
-            })
-            .state('signup', {
+            }).state('signup', {
                 url: '/signup',
                 templateUrl: 'partials/signup.html',
                 controller: 'SignupCtrl'
-            })
-            .state('logout', {
+            }).state('logout', {
                 url: '/logout',
                 template: null,
                 controller: 'LogoutCtrl'
-            })
-            .state('upload', {
-                url :'/upload',
-                templateUrl: 'partials/avatar_uploader.html',
-                controller: 'UploadCtrl'
             }).state('projectcreate',{
                 url: '/createproject',
                 templateUrl: 'partials/project/create-project.html',
                 controller: 'ProjectCreateCtrl',
                 access :{
                     loginRequired : true
-                }
-                
+                }  
             }).state('projectlist', {
                 url: '/projects',
                 templateUrl: 'partials/project/list-project.html',
@@ -110,7 +101,6 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 }).catch(function(response){
                     $location.path('/login').replace();
                 });
-              
             }
          });
   }]);

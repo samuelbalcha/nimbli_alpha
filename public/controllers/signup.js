@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('SignupCtrl', function($scope, $alert, $auth) {
+    .controller('SignupCtrl', function($scope, $alert, $auth, AccountService, $location) {
         $scope.unique = false;
         $scope.signupInfo = '';
         
@@ -10,6 +10,9 @@ angular.module('nimbliApp')
                 displayName: $scope.displayName,
                 email: $scope.email,
                 password: $scope.password
+            }).then(function(data){
+                AccountService.setCurrentUser(data.data.newUser);
+                $location.path('users/' + data.data.newUser._id);
             }).catch(function(response) {
                  
                   if(response.status === 409){

@@ -54,7 +54,7 @@ angular.module('nimbliApp').controller('ProjectTabsCtrl', function ($scope, USER
                 $scope.tabs = [ briefTemplate, applicantTemplate];
             break;
             case USER_ROLES.teamMember:
-                $scope.tabs = [ briefTemplate, teamTemplate, processTemplate];
+                $scope.tabs = [ briefTemplate, teamTemplate];
             break;
             case USER_ROLES.supervisor:
                 $scope.tabs = [ briefTemplate, teamTemplate, processTemplate];

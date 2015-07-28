@@ -56,8 +56,13 @@ exports.signUp = function(User){
                 password: req.body.password
             });
 
-            user.save(function() {
-                res.send({ token : createJWT(user) });
+            user.save(function(err) {
+                if(!err){
+                    var u = user;
+                    u.password = '';
+                    u.email = '';
+                    res.send({ token : createJWT(user) , newUser : u  });
+                }
             });
         });
     };
