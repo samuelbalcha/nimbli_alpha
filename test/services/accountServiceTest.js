@@ -11,15 +11,15 @@ describe ('Service: AccountService', function () {
               };
 
     beforeEach(function() {
-      module('nimbliApp');
-
-      inject(function( _$httpBackend_, _AccountService_, $auth, store, NotificationService) {
-        $httpBackend = _$httpBackend_;
-        AccountService = _AccountService_;
-        auth = auth;
-        store = store;
-        notificationService = NotificationService;
-      });
+        module('nimbliApp');
+        
+        inject(function( _$httpBackend_, _AccountService_, $auth, _store_, NotificationService) {
+            $httpBackend = _$httpBackend_;
+            AccountService = _AccountService_;
+            auth = auth;
+            store = _store_;
+            notificationService = NotificationService;
+        });
     });
 
     afterEach (function () {
@@ -41,6 +41,22 @@ describe ('Service: AccountService', function () {
             // assert
             expect(AccountService.getCurrentUser().displayName).toBe('samuel');
         });
+        
+        it ('should store user localStorage', function () {
+            
+            // arrange
+            $httpBackend.whenGET('/api/me').respond (user); 
+              
+            // act
+            AccountService.getProfile();
+            spyOn(store, "set");
+           
+            $httpBackend.expectGET('partials/project/list-project.html').respond('');
+            $httpBackend.flush();
+            
+            expect(store.set).toHaveBeenCalled();
+        });
+        
     });
     
     describe('when getCurrentUser method is called', function (){

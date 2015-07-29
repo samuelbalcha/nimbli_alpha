@@ -78,14 +78,16 @@ app.get('/api/projects', projectApi.getProjects);
 app.get('/api/projects/:id', projectApi.getProject);
 app.delete('/api/projects/:id', ensureAuthenticated, projectApi.deleteProject);
 app.put('/api/projects/:id', ensureAuthenticated, projectApi.updateProject);
+app.get('/api/projects/user/:id', projectApi.getUserProjects);
+app.put('/api/projects/:id/user/:id', projectApi.addUserToProject);
 
 // Brief
 app.put('/api/projects/:id/brief', projectApi.updateBrief);
 
 // ProjectRequest
-app.put('/api/projects/:id/request', projectApi.createProjectRequest);
-app.get('/api/projects/:id/request', projectApi.getProjectRequests);
-app.put('/api/projects/:id/updaterequest', projectApi.updateProjectRequest);
+// app.put('/api/projects/:id/request', projectApi.createProjectRequest);
+// app.get('/api/projects/:id/request', projectApi.getProjectRequests);
+// app.put('/api/projects/:id/updaterequest', projectApi.updateProjectRequest);
 
 // Test APIs
 app.get('/api/users', userApi.users);

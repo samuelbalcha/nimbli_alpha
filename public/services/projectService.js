@@ -6,15 +6,19 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
     var currentProject;
     var currentBrief;
     var currentProjectRequests;
+    var projectCount = 0;
     
     return ({
     
         getProjects : function (){
-            return  $http.get(url).then(handleSuccess, handleError);
+            return  $http.get(url).then(function(response) {
+                projectCount = response.data.length;
+                return response.data;
+            }, handleError);
         },
         
         getProject : function(id){
-            
+           
             var deferred = $q.defer();
             $http.get(url + '/'+ id).success(function(data){
                 currentProject = data;
@@ -34,7 +38,10 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
         },
     
         removeProject : function(id){
-            return $http.delete(url + '/' + id).then(handleSuccess, handleError);
+            return $http.delete(url + '/' + id).then(function(){
+                currentProject = null;
+                return currentProject;
+            }, handleError);
         },
     
         getCurrentProject : function(){
@@ -52,6 +59,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
                             $q.reject(err);
                     });
         },
+        /**
         saveBrief : function(brief){
             return $http.put(url + '/' + currentProject._id + '/brief', brief).then(function(response){
                             return response.data;
@@ -90,6 +98,18 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
                 currentProjectRequests = response.data;
                 return currentProjectRequests;
             }, handleError);
+        }, */
+        addUserToProject : function(data){
+            return $http.put(url + '/' + data.projectId + '/user/' + data.userId, { role : data.role }).then(handleSuccess, handleError);
+        },
+        getUserProjects : function(userId){
+            return $http.get(url + '/user/' + userId).then(function(response) {
+                projectCount = response.data.length;
+                return response.data;
+            }, handleError);
+        },
+        getProjectCount : function(){
+            return projectCount;
         }
         
     });

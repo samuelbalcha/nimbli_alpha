@@ -30,24 +30,6 @@ angular.module('nimbliApp')
                 });
                 return deferred.promise;
             }
-            /**
-            getUserAccess : function(){
-                
-                var isAuthen = $auth.isAuthenticated();
-                var deferred = $q.defer();
-                
-                if(currentUser === undefined && isAuthen){
-                    currentUser = store.get('currentUser');
-                    if(currentUser === undefined || currentUser === null){
-                        return $http.get('/api/access').then(handleSuccess, handleError);
-                    }
-                }
-              
-               deferred.resolve(currentUser);
-               return deferred.promise;
-            },
-            
-            */
         };
          
         function handleSuccess(response){

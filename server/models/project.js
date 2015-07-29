@@ -10,10 +10,6 @@ var projectSchema = new mongoose.Schema({
     company : String,
     coverPicture: { type: String, trim: true },
     driveLink : String,
-    skills : [{
-        name : String,
-        id : Number
-    }],
     brief : { type: mongoose.Schema.Types.ObjectId, ref: 'Brief'},
     location : { type: String, trim: true },
     owners : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
@@ -35,7 +31,8 @@ var projectSchema = new mongoose.Schema({
     description : { type: String, trim: true },
     team : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     supervisors : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-    projectRequest : [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProjectRequest'}]
+    school : { type: String }
+   // projectRequest : [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProjectRequest'}]
 });
 
 projectSchema.pre('save', function(next) {
