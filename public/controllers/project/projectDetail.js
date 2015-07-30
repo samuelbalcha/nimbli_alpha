@@ -1,9 +1,8 @@
-'use strict';
-
 angular.module('nimbliApp')
     .controller('ProjectDetailCtrl', function ($scope, $stateParams, $location, ProjectService, AccountService, UtilityService, USER_ROLES, $modal, store)
 {
-        
+    'use strict';       
+    
     $scope.isOwner = false;
     $scope.edit = edit;
     $scope.deleteBtn = deleteProject;

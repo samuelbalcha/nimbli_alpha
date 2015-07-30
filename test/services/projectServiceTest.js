@@ -1,15 +1,17 @@
 describe ('Service: ProjectService', function () {
   
-   var $httpBackend, ProjectService;
+   var $httpBackend, ProjectService, NotificationService, user_roles;
    var url = '/api/projects';
    var pr = new project();
    pr.title = 'Project 1';
   
     beforeEach(function(){
         module('nimbliApp');
-        inject(function( _$httpBackend_, _ProjectService_) {
+        inject(function( _$httpBackend_, _ProjectService_, _NotificationService_, USER_ROLES) {
             $httpBackend = _$httpBackend_;
             ProjectService = _ProjectService_;
+            NotificationService = _NotificationService_;
+            user_roles = USER_ROLES;
         });
     });
     
@@ -27,7 +29,7 @@ describe ('Service: ProjectService', function () {
          $httpBackend.whenGET(url).respond(projects);
          ProjectService.getProjects();
          
-         $httpBackend.expectGET('partials/project/list-project.html').respond('');
+         $httpBackend.expectGET('partials/project/list-projects.html').respond('');
          $httpBackend.flush();
          
          expect(ProjectService.getProjectCount()).toBe(4); 
@@ -42,7 +44,7 @@ describe ('Service: ProjectService', function () {
          $httpBackend.whenGET(url + '/' + 1).respond(p);
          
          ProjectService.getProject(1);
-         $httpBackend.expectGET('partials/project/list-project.html').respond('');
+         $httpBackend.expectGET('partials/project/list-projects.html').respond('');
          $httpBackend.flush();
          
          expect(ProjectService.getCurrentProject().title).toBe('Project 1'); 
@@ -56,7 +58,7 @@ describe ('Service: ProjectService', function () {
          pr.title = 'Project 1 with update';
          pr._id = 1; 
          $httpBackend.expectPUT(url + '/' + 1, pr).respond(pr);
-         $httpBackend.expectGET('partials/project/list-project.html').respond('');
+         $httpBackend.expectGET('partials/project/list-projects.html').respond('');
          
          ProjectService.updateProject(pr); 
          $httpBackend.flush();
@@ -78,7 +80,7 @@ describe ('Service: ProjectService', function () {
          $httpBackend.whenDELETE(url + '/' + 1).respond(p);
          
          ProjectService.removeProject(1);
-         $httpBackend.expectGET('partials/project/list-project.html').respond('');
+         $httpBackend.expectGET('partials/project/list-projects.html').respond('');
          $httpBackend.flush();
          
          expect(ProjectService.getCurrentProject()).toBe(null);   
@@ -94,7 +96,7 @@ describe ('Service: ProjectService', function () {
             
             $httpBackend.whenPOST(url, p).respond(p);
             ProjectService.createProject(p);
-            $httpBackend.expectGET('partials/project/list-project.html').respond('');
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
             $httpBackend.flush();
             
             expect(ProjectService.getCurrentProject()._id).toBe(12);
@@ -109,7 +111,7 @@ describe ('Service: ProjectService', function () {
             // /api/projects/user/:id
             $httpBackend.whenGET(url + '/user/' + 56).respond(projects);
             ProjectService.getUserProjects(56);
-            $httpBackend.expectGET('partials/project/list-project.html').respond('');
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
             $httpBackend.flush();
             
             expect(ProjectService.getProjectCount()).toBe(3);
@@ -138,7 +140,7 @@ describe ('Service: ProjectService', function () {
           
             ProjectService.getUserProjects(56);
            
-            $httpBackend.expectGET('partials/project/list-project.html').respond('');
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
             $httpBackend.flush();
             expect(projects.length).toEqual(4);
             expect(filter).toBe(3);
@@ -153,7 +155,7 @@ describe ('Service: ProjectService', function () {
             pr.team = [];
             ProjectService.setCurrentProject(pr);
             
-            // /api/projects/user/:id
+            // /api/projects/projectId/user/:id, { role } 
             $httpBackend.whenPUT(url + '/' + 1 + '/user/' + 56, { userId: 345, role: 'team', projectId : 1 } ).respond(projects);
             ProjectService.addUserToProject = jasmine.createSpy("addUserToProject()").and.callFake(function() {
                 var currentProject = ProjectService.getCurrentProject();
@@ -161,10 +163,22 @@ describe ('Service: ProjectService', function () {
             });
             
             ProjectService.addUserToProject({ _id: 345, role: 'team' });
-            $httpBackend.expectGET('partials/project/list-project.html').respond('');
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
             $httpBackend.flush();
             
             expect(ProjectService.getCurrentProject().team[0]).toEqual(345);
+        });
+    });
+    
+    describe('when setUserProjectRole is called', function() {
+        
+        it('should set userRole with the provided role and publish using NotificationService', function(){
+           
+            spyOn(NotificationService, "publish");
+            ProjectService.setUserProjectRole(user_roles.owner);
+            
+            expect(ProjectService.getUserProjectRole()).toEqual(user_roles.owner);
+            expect(NotificationService.publish).toHaveBeenCalled();
         });
     });
     

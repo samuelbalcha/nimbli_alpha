@@ -1,12 +1,11 @@
-'use strict';
-
-angular.module('nimbliApp').service('ProjectService', function ($http, $q, $rootScope) {
-
+angular.module('nimbliApp').service('ProjectService', function ($http, $q, $rootScope, USER_ROLES, NotificationService) {
+    'use strict';
     var url = '/api/projects';
     var currentProject;
     var currentBrief;
     var currentProjectRequests;
     var projectCount = 0;
+    var userRole = USER_ROLES.anonymous;
     
     return ({
     
@@ -18,15 +17,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
         },
         
         getProject : function(id){
-           
-            var deferred = $q.defer();
-            $http.get(url + '/'+ id).success(function(data){
-                currentProject = data;
-                deferred.resolve(data);
-            }).error(function(data){
-                deferred.reject("project was not found");
-            });
-            return deferred.promise;
+            return $http.get(url + '/'+ id).then(handleSuccess, handleError);    
         },
     
         createProject : function(project){
@@ -59,6 +50,14 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
                             $q.reject(err);
                     });
         },
+        getUserProjectRole : function(){
+            return userRole;
+        },
+        
+        setUserProjectRole : function(role){
+            userRole = role;
+            NotificationService.publish('userProjectRoleReady', role);
+        }
         /**
         saveBrief : function(brief){
             return $http.put(url + '/' + currentProject._id + '/brief', brief).then(function(response){
@@ -98,7 +97,8 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
                 currentProjectRequests = response.data;
                 return currentProjectRequests;
             }, handleError);
-        }, */
+        },
+        */,
         addUserToProject : function(data){
             return $http.put(url + '/' + data.projectId + '/user/' + data.userId, { role : data.role }).then(handleSuccess, handleError);
         },

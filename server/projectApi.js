@@ -41,7 +41,7 @@ exports.createProject = function(req, res){
             }
         });
         addProjectToOwner(req.user, project._id);
-        res.status(201). send(project);
+        res.status(201).send(project);
     });
 };
 
@@ -87,17 +87,23 @@ exports.updateProject = function(req, res){
  */
 exports.getProjects = function(req, res){
       
-    Project.find().populate('title, company, location, coverPicture dateCreated')
+    Project.find()
            .sort({ dateCreated : 'desc'})
            .exec(function(err, projects) {
                 if (err){
                     res.status(404).send(err);
                 }
-                projects.forEach(function(project, idx){
-                    project.coverPicture = faker.image.business();
-                    project.company = faker.company.companyName();
-                });
-                res.status(200).send(projects);
+                if(!projects){
+                    res.status(404).send();
+                }
+                else{
+                     projects.forEach(function(project, idx){
+                        project.coverPicture = faker.image.business();
+                        project.company = faker.company.companyName();
+                    });
+                    res.status(200).send(projects);
+                }
+                
            });
 };
 
@@ -154,6 +160,7 @@ exports.getProject = function(req, res) {
                 else{
                     project.coverPicture = faker.image.business();
                     project.company = faker.company.companyName();
+                    project.description = faker.lorem.sentence();
                     res.status(200).send(project);
                 }
             });
@@ -294,7 +301,7 @@ function createBrief(){
  * removes projectId from user.roles based on the role
  */ 
 function removeProjectFromUsers(userIds, prId, role){
-    // Remove project from users
+   
     User.find({_id : {$in: userIds } }, function(err, users){
         if(err){
             console.log(err);

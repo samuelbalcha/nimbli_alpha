@@ -1,3 +1,4 @@
+<!--
 <div ng-controller="ProjectDetailCtrl" class="col-md-12 panel project-panel" style="margin-bottom:5px">
    	<div class="col-md-2 pull-right" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' 
    	                                     || 'partials/project/apply-follow.tpl.html' "></div>
@@ -25,5 +26,35 @@
         </div>
     </div>
 </div>    
-
-
+-->
+<div ng-controller="ProjectHeaderCtrl" class="container-fluid">
+    <div class="col-md-9 panel panel-default" style="margin-left:5px;">
+       <div >
+           <h1>This is the ply ground</h1>
+       </div>
+    </div>
+    <div ng-controller="ProjectInfoCtrl" class="col-sm-2 panel panel-default pull-right" style="">
+       	<h3> About project </h3>
+       	<div>{{ project.description }}</div>
+       	<hr class="divider"></hr>
+       	 <h3> Team members </h3>
+       	 <ul>
+       	     <li ng-repeat="tm in project.team">
+       	         <h5> Name of the person and picture</h5>
+       	     </li>
+       	 </ul>
+       	 <hr class="divider"></hr>
+       	 <h3> Company </h3>
+       	 <div>{{ project.company }}</div>
+       	 <hr class="divider"></hr>
+       	 <h3> School </h3>
+       	 <div> 
+       	   <h4>Aalto University</h4> 
+       	    <h5> Tiina Tard</h5>
+       	   
+       	 </div>
+       	 <div ng-if="canEdit">
+       	     <button class="btn btn-primary"> Edit</button>
+       	 </div>
+    </div>
+</div>

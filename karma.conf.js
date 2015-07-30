@@ -24,7 +24,7 @@ module.exports = function(config) {
       'public/services/*.js',
       'public/controllers/*/*.js',
       'test/*/*.js',
-      'public/partials//**/*.html'
+      'public/partials/**/*.html'
     ],
 
 

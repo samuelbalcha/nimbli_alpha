@@ -1,7 +1,7 @@
-'use strict';
-
 angular.module('nimbliApp')
     .factory('AccountService', function($q, $http, $auth, store, NotificationService) {
+       'use strict';
+       
         var currentUser;
         
         return {

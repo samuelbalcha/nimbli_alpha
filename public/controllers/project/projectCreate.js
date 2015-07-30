@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('ProjectCreateCtrl',  function($scope, $http, $location, AccountService)
+    .controller('ProjectCreateCtrl',  function($scope, $http, $location, AccountService, ProjectService)
     {
        $scope.project =  {
             title : '',
@@ -17,27 +17,13 @@ angular.module('nimbliApp')
        $scope.cancel = cancel;
      
        function createProject(){
-        
-           $http({url: '/api/projects', method: "POST", data: $scope.project})
-               .success(function (data, status, headers, config) {
-                    $scope.project = data.project;
-                     // Update user roles
-                    AccountService.setCurrentUser(data.user);
-                    $location.path('/projects/' + data.project._id);
-                     
-               }).error(function (data, status, headers, config) {
-                     $scope.status = status;
-                     logErr(data);
-               });  
-      }
+           ProjectService.createProject($scope.project).then(function(currentProject){
+              $location.path('/projects/' + currentProject._id);
+           }); 
+       }
       
-      function cancel(){
-          console.log("cancel")
+       function cancel(){
           $scope.editMode = false;
           $location.path('/projects');
-      }
-      
-      function logErr(err){
-          console.log(err);
-      }
+       }
 });

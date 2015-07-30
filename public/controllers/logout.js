@@ -6,7 +6,7 @@ angular.module('nimbliApp')
         $auth.logout()
             .then(function() {
                 store.remove('currentUser');
-                AccountService.setCurrentUserAndRoles(null);
+                AccountService.setCurrentUser(null);
                 $alert({
                     content: 'You have been logged out',
                     animation: 'fadeZoomFadeDown',

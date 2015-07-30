@@ -35,7 +35,7 @@ describe ('Service: AccountService', function () {
               
             // act
             AccountService.getProfile();
-            $httpBackend.expectGET('partials/project/list-project.html').respond('');
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
            
             $httpBackend.flush();
             // assert
@@ -51,7 +51,7 @@ describe ('Service: AccountService', function () {
             AccountService.getProfile();
             spyOn(store, "set");
            
-            $httpBackend.expectGET('partials/project/list-project.html').respond('');
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
             $httpBackend.flush();
             
             expect(store.set).toHaveBeenCalled();
@@ -73,7 +73,7 @@ describe ('Service: AccountService', function () {
             
             user.displayName = "Samuel Balcha";
             $httpBackend.whenPUT('/api/me', user).respond(user);
-            $httpBackend.expectGET('partials/project/list-project.html').respond('');
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
             
             AccountService.updateProfile(user);
             

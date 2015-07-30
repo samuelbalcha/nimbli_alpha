@@ -6,7 +6,7 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
         $stateProvider
             .state('home', {
                 url: '/',
-                templateUrl: 'partials/project/list-project.html',
+                templateUrl: 'partials/project/list-projects.html',
                 controller: 'ProjectListCtrl'
             }).state('login', {
                 url: '/login',
@@ -29,7 +29,7 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 }  
             }).state('projectlist', {
                 url: '/projects',
-                templateUrl: 'partials/project/list-project.html',
+                templateUrl: 'partials/project/list-projects.html',
                 controller: 'ProjectListCtrl'
             }).state('projectview', {
                 url : '/projects/:id',
