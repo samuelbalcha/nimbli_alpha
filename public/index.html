@@ -9,9 +9,7 @@
     <link href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.css" rel="stylesheet">
-   <!-- <link href="/stylesheets/vendors/xeditable.css" rel="stylesheet"> -->
- <!--   <link href="/stylesheets/vendors/ng-img-crop.css" rel="stylesheet"> -->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.css" type="text/css" />
 <link rel="stylesheet" href="stylesheets/styles.css" type="text/css" /> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -21,7 +19,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-resource.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.2.4/angular-strap.min.js"></script>
 <script src="vendors/angular-strap.tpl.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-animate.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-animate.min.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-messages.min.js"></script>
 <script src="vendors/core/satellizer.min.js"></script>
 <!--  angular store -->
@@ -30,6 +28,9 @@
 <!-- moment -->
 <script src="vendors/moment.js"></script>
 <script src="vendors/angular-moment.js"></script>
+<!-- ng-fileupload -->
+<script src="vendors/ng-file-upload.min.js"></script>
+<script src="vendors/ng-file-upload-shim.min.js"></script>
 
 <script src="angularApp.js"></script>
 
@@ -67,8 +68,21 @@
 <script src="/directives/truncate.js"></script>
 <script src="/directives/textFilter.js"></script>
 <style>
-
-    
+.preview img {
+    max-width: 500px;
+    max-height: 350px;
+}
+.fileupload {
+  position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
 </style>
 
 </head>

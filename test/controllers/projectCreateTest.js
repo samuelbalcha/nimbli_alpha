@@ -5,7 +5,7 @@ describe('Controller: ProjectCreateCtrl', function(){
     
     beforeEach(function(){
           module('nimbliApp');
-          inject(function($q, $rootScope, $controller,  _$httpBackend_, _AccountService_ , _$location_ , _ProjectService_){
+          inject(function($q, $rootScope, $controller,  _$httpBackend_, _AccountService_ , _$location_ , _ProjectService_, _Upload_){
              
                 AccountService = _AccountService_;
                 $httpBackend = _$httpBackend_;

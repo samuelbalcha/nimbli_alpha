@@ -2,7 +2,7 @@
     <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <form>
+                <form enctype="multipart/form-data" name="createForm">
                     <div class="container">
                         <div class="row">
                             <div class="col-sm-5 col-md-5">
@@ -47,17 +47,22 @@
                         <div class="row">
                             <div class="col-sm-5 col-md-5">
                               <h4>Cover picture</h4>
-                              <input  class="btn-file" type="file" id="coverPicture">
+                              <input name="file" accept="image/*" ngf-select="" ng-model="file"  class="btn btn-flat btn-primary" type="file" id="coverPicture">
+                             
                               <p class="help-block">Add cover picture.</p>
                             </div>
                        </div>
                     </div>
+                    <div class="preview">
+                        <div>Preview image</div>
+                        <img ngf-src="file" ng-show="file.type.indexOf('image') > -1" ngf-accept="'image/*'">
+                     </div>
                     <!-- Buttons -->
                     <div class="container">
                         <div class="row">
                            <div class="col-sm-5 col-md-5">
                             <p>
-                                 <button type="submit"  ng-click="create()"
+                                 <button type="submit"  ng-click="create()" ng-disabled="createForm.$invalid"
                                          class="btn btn-md btn-primary" style="margin-right: 10px;">
                                          <span class="glyphicon glyphicon-floppy-disk"></span>
                                      Create

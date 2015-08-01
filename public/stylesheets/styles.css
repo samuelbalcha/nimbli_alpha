@@ -101,7 +101,7 @@
         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.42);
     }
    .card { box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-   .panel { box-shadow : 0 0; }
+   .panel { box-shadow : 0 1px 1px rgba(0,0,0,0.05); border-radius: 0px; }
    body .well { 
        box-shadow : 0 0;
    }
@@ -116,4 +116,14 @@
         width: 85%;
         float: right;
     }
+  #main {
+	width: 74.533%;
+  }
+  #project-header{
+      height : 350px;
+  }
   
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none;
+}
+

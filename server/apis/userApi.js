@@ -1,9 +1,9 @@
 'use strict';
 
 var crypto = require('crypto');
-var User = require('./models/user');
+var User = require('../models/user');
 var auth = require('./authentication');
-var ProjectSchema = require('./models/project');
+var ProjectSchema = require('../models/project');
 var Project = ProjectSchema.Project;
 var faker = require('faker');
 
@@ -112,15 +112,19 @@ exports.user =  function(req, res) {
         if (err){
             res.status(401).send({ message: err});
         }
-        
-         getUserProjects(user.roles.owner, function(data){
+        if(!user){
+            res.status(401).send({ message : err });
+        }
+        else{
+           
+             getUserProjects(user.roles.owner, function(data){
              user.email = '';
              user.about = faker.lorem.sentence();
              user.avatar = faker.image.avatar();
              user.location = faker.address.streetAddress();
              res.status(200).send({ user: user, userProjects : data }); 
          });
-         
+        }
     });
    
 };

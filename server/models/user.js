@@ -2,12 +2,18 @@
 
 var bcrypt = require('bcryptjs');
 var mongoose = require('mongoose');
+var shortid = require('shortid');
 
 // SkillSchema
 //var SkillSchema = new mongoose.Schema({ id: Number, name: String });
 
 // UserSchema
 var userSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        unique: true,
+        'default': shortid.generate
+    },
    email: {
         type: String,
         unique : true,
@@ -33,9 +39,9 @@ var userSchema = new mongoose.Schema({
     about : { type: String, trim: true },
     location : { type: String, trim: true},
     roles : {
-        owner : [ { type: mongoose.Schema.Types.ObjectId, ref: 'Project'}],
-        teamMember : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project'}],
-        supervisor : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Project'}]
+        owner : [ { type: String, ref: 'Project'}],
+        teamMember : [{ type: String, ref: 'Project'}],
+        supervisor : [{ type: String, ref: 'Project'}]
     },
     
     userType :  [{

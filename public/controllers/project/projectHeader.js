@@ -1,5 +1,5 @@
 angular.module('nimbliApp')
-    .controller('ProjectHeaderCtrl',  function($scope, $stateParams, ProjectService, AccountService, USER_ROLES)
+    .controller('ProjectHeaderCtrl',  function($scope, $stateParams, ProjectService, AccountService, USER_ROLES, Upload)
     {
         'use strict';
         
@@ -11,7 +11,7 @@ angular.module('nimbliApp')
         $scope.cancel = cancel;
         $scope.editMode = false;
         $scope.userRole = USER_ROLES.anonymous;
-        
+       
         $scope.load();
         
         function load(){
@@ -24,16 +24,38 @@ angular.module('nimbliApp')
         
         function edit(){
             $scope.editMode = true;
+            $scope.$watch('file', function () {
+                console.log($scope.file);
+            });
         }
         
         function save(){
             ProjectService.updateProject($scope.project).then(function(project){
-                $scope.editMode = false;
+                var path = '/api/projects/' + project._id + '/cover';
+                if($scope.file){
+                    Upload.upload({
+                            url: path,
+                            file: $scope.file,
+                            method: 'PUT'
+                        })
+                    .progress(function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                    }).success(function (data, status, headers, config) {
+                        console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                        $scope.editMode = false;
+                        $scope.load();
+                    }).error(function (data, status, headers, config) {
+                        console.log('error status: ' + status);
+                    });
+                }
             });
         }
         
         function cancel(){
             $scope.editMode = false;
+            $scope.file = null;
+            $scope.load();
         }
         
         function setUserRole(){

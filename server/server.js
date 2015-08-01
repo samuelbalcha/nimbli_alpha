@@ -7,9 +7,11 @@ var mongoose = require('mongoose');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var cors = require('cors'); // not used yet
+var logger = require('morgan'); // not used yet
+var multer  = require('multer');
 
-var cors = require('cors');
-var logger = require('morgan');
+var upload = multer({ dest: './uploads/' });
 
 // configuration =================
 var config = require('./config');
@@ -20,6 +22,8 @@ app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(methodOverride());
+
+//app.use(cors);
 var moment = require('moment');
 var jwt = require('jwt-simple');
 
@@ -27,12 +31,9 @@ var jwt = require('jwt-simple');
 mongoose.connect(config.MONGO_URI);
 
 var User = require('./models/user');
-var ProjectSchema = require('./models/project');
-var userApi = require('./userApi');
-var projectApi = require('./projectApi');
-var auth = require('./authentication');
-var Project = ProjectSchema.Project;
-
+var userApi = require('./apis/userApi');
+var projectApi = require('./apis/projectApi');
+var auth = require('./apis/authentication');
 
 /*
  |--------------------------------------------------------------------------
@@ -73,13 +74,16 @@ app.get('/api/me', ensureAuthenticated, userApi.getProfile);
 app.get('/api/access', ensureAuthenticated, userApi.getAccess);
 
 // Project
-app.post('/api/projects', ensureAuthenticated, projectApi.createProject);
 app.get('/api/projects', projectApi.getProjects);
 app.get('/api/projects/:id', projectApi.getProject);
+app.get('/api/projects/:id/cover', projectApi.getProjectCover);
+app.get('/api/projects/user/:id', projectApi.getUserProjects);
+
+app.post('/api/projects', ensureAuthenticated, projectApi.createProject);
 app.delete('/api/projects/:id', ensureAuthenticated, projectApi.deleteProject);
 app.put('/api/projects/:id', ensureAuthenticated, projectApi.updateProject);
-app.get('/api/projects/user/:id', projectApi.getUserProjects);
-app.put('/api/projects/:id/user/:id', projectApi.addUserToProject);
+app.put('/api/projects/:id/user/:id', ensureAuthenticated, projectApi.addUserToProject);
+app.put('/api/projects/:id/cover', ensureAuthenticated, upload.single('file'), projectApi.uploadCover);
 
 // Brief
 app.put('/api/projects/:id/brief', projectApi.updateBrief);

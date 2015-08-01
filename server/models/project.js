@@ -1,19 +1,24 @@
 'use strict';
 
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+var shortid = require('shortid');
+
 
 // ProjectSchema
 var projectSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        unique: true,
+        'default': shortid.generate
+    },
     title : { type: String, trim : true, unique : true },
     company : String,
     coverPicture: { type: String, trim: true },
     driveLink : String,
-    brief : { type: mongoose.Schema.Types.ObjectId, ref: 'Brief'},
+    brief : { type: String, ref: 'Brief'},
     location : { type: String, trim: true },
-    owners : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    owners : [ { type: String, ref: 'User'}],
+    createdBy: { type: String, ref: 'User'},
     likesCount : Number,
     viewsCount : Number,
     dateCreated : Date,
@@ -29,8 +34,8 @@ var projectSchema = new mongoose.Schema({
             default: 'Private'
         },
     description : { type: String, trim: true },
-    team : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-    supervisors : [ { type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    team : [ { type: String, ref: 'User'}],
+    supervisors : [ { type: String, ref: 'User'}],
     school : { type: String }
    // projectRequest : [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProjectRequest'}]
 });
@@ -43,6 +48,11 @@ projectSchema.pre('save', function(next) {
 
 // BriefSchema
 var briefSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        unique: true,
+        'default': shortid.generate
+    },
     outcome : String,
     objective : String,
     deliverable : String,

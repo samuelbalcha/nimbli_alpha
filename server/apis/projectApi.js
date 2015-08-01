@@ -1,48 +1,111 @@
 'use strict';
 
-var ProjectSchema = require('./models/project');
-var User = require('./models/user');
+var ProjectSchema = require('../models/project');
+var User = require('../models/user');
 var faker = require('faker');
 var USER_ROLES = require('constants');
 
 var Project = ProjectSchema.Project;
 var Brief = ProjectSchema.Brief;
-var ProjectRequest = ProjectSchema.ProjectRequest;
+//var ProjectRequest = ProjectSchema.ProjectRequest;
+var fs = require('fs');
+var mongoose = require('mongoose');
+var conn = mongoose.connection;
+var Grid = require('gridfs-stream');
+Grid.mongo = mongoose.mongo;
+var gfs = Grid(conn.db);
 
 
 /**
  * creats a new project and saves it to collection. 
  * it creates a brief object and attaches it to the project.
- * it addes the projectid to the user
+ * it addes the projectid to the user.
  */
 exports.createProject = function(req, res){
     
     var pr = req.body;
     Project.findOne({ title : pr.title}, function(err, existingProject){
         if (existingProject) {
-            res.status(409).send({ message: 'The project title is already taken' });
+           return res.status(409).send({ message: 'The project title is already taken' });
         }
         if(err){
             res.status(403).send({ message : err });
         }
-        var brf = createBrief();
-        var project = new Project({
+        else{
+            var brf = createBrief();
+            var project = new Project({
                 title : pr.title,
                 company : pr.company,
                 description : pr.description,
                 createdBy : req.user,
                 brief : brf._id
             });
-    
-        project.owners.push(req.user);
-        project.save(function(err) {
-            if(err){
-                console.log(err);
-            }
-        });
-        addProjectToOwner(req.user, project._id);
-        res.status(201).send(project);
+            
+            project.owners.push(req.user);
+            project.save(function(err) {
+                if(err){
+                    console.log(err);
+                }
+            });
+            
+            addProjectToOwner(req.user, project._id);
+            res.status(201).send(project);
+        }
     });
+};
+
+/**
+ * uploades cover picture for projects and sets it's filename to projectid.
+ * stores the image to GridFs fs.files collection.
+ */ 
+exports.uploadCover = function(req, res){
+    var is, os;
+    var extension = req.file.originalname.split(/[. ]+/).pop();
+    var filename =  req.params.id +'.'+ extension;
+    
+    is = fs.createReadStream(req.file.path);
+    gfs.files.find({ filename:  filename }).toArray(function (err, files) {
+         if (err) {
+             res.send(500).send({ message : err });
+         }
+         if(files.length > 0){
+            //if file exists update with new file 
+            gfs.remove({ filename: filename }, function (err) {
+                if (err){ 
+                    console.log("could not remove image", filename);
+                    res.send(500).send({ message : err }); 
+                } 
+            });
+         }
+        os = gfs.createWriteStream({ filename: req.params.id+'.'+ extension });
+        is.pipe(os);
+        
+        os.on('close', function (file) {
+        //Update project cover
+            Project.findById(req.params.id, function(err, project) {
+                if(err){
+                    res.send(500).send({ message : err });
+                }
+                if (!project) {
+                    res.status(404).send({ message: 'Project not found' });
+                }
+                else{
+                    project.coverPicture = '/api/projects/' + project._id + '/cover';
+                    project.dateUpdated = Date.now();
+                    project.save(function(err) {
+                        if(err){
+                            console.log(err);
+                            res.status(500).send(err);
+                        }
+                        res.status(200).send(project);
+                    });
+                }
+            });
+            
+            //delete file from upload folder
+            fs.unlink(req.file.path, function() {});
+        });
+    });     
 };
 
 /**
@@ -61,7 +124,6 @@ exports.updateProject = function(req, res){
         else{
                 project.title = pr.title || project.title;
                 project.company = pr.company || project.company;
-                project.coverPicture = pr.coverPicture || project.coverPicture;
                 project.driveLink = pr.driveLink || project.driveLink;
                 project.dateUpdated = Date.now();
                 project.description = pr.description || project.description;
@@ -158,12 +220,16 @@ exports.getProject = function(req, res) {
                     res.status(401).send({ message: 'Project not found' });
                 }
                 else{
-                    project.coverPicture = faker.image.business();
-                    project.company = faker.company.companyName();
-                    project.description = faker.lorem.sentence();
                     res.status(200).send(project);
                 }
             });
+};
+
+exports.getProjectCover = function(req, res){
+    res.set('Content-Type', 'image/jpeg');
+    var readstream = gfs.createReadStream({filename: req.params.id + '.jpg' });
+    
+    readstream.pipe(res); 
 };
 
 /**
@@ -208,10 +274,6 @@ exports.getUserProjects = function(req, res){
                 if (err){
                     res.status(404).send(err);
                 }
-                projects.forEach(function(project, idx){
-                    project.coverPicture = faker.image.business();
-                    project.company = faker.company.companyName();
-                });
                 res.status(200).send(projects);
             });
 };

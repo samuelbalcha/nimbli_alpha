@@ -3,7 +3,7 @@
 var moment = require('moment');
 var jwt = require('jwt-simple');
 var request = require('request');
-var config = require('./config_local');
+var config = require('../config_local');
 
 /*
  |--------------------------------------------------------------------------
@@ -25,9 +25,12 @@ exports.checkEmail = function(User){
     return function(req, res){
               
          User.findOne({ email: req.params.email }, function(err, existingUser) {
-                    if (existingUser) {
-                        return res.status(409).send({ message: 'Email is already taken' });
-                    }
+                if(err){
+                    return res.status(401).send({ message : err });
+                }
+                if (existingUser) {
+                    return res.status(409).send({ message: 'Email is already taken' });
+                }
          });
          
         res.status(200).send('Email not found');
@@ -77,10 +80,16 @@ exports.logIn = function(User){
 
     return function(req, res) {
         User.findOne({ email: req.body.email }, '+password', function(err, user) {
+            if(err){
+                return res.status(401).send({ message : err });
+            }
             if (!user) {
                 return res.status(401).send({ message: 'Wrong email and/or password' });
             }
             user.comparePassword(req.body.password, function(err, isMatch) {
+                if(err){
+                    return res.status(401).send({ message : err });
+                }
                 if (!isMatch) {
                     return res.status(401).send({ message: 'Wrong email and/or password' });
                 }

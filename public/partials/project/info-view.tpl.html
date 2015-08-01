@@ -1,0 +1,46 @@
+
+<div class="col-sm-3 panel pull-right">
+    <h5 class="text-muted"> About project </h5>
+    <small>{{ project.description }}</small>
+    <hr class="divider"></hr>
+    <h5 class="text-muted"> Team members </h5>
+    <ul>
+        <li ng-repeat="tm in project.team">
+            <h5> Name of the person and picture</h5>
+        </li>
+    </ul>
+    <hr class="divider"></hr>
+    <h5 class="text-muted"> Company </h5>
+    <p>{{ project.company }}</p>
+    <hr class="divider"></hr>
+    <h5 class="text-muted"> School </h5>
+    <div> 
+    <p>{{ project.school }}</p> 
+    <p> Tiina Tard</p>
+    
+    </div>
+    <div ng-if="canEdit">
+        <button ng-click="edit()" class="btn btn-primary"> Edit</button>
+    </div>
+</div>
+<div id="main">
+    <div id="project-header" class="card">
+        <div class="card-height-indicator"></div>
+        <div class="card-content">
+            <div class="card-image" style="height:75%;">
+                <img  src="{{ project.coverPicture }}" alt="Loading image...">
+                <h3 ng-model="project.title" class="card-image-headline">
+                    {{ project.title }}
+                </h3>
+            </div>
+            <div ng-switch="userRole" class="card-body" style="height:5%;">
+                <div ng-switch-when="anonymous">
+                      <button class="btn  btn-primary">Apply</button>
+                      <button class="btn  btn-warning">Follow</button>
+                </div>
+            </div>
+            <footer class="card-footer">
+            </footer>
+        </div>
+    </div>
+</div>
