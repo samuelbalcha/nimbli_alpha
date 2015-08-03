@@ -107,21 +107,6 @@ describe ('Service: ProjectService', function () {
         
         it('should get all projects related to user', function(){
             var projects = createProjects(1, 4, 56);
-           
-            // /api/projects/user/:id
-            $httpBackend.whenGET(url + '/user/' + 56).respond(projects);
-            ProjectService.getUserProjects(56);
-            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
-            $httpBackend.flush();
-            
-            expect(ProjectService.getProjectCount()).toBe(3);
-        });
-    });
-    
-    describe('when getUserProjects is called', function() {
-        
-        it('should get all projects related to user', function(){
-            var projects = createProjects(1, 4, 56);
             var p = new project();
             p._id = 30;
             p.title = "something else";
@@ -182,6 +167,42 @@ describe ('Service: ProjectService', function () {
         });
     });
     
+    describe('when sendProjectRequest is called', function() {
+        it('should add projectRequest with the sender_id, role and note and add it to the project request ', function(){
+            var p = new project();
+            p.title = "Has request";
+            p.projectRequest = [];
+            p._id = 1;
+            ProjectService.setCurrentProject(p);
+            
+            ProjectService.getCurrentProjectRequest = jasmine.createSpy("getCurrentProjectRequest()").and.callFake(function() {
+                var currentProjectRequests = [];
+                return currentProjectRequests;
+            });
+            
+            ProjectService.getCurrentProjectRequest();
+            expect(ProjectService.getCurrentProjectRequest().length).toEqual(0);
+           // $httpBackend.whenPUT(url + '/' + 1 + '/request', { userId: 346, role: 'team', projectId : 1, note :' add me to the team' } ).respond(p);
+           
+            ProjectService.sendProjectRequest = jasmine.createSpy("sendProjectRequest()").and.callFake(function() {
+                var currentProjectRequests = ProjectService.getCurrentProjectRequest();
+                var projectRequest = {
+                    userId : 346,
+                    projectId : 1,
+                    role : 'team',
+                    note: 'add me to the team'
+                }
+               currentProjectRequests.push(projectRequest);
+            });
+            
+            
+            
+            ProjectService.sendProjectRequest({ userId: 346, role: 'team', projectId : 1, note :' add me to the team' });
+            
+            // expect(ProjectService.getCurrentProjectRequest().length).toEqual(1);
+        });
+    });
+    
    function project (title, company, school, supervisors, team, status) { 
        _id: 1;
        title : title ||'Project 1';
@@ -195,6 +216,7 @@ describe ('Service: ProjectService', function () {
        status : status || 'Private';
        dateCreated : ' ';
        createdBy : 1;
+       projectRequest : []
    };
    
    function createProjects(i, max, user){

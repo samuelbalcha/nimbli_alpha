@@ -37,7 +37,6 @@ var projectSchema = new mongoose.Schema({
     team : [ { type: String, ref: 'User'}],
     supervisors : [ { type: String, ref: 'User'}],
     school : { type: String }
-   // projectRequest : [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProjectRequest'}]
 });
 
 projectSchema.pre('save', function(next) {
@@ -65,28 +64,9 @@ var briefSchema = new mongoose.Schema({
     briefCreatedByUser : Boolean
 });
 
-// RequestSchema
-var requestSchema = new mongoose.Schema({
-    user : { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    project : { type: mongoose.Schema.Types.ObjectId, ref: 'Project'},
-    role : Number, 
-    dateRequested : Date,
-    requestStatus : { type: Number, default : 0 },
-    note : { type : String, trim : true },
-    responseDate : Date
-});
 
-requestSchema.pre('save', function(next) {
-    var re = this;
-    re.dateRequested = Date.now();
-    next();
-});
-
-// role : 0 = TeamMember, 1 = Supervisor, 2 = Owner 
-// requestStatus : 0 = Active, 1 = Accepted,  2 = Rejected 
 
 var Project = mongoose.model('Project', projectSchema);
 var Brief = mongoose.model('Brief', briefSchema);
-var ProjectRequest = mongoose.model('ProjectRequest', requestSchema);
 
-module.exports = { Project : Project, Brief : Brief , ProjectRequest : ProjectRequest };
+module.exports = { Project : Project, Brief : Brief };

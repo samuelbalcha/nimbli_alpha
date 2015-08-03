@@ -35,8 +35,10 @@
             </div>
             <div ng-switch="userRole" class="card-body" style="height:5%;">
                 <div ng-switch-when="anonymous">
-                      <button class="btn  btn-primary">Apply</button>
-                      <button class="btn  btn-warning">Follow</button>
+                   <div ng-include="'partials/project/apply-follow.tpl.html'"></div>
+                </div>
+                <div ng-switch-when="owner">
+                   <div ng-include="'partials/project/owner.tpl.html'"></div>
                 </div>
             </div>
             <footer class="card-footer">

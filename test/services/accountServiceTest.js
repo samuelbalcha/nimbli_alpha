@@ -3,7 +3,7 @@ describe ('Service: AccountService', function () {
         auth,
         store,
         $httpBackend,
-        notificationService;
+        notificationService, deferred;
     
     var user = {
                   email : '', displayName : 'samuel',
@@ -13,12 +13,13 @@ describe ('Service: AccountService', function () {
     beforeEach(function() {
         module('nimbliApp');
         
-        inject(function( _$httpBackend_, _AccountService_, $auth, _store_, NotificationService) {
+        inject(function( _$httpBackend_, _AccountService_, $auth, _store_, NotificationService, $q) {
             $httpBackend = _$httpBackend_;
             AccountService = _AccountService_;
             auth = auth;
             store = _store_;
             notificationService = NotificationService;
+            deferred = $q.defer();
         });
     });
 
@@ -83,14 +84,75 @@ describe ('Service: AccountService', function () {
         });
     });
     
-      describe('when setCurrentUser method is called', function() {
+    describe('when setCurrentUser method is called', function() {
         it('should update currentUser data', function(){
             
             user.displayName = 'Tom';
             AccountService.setCurrentUser(user);
          
             expect(AccountService.getCurrentUser().displayName).toBe('Tom');
+        });
+    });
+    
+    describe('when getUser method is called', function() {
+        it('should return user data promise', function(){
+        
+            AccountService.getUser = jasmine.createSpy("getUser() spy").and.callFake(function(){
+               
+                deferred.resolve({ _id : 123, displayName : 'Samuel'});
+                return deferred.promise;
+            });
+         
+           var d;
+            AccountService.getUser(123).then(function(data){
+                d = data;
+            });
             
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
+            $httpBackend.flush();
+            
+            expect(d.displayName).toBe('Samuel');
+        });
+    });
+    
+    describe('when getProjectRequest method is called', function() {
+        it('should return single projectRequest data', function(){
+             var pr = { senderUser : '', project : '234', role : 'team', note : '' };   
+             $httpBackend.expectGET('partials/project/list-projects.html').respond('');
+         
+            AccountService.setCurrentUser({ _id : 123 });
+            $httpBackend.whenGET('/api/projectrequest/'+ 234 + '/' + 123).respond(pr);
+            var d;
+            AccountService.getProjectRequest(234).then(function(response){
+                d = response.data;
+            });
+            
+            $httpBackend.flush();
+            
+            expect(d.role).toBe('team');
+        });
+    });
+    
+    describe('when getProjectRequests method is called', function() {
+        it('should return list of projectRequests sent for the project owner', function(){
+           
+           var list = [];
+             for(var i = 0; i <5; i++){
+                 var pr = { senderUser : i, project : '234', role : 'team', note : '', toUser : 888 };   
+                 list.push(pr);
+             }  
+             
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
+         
+            AccountService.setCurrentUser({ _id : 888 });
+            $httpBackend.whenGET('/api/projectrequests/'+ 234 + '/' + 888).respond(list);
+            var d;
+            AccountService.getProjectRequests(234).then(function(response){
+                d = response.data;
+            });
+            
+            $httpBackend.flush();
+            expect(d.length).toEqual(5);
         });
     });
 });

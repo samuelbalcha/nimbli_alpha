@@ -2,7 +2,7 @@ angular.module('nimbliApp')
     .controller('ProjectHeaderCtrl',  function($scope, $stateParams, ProjectService, AccountService, USER_ROLES, Upload)
     {
         'use strict';
-        
+       
         $scope.project = {};
         $scope.canEdit = false;
         $scope.load = load;
@@ -15,10 +15,12 @@ angular.module('nimbliApp')
         $scope.load();
         
         function load(){
+            
             ProjectService.getProject($stateParams.id).then(function(project){
                 $scope.project = project;
                 setUserRole();
                 ProjectService.setUserProjectRole($scope.userRole);
+                $scope.$broadcast('parentControllerLoaded', project);
             });
         }
         
@@ -40,15 +42,17 @@ angular.module('nimbliApp')
                         })
                     .progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                     }).success(function (data, status, headers, config) {
-                        console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
-                        $scope.editMode = false;
-                        $scope.load();
+                         $scope.editMode = false;
+                         $scope.load();
                     }).error(function (data, status, headers, config) {
                         console.log('error status: ' + status);
+                        // show modal
                     });
                 }
+                
+                $scope.editMode = false;
+                $scope.load();
             });
         }
         

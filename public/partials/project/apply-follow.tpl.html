@@ -1,6 +1,6 @@
-<div ng-if="showButton(userRole)" class="pull-right">
-    <button  ng-click="applyToProject();" type="button" class="btn btn-primary">
+<div ng-controller="ProjectApplyCtrl" class="pull-right">
+    <button ng-click="applyClick();" type="button" class="btn btn-primary">
         <span class="mdi-action-thumb-up">
-        </span>{{ applyBtn | ifText : "Apply" : "Applied"}} </button>
+        </span>{{ canApply | yes : "Apply" : "Applied"}} </button>
 </div>
 

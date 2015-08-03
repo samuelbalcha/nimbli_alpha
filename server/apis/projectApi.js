@@ -132,7 +132,7 @@ exports.updateProject = function(req, res){
                 project.dateStarted = pr.dateStarted || project.dateStarted;
                 project.dateCancelled = pr.dateCancelled || project.dateCancelled;
                 project.dateCompleted = pr.dateCompleted || project.dateCompleted;
-                
+                project.school = pr.school || project.school;
                 project.save(function(err) {
                     if(err){
                         console.log(err);
@@ -159,13 +159,8 @@ exports.getProjects = function(req, res){
                     res.status(404).send();
                 }
                 else{
-                     projects.forEach(function(project, idx){
-                        project.coverPicture = faker.image.business();
-                        project.company = faker.company.companyName();
-                    });
                     res.status(200).send(projects);
-                }
-                
+                }   
            });
 };
 

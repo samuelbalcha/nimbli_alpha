@@ -34,6 +34,7 @@ var User = require('./models/user');
 var userApi = require('./apis/userApi');
 var projectApi = require('./apis/projectApi');
 var auth = require('./apis/authentication');
+var projectRequestApi = require('./apis/projectRequestApi');
 
 /*
  |--------------------------------------------------------------------------
@@ -89,9 +90,10 @@ app.put('/api/projects/:id/cover', ensureAuthenticated, upload.single('file'), p
 app.put('/api/projects/:id/brief', projectApi.updateBrief);
 
 // ProjectRequest
-// app.put('/api/projects/:id/request', projectApi.createProjectRequest);
-// app.get('/api/projects/:id/request', projectApi.getProjectRequests);
-// app.put('/api/projects/:id/updaterequest', projectApi.updateProjectRequest);
+app.post('/api/projectrequests', ensureAuthenticated, projectRequestApi.createProjectRequest);
+app.get('/api/projectrequest/:projectId/:user', ensureAuthenticated, projectRequestApi.getProjectRequest);
+app.put('/api/projectrequest/:id', ensureAuthenticated, projectRequestApi.updateProjectRequest);
+app.get('/api/projectrequests/:projectId/:user', ensureAuthenticated, projectRequestApi.getProjectRequests);
 
 // Test APIs
 app.get('/api/users', userApi.users);

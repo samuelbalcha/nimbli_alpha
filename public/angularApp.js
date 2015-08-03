@@ -1,8 +1,6 @@
 'use strict';
 
-
-angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 
-'angular-storage', 'angularMoment', 'truncate', 'ngAnimate', 'ngFileUpload'])
+angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'angular-storage', 'angularMoment', 'truncate', 'ngAnimate', 'ngFileUpload'])
     .config(function($stateProvider, $urlRouterProvider, $authProvider, USER_ROLES, AUTH_EVENTS) {
         $stateProvider
             .state('home', {
@@ -67,7 +65,6 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
         angular.extend($modalProvider.defaults, {
             html: true
         });   
-        
     }).run(['$rootScope','$location','$state', 'AuthorizationService','AUTH_EVENTS', 'AccountService', 
    
      function($rootScope, $location, $state, AuthorizationService, AUTH_EVENTS, AccountService){

@@ -23,8 +23,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.1/angular-messages.min.js"></script>
 <script src="vendors/core/satellizer.min.js"></script>
 <!--  angular store -->
-<script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-storage/master/dist/angular-storage.js"></script>
-
+<script type="text/javascript" src="vendors/core/angular-storage.js"></script>
 <!-- moment -->
 <script src="vendors/moment.js"></script>
 <script src="vendors/angular-moment.js"></script>
@@ -50,8 +49,9 @@
 <script src="/controllers/project/projectCreate.js"></script>
 <script src="/controllers/project/projectList.js"></script>
 <script src="/controllers/project/projectHeader.js"></script>
-<script src="/controllers/project/projectInfo.js"></script>
-<script src="/controllers/project/projectTabs.js"></script>
+<script src="/controllers/project/projectApply.js"></script>
+<script src="/controllers/project/projectOwner.js"></script>
+
 <script src="/controllers/dashboard.js"></script>
 <!-- project tabs -->
 <script src="/controllers/project/briefCtrl.js"></script>
@@ -82,6 +82,9 @@
     cursor: pointer;
     opacity: 0;
     filter: alpha(opacity=0);
+}
+.pull-up{
+    margin-top : -2%;
 }
 </style>
 

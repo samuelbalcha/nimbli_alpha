@@ -1,6 +1,6 @@
-<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div  class="modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div ng-show="canApply" class="modal-content">
             <div class="modal-header" ng-model="title">
                 <h4 class="modal-title alert-info" style="text-align:center; padding:5px;"> {{ modalPurpose }}</h4>
             </div>
@@ -12,24 +12,51 @@
                 <div class="col-lg-10">
                     <select class="form-control" id="role" 
                             ng-options="role.name for role in projectRoles" 
-                            ng-model="selectedRoleItem" 
+                            ng-model="$parent.selectedRoleItem" 
                             ng-change="roleChanged(this)">
                     </select>
                 </div>
             </div>
              <!-- Note -->
             <div class="form-group">
-                <label for="note" class="col-lg-2 control-label">Description</label>
+                <label for="note" class="col-lg-2 control-label">Note</label>
                 <div class="col-lg-10">
                     <textarea id="description" 
-                              ng-model="projectRequest.note" class="form-control" rows="3" id="note"></textarea>
+                              ng-model="$parent.projectRequest.note" class="form-control" rows="3" id="note"></textarea>
                     <span class="help-block">Tell us with few words, why you want to join this project.</span>
+                   <div ng-show="$parent.showError" class="alert-danger">
+                       You need to login to apply. 
+                    </div>
+       
                 </div>
             </div>
             
             <div class="modal-footer">
                 <button ng-click="closeModal()" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button ng-click="sendApplication()" type="button" class="btn btn-primary">Send</button>
+                <button ng-disabled="$parent.saveDisabled"  ng-click="sendApplication()" type="button" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+    </div>
+         <div ng-show="!canApply" class="modal-content">
+            <div class="modal-header" ng-model="title">
+                <h4 class="modal-title alert-primary" style="text-align:center; padding:5px;"> You applied to this project </h4>
+            </div>
+            <div class="modal-body">
+              <p class="text-muted" style="text-align:center; padding:5px"> </p>
+              <!-- Role -->
+             <div class="form-group">
+                <p  class="col-lg-2"> <b>Role: </b> {{ projectRequest.role }} </p>
+            </div>
+             <!-- Note -->
+            <div class="form-group">
+                <p  class="col-lg-2"><b>Note: </b> {{ projectRequest.note }} </p>
+                <p class="col-lg-2 text-muted"  style="margin-bottom:15px;"> 
+                   {{ projectRequest.dateRequested | amDateFormat:'dddd, MMMM Do YYYY HH:mm' }} 
+                </p>
+            </div>
+            
+            <div class="modal-footer">
+                <button ng-click="closeModal()" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

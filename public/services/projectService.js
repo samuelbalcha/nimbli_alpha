@@ -12,6 +12,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
         getProjects : function (){
             return  $http.get(url).then(function(response) {
                 projectCount = response.data.length;
+                currentProject = null;
                 return response.data;
             }, handleError);
         },
@@ -74,13 +75,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
             $rootScope.$broadcast('currentBriefChanged', [currentBrief, isOwner]);
         },
         
-        sendProjectRequest : function(projectRequest){
-            return $http.put(url + '/' + currentProject._id + '/request', projectRequest).then(function(response){
-                return response.data;
-            }, function(err){
-                $q.reject(err);
-            });
-        },
+        
         
         getProjectRequests : function(id){
             
@@ -99,6 +94,13 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
             }, handleError);
         },
         */,
+        sendProjectRequestRequest : function(projectRequest){
+            return $http.post('/api/projectrequests', projectRequest).then(function(response){
+                return response.data;
+            }, function(err){
+                $q.reject(err);
+            });
+        },
         addUserToProject : function(data){
             return $http.put(url + '/' + data.projectId + '/user/' + data.userId, { role : data.role }).then(handleSuccess, handleError);
         },

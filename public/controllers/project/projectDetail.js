@@ -6,7 +6,7 @@ angular.module('nimbliApp')
     $scope.isOwner = false;
     $scope.edit = edit;
     $scope.deleteBtn = deleteProject;
-    $scope.publish = publish;
+   
     $scope.editMode = false;
     $scope.save = save;
     $scope.cancel = cancel;
@@ -64,9 +64,7 @@ angular.module('nimbliApp')
         $location.path('/projects');
     };
     
-    function publish(status){
-        console.log("publish" , status);
-    }
+    
     
     function save(){
         ProjectService.updateProject($scope.project);

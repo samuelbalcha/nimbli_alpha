@@ -5,7 +5,7 @@ angular.module('nimbliApp')
     {
         
        $scope.projects = [];
-      
+       $scope.projectview = goTo;
        listProjects();
        
       function listProjects(){
@@ -15,8 +15,7 @@ angular.module('nimbliApp')
          });
       }
       
-      function logErr(err){
-          console.log(err);
+      function goTo(project){
+          $location.path('/projects/' + project.id);
       }
-     
 });

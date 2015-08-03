@@ -29,7 +29,15 @@ angular.module('nimbliApp')
                     deferred.reject("user was not found");
                 });
                 return deferred.promise;
+            },
+            getProjectRequest : function(id){
+                 return $http.get('/api/projectrequest/'+ id + '/' + currentUser._id);
+            },
+            
+            getProjectRequests: function(id){
+                  return $http.get('/api/projectrequests/'+ id + '/' + currentUser._id);
             }
+            
         };
          
         function handleSuccess(response){

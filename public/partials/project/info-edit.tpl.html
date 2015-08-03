@@ -40,20 +40,23 @@
             <div class="card-height-indicator"></div>
             <div class="card-content">
                 <div class="card-image" style="height:75%;">
-                    <div class="btn btn-flat btn-primary">
-                        <span>Update cover</span>
-                        <input name="file" accept="image/*" ngf-select="" ng-model="$parent.file"  class="fileupload" type="file" id="coverPicture">
-                    </div>
                     <img ngf-src="file" ng-show="file.type.indexOf('image') > -1" ngf-accept="'image/*'">     
                     <img ng-hide="$parent.file" src="{{ project.coverPicture }}" alt="{{ project.title }}">
                     <input type="text" class="form-control card-image-headline" 
                            ng-model="project.title" value="{{ project.title }}" style="width:90%;"
-                            id="title" placeholder="Title" required>
+                           id="title" placeholder="Title" required>
+                   
                 </div>
-                <div class="card-body" style="height:5%;">
+                <div class="card-body" style="height:3%;">
                   
                 </div>
                 <footer class="card-footer">
+                     <div class="pull-up">
+                         <div class="btn btn-flat btn-primary">
+                            <span>Update cover</span>
+                            <input name="file" accept="image/*" ngf-select="" ng-model="$parent.file"  class="fileupload" type="file" id="coverPicture">
+                        </div>
+                     </div>
                 </footer>
             </div>
         </div>
