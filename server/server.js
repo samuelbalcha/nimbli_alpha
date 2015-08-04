@@ -83,7 +83,7 @@ app.get('/api/projects/user/:id', projectApi.getUserProjects);
 app.post('/api/projects', ensureAuthenticated, projectApi.createProject);
 app.delete('/api/projects/:id', ensureAuthenticated, projectApi.deleteProject);
 app.put('/api/projects/:id', ensureAuthenticated, projectApi.updateProject);
-app.put('/api/projects/:id/user/:id', ensureAuthenticated, projectApi.addUserToProject);
+app.put('/api/addusertoproject', ensureAuthenticated, projectApi.addUserToProject);
 app.put('/api/projects/:id/cover', ensureAuthenticated, upload.single('file'), projectApi.uploadCover);
 
 // Brief
@@ -94,7 +94,7 @@ app.post('/api/projectrequests', ensureAuthenticated, projectRequestApi.createPr
 app.get('/api/projectrequest/:projectId/:user', ensureAuthenticated, projectRequestApi.getProjectRequest);
 app.put('/api/projectrequest/:id', ensureAuthenticated, projectRequestApi.updateProjectRequest);
 app.get('/api/projectrequests/:projectId/:user', ensureAuthenticated, projectRequestApi.getProjectRequests);
-
+app.delete('/api/projectrequest/:id', ensureAuthenticated, projectRequestApi.removeRequest);
 // Test APIs
 app.get('/api/users', userApi.users);
 app.get('/api/users/:id', userApi.user);

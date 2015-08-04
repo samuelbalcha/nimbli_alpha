@@ -4,11 +4,18 @@
     <small>{{ project.description }}</small>
     <hr class="divider"></hr>
     <h5 class="text-muted"> Team members </h5>
-    <ul>
-        <li ng-repeat="tm in project.team">
-            <h5> Name of the person and picture</h5>
+        <li  ng-repeat="tm in project.team">
+            <div class="list-group">
+                <div class="list-group-item ">
+                    <div class="row-picture">
+                        <img  src="http://lorempixel.com/56/56/people/1" alt="{{ tm.displayName }}">
+                    </div>
+                    <div class="row-content">
+                        <h4 class="list-group-item-heading"> {{ tm.displayName }}</h4>
+                    </div>
+                </div>
+            </div>
         </li>
-    </ul>
     <hr class="divider"></hr>
     <h5 class="text-muted"> Company </h5>
     <p>{{ project.company }}</p>
@@ -16,7 +23,19 @@
     <h5 class="text-muted"> School </h5>
     <div> 
     <p>{{ project.school }}</p> 
-    <p> Tiina Tard</p>
+     <li  ng-repeat="sup in project.supervisors">
+            <div class="list-group">
+                <div class="list-group-item ">
+                    <div class="row-picture">
+                        <img  src="http://lorempixel.com/56/56/people/1" alt="{{ sup.displayName }}">
+                    </div>
+                    <div class="row-content">
+                        <h4 class="list-group-item-heading"> {{ sup.displayName }}</h4>
+                        <p> {{ sup.title }}</p>
+                    </div>
+                </div>
+            </div>
+        </li>
     
     </div>
     <div ng-if="canEdit">

@@ -1,7 +1,7 @@
 module.exports = {
     TOKEN_SECRET: process.env.TOKEN_SECRET || 'stuff',
     MONGO_URI: process.env.IP || 'mongodb://localhost/nalpha',
-    MONGO_URI: process.env.MONGO_URI || 'mongodb://localhost/nalpha',
+    //MONGO_URI: process.env.MONGO_URI || 'mongodb://localhost/nalpha',
     FACEBOOK_SECRET: process.env.FACEBOOK_SECRET || 'stuff',
     GOOGLE_SECRET: process.env.GOOGLE_SECRET || 'stuff',
     AWS_KEYID : process.env.AWS_KEYID || 'stuff',

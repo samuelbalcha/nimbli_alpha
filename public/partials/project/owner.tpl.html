@@ -1,7 +1,37 @@
 <div class="pull-right" ng-controller="ProjectOwnerCtrl">
-     
      <ul class="nav nav-pills">
-         <li ng-show="projectRequests && projectRequests.length > 0"><a href="javascript:void(0)">  <span class="mdi-social-person-add"></span></a></li>
+         <li class="dropdown">
+                <a data-target="#" class="dropdown-toggle" data-toggle="dropdown"><span class="mdi-social-person-add"></span></a>
+                <ul class="dropdown-menu person-add">
+                     <h4 style="margin:10px" class="alert-info" ng-show="projectRequests.length === 0">No request found</h4>
+                   <li ng-repeat="preq in projectRequests">
+                      
+                        <div class="list-group">
+                            <div class="list-group-item ">
+                                <div class="row-picture">
+                                    <img src="http://lorempixel.com/56/56/people/1" alt="icon">
+                                </div>
+                                <div class="row-content" style="width:70%">
+                                    <h4 class="list-group-item-heading"> {{ preq.senderUser }}</h4>
+                                    <p class="list-group-item-text"> {{ preq.note }}</p>
+                                </div>
+                                <div class="pull-right">
+                                    <p>
+                                        <a href="" ng-click="acceptUser(preq)" style="margin-left:5px">  <span class="mdi-content-add-circle-outline"></span> </a> 
+                                        <a href="" ng-click="rejectUser(preq._id)"> <span class="mdi-content-remove-circle-outline"></span>  </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                   </li>
+                </ul>
+            </li>
+         <li class="dropdown">
+             <a  href="javascript:void(0)">  </a>
+              <ul class="dropdown-menu">
+                   
+              </ul>
+         </li>
     </ul>
 </div>
     

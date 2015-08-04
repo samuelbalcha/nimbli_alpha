@@ -102,7 +102,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
             });
         },
         addUserToProject : function(data){
-            return $http.put(url + '/' + data.projectId + '/user/' + data.userId, { role : data.role }).then(handleSuccess, handleError);
+            return $http.put('/api/addusertoproject',  data).then(handleSuccess, handleError);
         },
         getUserProjects : function(userId){
             return $http.get(url + '/user/' + userId).then(function(response) {
@@ -112,6 +112,16 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
         },
         getProjectCount : function(){
             return projectCount;
+        },
+        sendProjectRequestResponse : function(projectrequest){
+            return $http.put('/api/projectrequest/' + projectrequest._id).then(function(response) {
+                return response.data;
+            }, handleError);
+        },
+        removeProjectRequest : function(id){
+            return $http.delete('/api/projectrequest/' + id).then(function(response) {
+                return response.data;
+            })
         }
         
     });

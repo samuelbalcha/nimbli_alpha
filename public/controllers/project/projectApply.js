@@ -46,12 +46,15 @@ angular.module('nimbliApp')
         $scope.modalPurpose = 'Apply to project';
         $scope.modalTitle = "How do you want to contribute to this project?";
         $scope.selectedRoleItem = $scope.projectRoles[0];
-        $scope.projectRequest = $scope.projectRequest;
+        //$scope.projectRequest = $scope.projectRequest;
         
         theModal =  $modal({ scope: $scope, template: template, show: true }); 
     }
     
     function roleChanged(ele){
+        if(!$scope.projectRequest){
+            $scope.projectRequest = { role : '' , note : ''};
+        }
         $scope.projectRequest.role = ele.selectedRoleItem.value; 
     }
     

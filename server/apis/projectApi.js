@@ -59,6 +59,8 @@ exports.createProject = function(req, res){
  * stores the image to GridFs fs.files collection.
  */ 
 exports.uploadCover = function(req, res){
+    if(req.file === null || req.file === undefined) return;
+    
     var is, os;
     var extension = req.file.originalname.split(/[. ]+/).pop();
     var filename =  req.params.id +'.'+ extension;
@@ -204,7 +206,7 @@ exports.getProject = function(req, res) {
     Project.findOne({ '_id' : req.params.id}).populate('brief')
                                              .populate('createdBy', 'displayName')
                                              .populate('team', 'displayName')
-                                             .populate('supervisor', 'displayName')
+                                             .populate('supervisors', 'displayName')
                                              .populate('owners', 'displayName')
             .exec(function(err, project) {
                 if(err){
@@ -287,16 +289,17 @@ exports.addUserToProject = function(req, res){
         if (!project) {
             res.status(404).send({ message: 'Project not found' });
         }
-       
-        if(pr.role === USER_ROLES.team && project.team.indexOf(pr.userId) === -1){
+        console.log(pr);
+        if(pr.role === 'team' && project.team.indexOf(pr.userId) === -1){
             project.team.push(pr.userId);
             project.markModified('team');
         }
-        if(pr.role === USER_ROLES.supervisor && project.supervisors.indexOf(pr.userId) === -1){
+        else if(pr.role === 'supervisor' && project.supervisors.indexOf(pr.userId) === -1){
+            console.log("sup")
             project.supervisors.push(pr.userId);
             project.markModified('supervisors');
         }
-        if(pr.role === USER_ROLES.owner && project.owners.indexOf(pr.userId) === -1){
+        else if(pr.role === 'owner' && project.owners.indexOf(pr.userId) === -1){
             project.owners.push(pr.userId);
             project.markModified('owners');
             addProjectToOwner(pr.userId, pr.projectId);

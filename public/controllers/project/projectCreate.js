@@ -44,7 +44,12 @@ angular.module('nimbliApp')
        function createProject(){
            ProjectService.createProject($scope.project).then(function(currentProject){
               $scope.project = currentProject;
-              $scope.upload([$scope.file], currentProject._id);
+              if($scope.file !== undefined){ 
+                 $scope.upload([$scope.file], currentProject._id);
+              }
+              else{
+                 $location.path('/projects/' + $scope.project._id);
+              }
            }); 
        }
       

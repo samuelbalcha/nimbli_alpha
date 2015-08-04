@@ -1,7 +1,6 @@
 'use strict';
 
 var ProjectRequestSchema = require('../models/projectRequest');
-var User = require('../models/user');
 var USER_ROLES = require('constants');
 
 var ProjectRequest = ProjectRequestSchema.ProjectRequest;
@@ -60,18 +59,23 @@ exports.getProjectRequest = function(req, res){
 
 exports.updateProjectRequest = function(req, res){
     var pr = req.params;
-    console.log(pr);
-    ProjectRequest.find({_id : req.params.id } , function(err, found){
+    console.log("updateProjectRequest",pr);
+    ProjectRequest.findById(req.params.id , function(err, pReq){
         if(err){
             res.status(403).send({ message : err });
         }
-        if(found){
-            console.log(found);
-            res.status(200).send(found);
-        }
-        else res.status(200).send([]);
+        
+        pReq.status = 'Accepted';
+        pReq.responseDate = Date.now();
+        
+        pReq.save(function(err){
+            if(err){
+                res.status(403).send({ message : err });
+            }
+            res.status(200).send(pReq);
+        }); 
     });
-}
+};
 
 exports.getProjectRequests = function(req, res){
     var pr = req.params;
@@ -85,4 +89,15 @@ exports.getProjectRequests = function(req, res){
         }
         res.status(200).send(prs);
     });
+};
+
+exports.removeRequest = function(req, res){
+    ProjectRequest.findOneAndRemove({ _id : req.params.id }, function(err, pr){
+        if(err){
+            res.status(404).send(err);
+        }
+        res.send(200);
+    });
+    
+    
 };
