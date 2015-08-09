@@ -1,5 +1,5 @@
 angular.module('nimbliApp')
-    .controller('ProjectWallCtrl', function ($scope, AccountService, ProjectService, USER_ROLES, ProjectWallService, POST_VISIBILITY, POST_TYPE)
+    .controller('ProjectWallCtrl', function ($scope, AccountService, ProjectService, NotificationService ,USER_ROLES, ProjectWallService, POST_VISIBILITY, POST_TYPE)
 {
     'use strict';    
     $scope.posts = [];

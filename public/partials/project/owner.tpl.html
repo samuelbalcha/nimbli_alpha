@@ -9,10 +9,10 @@
                         <div class="list-group">
                             <div class="list-group-item ">
                                 <div class="row-picture">
-                                    <img src="http://lorempixel.com/56/56/people/1" alt="icon">
+                                    <img ng-src="{{ preq.senderUser.avatar }}" alt="{{preq.senderUser.displayName }}">
                                 </div>
                                 <div class="row-content" style="width:70%">
-                                    <h4 class="list-group-item-heading"> {{ preq.senderUser }}</h4>
+                                    <h4 class="list-group-item-heading"> {{ preq.senderUser.displayName }}</h4>
                                     <p class="list-group-item-text"> {{ preq.note }}</p>
                                 </div>
                                 <div class="pull-right">

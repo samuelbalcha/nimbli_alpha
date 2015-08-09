@@ -14,7 +14,7 @@
             <div class="list-group">
                 <div class="list-group-item ">
                     <div class="row-picture">
-                        <img  src="{{ tm.avatar }}" alt="{{ tm.displayName }}">
+                        <img  ng-src="{{ tm.avatar }}" alt="{{ tm.displayName }}">
                     </div>
                     <div class="row-content">
                         <h4 class="list-group-item-heading"> {{ tm.displayName }}</h4>
@@ -41,7 +41,7 @@
             <div class="list-group">
                 <div class="list-group-item ">
                     <div class="row-picture">
-                        <img  src="{{ sup.avatar }}" alt="{{ sup.displayName }}">
+                        <img  ng-src="{{ sup.avatar }}" alt="{{ sup.displayName }}">
                     </div>
                     <div class="row-content">
                         <h4 class="list-group-item-heading"> {{ sup.displayName }}</h4>
@@ -63,7 +63,7 @@
             <div class="card-content">
                 <div class="card-image" style="height:75%;">
                     <img ngf-src="file" ng-show="file.type.indexOf('image') > -1" ngf-accept="'image/*'">     
-                    <img ng-hide="$parent.file" src="{{ project.coverPicture }}" alt="{{ project.title }}">
+                    <img ng-hide="$parent.file" ng-src="{{ project.coverPicture }}" alt="{{ project.title }}">
                     <input type="text" class="form-control card-image-headline" 
                            ng-model="project.title" value="{{ project.title }}" style="width:90%;"
                            id="title" placeholder="Title" required>

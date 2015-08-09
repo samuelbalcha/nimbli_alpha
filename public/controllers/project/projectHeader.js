@@ -1,5 +1,5 @@
 angular.module('nimbliApp')
-    .controller('ProjectHeaderCtrl',  function($scope, $stateParams, ProjectService, AccountService, USER_ROLES, Upload, NotificationService)
+    .controller('ProjectHeaderCtrl',  function($scope, $state, $stateParams, ProjectService, AccountService, USER_ROLES, Upload, $location)
     {
         'use strict';
        
@@ -10,7 +10,9 @@ angular.module('nimbliApp')
         $scope.save = save;
         $scope.cancel = cancel;
         $scope.editMode = false;
-        $scope.userRole = USER_ROLES.anonymous;
+        $scope.userRole;
+        $scope.refresh = refresh;
+        $scope.userview = userviewClicked;
        
         $scope.load();
         
@@ -20,7 +22,6 @@ angular.module('nimbliApp')
                 $scope.project = project;
                 $scope.userRole = ProjectService.setUserRole(project, AccountService.getCurrentUser());
                 $scope.canEdit = ($scope.userRole === USER_ROLES.owner);
-                NotificationService.publish('parentControllerLoaded', project);
             });
         }
         
@@ -52,15 +53,21 @@ angular.module('nimbliApp')
                 }
                 
                 $scope.editMode = false;
-                $scope.load();
+                $scope.refresh(); 
             });
         }
         
         function cancel(){
             $scope.editMode = false;
             $scope.file = null;
-            $scope.load();
+            $scope.refresh(); 
         }
         
+        function refresh(){
+           $state.reload();
+        }
+        function userviewClicked(user){
+            $location.path('/users/' + user.id);
+        }
         
     });

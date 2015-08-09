@@ -204,10 +204,10 @@ exports.deleteProject = function(req, res){
 exports.getProject = function(req, res) {
 
     Project.findOne({ '_id' : req.params.id}).populate('brief')
-                                             .populate('createdBy', 'displayName, avatar')
-                                             .populate('team', 'displayName, avatar')
-                                             .populate('supervisors', 'displayName, avatar')
-                                             .populate('owners', 'displayName, avatar')
+                                             .populate('createdBy', 'displayName avatar')
+                                             .populate('team', 'displayName avatar')
+                                             .populate('supervisors', 'displayName avatar')
+                                             .populate('owners', 'displayName avatar')
             .exec(function(err, project) {
                 if(err){
                     console.log(err);
@@ -266,7 +266,7 @@ exports.updateBrief = function(req, res){
  */ 
 exports.getUserProjects = function(req, res){
       
-    Project.find({createdBy : req.user }).populate('createdBy', 'displayName, avatar')
+    Project.find({createdBy : req.user }).populate('createdBy', 'displayName avatar')
                                         .sort({ dateCreated : 'desc'})
            .exec(function(err, projects) {
                 if (err){
@@ -296,15 +296,15 @@ exports.addUserToProject = function(req, res){
             project.markModified('team');
         }
         else if(pr.role === 'supervisor' && project.supervisors.indexOf(pr.userId) === -1){
-            console.log("sup")
             project.supervisors.push(pr.userId);
             project.markModified('supervisors');
         }
         else if(pr.role === 'owner' && project.owners.indexOf(pr.userId) === -1){
             project.owners.push(pr.userId);
             project.markModified('owners');
-            addProjectToOwner(pr.userId, pr.projectId);
         }
+        addProjectToUser(pr.userId, pr.projectId, pr.role);
+        
         project.dateUpdated = Date.now();
         project.save(function(err) {
             if(err){
@@ -319,14 +319,26 @@ exports.addUserToProject = function(req, res){
 /**
  * adds projectId to user.owner property
  */ 
-function addProjectToOwner(userId, projectId){
+function addProjectToUser(userId, projectId, role){
      
     User.findOne({_id : userId}, function(err, user){
         if(err){
             console.log(err);
+            return;
         }
-        
-        user.roles.owner.push(projectId);
+        if(!user){
+            return;
+        }
+        if(role === 'team' && user.roles.teamMember.indexOf(projectId) === -1){
+            user.roles.teamMember.push(projectId);
+        }
+        if(role === 'supervisor' && user.roles.supervisor.indexOf(projectId) === -1){
+            user.roles.supervisor.push(projectId);
+        }
+        if(role === 'owner' && user.roles.owner.indexOf(projectId) === -1){
+             user.roles.owner.push(projectId);
+        }
+       
         user.save(function(err) {
             if(err){
                 console.log(err);

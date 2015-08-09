@@ -2,11 +2,11 @@
      <li ng-repeat="preq in projectRequests"> 
         <div class="col-md-3">
              <div class="row-picture">
-                <img class="circle" src="http://lorempixel.com/56/56/people/1" alt="icon">
+                <img  ng-src="{{ preq.senderUser.avatar }}" alt="{{ preq.senderUser.displayName }}">
             </div> 
         </div>
         <div class="col-md-5">
-                <h4 class="list-group-item-heading">{{ preq.user.displayName }}</h4>
+                <h4 class="list-group-item-heading">{{ preq.senderUser.displayName }}</h4>
                 <div class="divider"></div>
                 <p class="list-group-item-text">{{ preq.note }}</p>
                 <p class="label label-default">{{ getRoleName(preq.role) }}</p>

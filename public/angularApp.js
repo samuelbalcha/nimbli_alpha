@@ -10,7 +10,8 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
             }).state('login', {
                 url: '/login',
                 templateUrl: 'partials/login.html',
-                controller: 'LoginCtrl'
+                controller: 'LoginCtrl',
+                cache : false
             }).state('signup', {
                 url: '/signup',
                 templateUrl: 'partials/signup.html',
@@ -44,7 +45,8 @@ angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ng
                 }
             }).state('userview', {
                 url:'/users/:id',
-                templateUrl: 'partials/user/view-user.html'
+                templateUrl: 'partials/user/view-user.html',
+                cache: false
             });
 
         $urlRouterProvider.otherwise('/');

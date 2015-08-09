@@ -59,7 +59,7 @@ exports.getProjectRequest = function(req, res){
 
 exports.updateProjectRequest = function(req, res){
     var pr = req.params;
-    console.log("updateProjectRequest",pr);
+   
     ProjectRequest.findById(req.params.id , function(err, pReq){
         if(err){
             res.status(403).send({ message : err });
@@ -80,7 +80,8 @@ exports.updateProjectRequest = function(req, res){
 exports.getProjectRequests = function(req, res){
     var pr = req.params;
     
-    ProjectRequest.find({ toUser : pr.user, project : pr.projectId, status : 'new' }, function(err, prs){
+    ProjectRequest.find({ toUser : pr.user, project : pr.projectId, status : 'new' }).populate('senderUser', 'displayName avatar')
+    .exec(function(err, prs){
         if(err){
             res.status(403).send({ message : err });
         }

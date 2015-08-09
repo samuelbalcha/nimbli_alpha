@@ -61,7 +61,8 @@ var userSchema = new mongoose.Schema({
         },
     title : String,
     organization: String,
-    userRole: String
+    userRole: String,
+    dateUpdated : Date
 });
 
 
@@ -82,6 +83,8 @@ userSchema.pre('save', function(next) {
             next();
         });
     });
+    
+    user.dateUpdated = Date.now();
 });
 
 userSchema.methods.comparePassword = function(password, done) {

@@ -1,5 +1,5 @@
 angular.module('nimbliApp')
-    .controller('ProjectApplyCtrl', function ($scope, ProjectService, AccountService, USER_ROLES, $modal)
+    .controller('ProjectApplyCtrl', function ($scope, $stateParams, ProjectService, AccountService, USER_ROLES, $modal)
 {
     'use strict';
     //$scope.load = load;
@@ -12,11 +12,8 @@ angular.module('nimbliApp')
     $scope.canApply = true;
   
     var theModal;
-    var currentUser, currentProject;
-    $scope.$on('parentControllerLoaded',function(event, data){
-        currentProject = data;
-        load(); 
-    });
+  
+    load();
    
     $scope.showModal = function() {
         theModal.$promise.then(theModal.show);
@@ -27,9 +24,9 @@ angular.module('nimbliApp')
     };
     
     function load(){
-        currentUser = AccountService.getCurrentUser();
-        if(currentUser){
-              AccountService.getProjectRequest(currentProject._id).then(function(pr){
+       
+        if(AccountService.getCurrentUser()){
+              AccountService.getProjectRequest($stateParams.id).then(function(pr){
                    if(pr){
                         $scope.projectRequest = pr.data[0];
                         $scope.canApply = pr.data.length === 0 ? true : false;    
@@ -59,7 +56,7 @@ angular.module('nimbliApp')
     }
     
     function sendRequest(){
-         
+        var currentUser = AccountService.getCurrentUser();
         if(currentUser){
             var pr = {
                 senderUser : currentUser._id,
@@ -72,6 +69,7 @@ angular.module('nimbliApp')
             ProjectService.sendProjectRequestRequest(pr).then(function(p){
                 $scope.projectRequest = p;
                 $scope.closeModal();
+                $scope.$parent.refresh();
             });
         }
         else {

@@ -1,23 +1,23 @@
 'use strict';
 
 angular.module('nimbliApp')
-    .controller('UserDetailCtrl', function($scope, $stateParams, AccountService, Upload, NotificationService)
+    .controller('UserDetailCtrl', function($scope, $stateParams, AccountService, Upload, NotificationService, $state)
 {
     $scope.user = {};
     $scope.editMode = false;
     $scope.edit = edit;
     $scope.save = save;
     $scope.isOwner = false;
-    
     $scope.cancel = cancel;
+     var activeUser;
     
     load();
     
     function load(){
-       var activeUser = AccountService.getActiveUser();
+       activeUser = AccountService.getActiveUser();
        if(!activeUser || (activeUser.user._id !== $stateParams.id)){
             AccountService.getUser($stateParams.id).then(function(data){
-                console.log(data);
+                AccountService.setActiveUser(data);
                 fillData(data);
                }, function(err){
                    console.log(err);
@@ -38,12 +38,11 @@ angular.module('nimbliApp')
                         method: 'PUT'
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                        console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                        //console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                     }).success(function (data, status, headers, config) {
-                        console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
-                        //$location.path('/projects/' + $scope.project._id);
+                        
                     }).error(function (data, status, headers, config) {
-                        console.log('error status: ' + status);
+                        
                     });
                 }
             }
@@ -51,14 +50,13 @@ angular.module('nimbliApp')
     
     function fillData(data){
         $scope.user = data.user;
-        NotificationService.publish('parentControllerLoaded', data);
-      
-        AccountService.setActiveUser(data);
+     
         var currentUser = AccountService.getCurrentUser();
-        
         if(currentUser && ($stateParams.id === currentUser._id)){
             $scope.isOwner = true;
         }
+        
+        NotificationService.publish('userDetailCtrlReady', data);
     }
    
     function edit(){
@@ -73,12 +71,14 @@ angular.module('nimbliApp')
         if($scope.file !== undefined){ 
             $scope.upload([$scope.file], $scope.user._id);
         }
-        
+        AccountService.setActiveUser(null);
         $scope.editMode = false;
+        $state.reload();
     }
    
     function cancel(){
         $scope.editMode = false;
         $scope.file = null;
     }
+    
 });

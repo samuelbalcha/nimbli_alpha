@@ -87,6 +87,7 @@ exports.updateProfile = function(req, res) {
         user.firstName = req.body.firstName || user.firstName;
         user.lastName = req.body.lastName || user.lastName;
         user.title = req.body.title || user.title;
+        user.dateUpdated = Date.now();
         user.save(function(err) {
             if(err){
                 console.log(err);
@@ -206,23 +207,23 @@ exports.uploadAvatar = function(req, res){
     
     var is, os;
     var extension = req.file.originalname.split(/[. ]+/).pop();
-    var filename =  req.params.id +'.'+ extension;
+    var filename =  req.params.id + '_' + Date.now() + '.'+ extension;
     
     is = fs.createReadStream(req.file.path);
-    gfs.files.find({ filename:  filename }).toArray(function (err, files) {
+    gfs.files.find({ filename:  new RegExp('^'+ req.params.id +'$', "i") }).toArray(function (err, files) {
          if (err) {
              res.send(500).send({ message : err });
          }
          if(files.length > 0){
             //if file exists update with new file 
-            gfs.remove({ filename: filename }, function (err) {
+            gfs.remove({ filename: new RegExp('^'+ req.params.id +'$', "i") }, function (err) {
                 if (err){ 
-                    console.log("could not remove image", filename);
+                    console.log("could not remove image", req.params.id);
                     res.send(500).send({ message : err }); 
-                } 
+                }
             });
          }
-        os = gfs.createWriteStream({ filename: req.params.id+'.'+ extension });
+        os = gfs.createWriteStream({ filename: filename });
         is.pipe(os);
         
         os.on('close', function (file) {

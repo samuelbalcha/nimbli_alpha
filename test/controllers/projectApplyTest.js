@@ -1,6 +1,6 @@
 describe('Controller: ProjectApplyCtrl', function(){
      var AccountService, ProjectService, createController, user_roles, $modal;
-     var scope, $httpBackend, deferred, $rScope;
+     var scope, $httpBackend, deferred, $rScope, stateparams;
      
      // check projectrequest collection if an application is made
      // show apply or applied to based on finding. Hide the button if the request is accepted
@@ -25,16 +25,17 @@ describe('Controller: ProjectApplyCtrl', function(){
        
       beforeEach(function(){
           module('nimbliApp');
-          inject(function($q, $rootScope, $controller, _$httpBackend_, _AccountService_ , USER_ROLES, _ProjectService_, _$modal_){
+          inject(function($q, $rootScope, $controller, $stateParams, _$httpBackend_, _AccountService_ , USER_ROLES, _ProjectService_, _$modal_){
              
                 AccountService = _AccountService_;
                 $httpBackend = _$httpBackend_;
                 user_roles = USER_ROLES;
                 ProjectService = _ProjectService_;
                 $modal = _$modal_;
+                stateparams = $stateParams;
                 $rScope = $rootScope;
                 deferred = $q.defer();
-               
+                stateparams.id = project._id;
                 scope = $rootScope.$new();
                 spyOn(scope, "$on").and.callThrough();
               
@@ -44,6 +45,7 @@ describe('Controller: ProjectApplyCtrl', function(){
                         $scope: scope,
                         ProjectService : _ProjectService_,
                         USER_ROLES : USER_ROLES,
+                        $stateParams : stateparams
                     });
                 };   
           });
@@ -59,14 +61,12 @@ describe('Controller: ProjectApplyCtrl', function(){
          it('should fetch projectrequest for the current user', function(){
             AccountService.setCurrentUser({ _id : '1233', displayName : "sam"}); 
             createController();
-            $rScope.$broadcast('parentControllerLoaded', project);
-          
+            
             $httpBackend.expectGET('/api/projectrequest/' + project._id + '/' + AccountService.getCurrentUser()._id).respond(pr);
             $httpBackend.expectGET('partials/project/list-projects.html').respond('');
             scope.$digest();
             $httpBackend.flush();
      
-            expect(scope.$on).toHaveBeenCalledWith('parentControllerLoaded', jasmine.any(Function));
          });
          
           it('should set applyBtn active if projectrequest for the current user is null', function(){

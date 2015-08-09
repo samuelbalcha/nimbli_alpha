@@ -12,7 +12,7 @@ angular.module('nimbliApp')
                         duration: 3
                     });
                     AccountService.getProfile().then(function(user){
-                         $location.path('/users/' + user._id);
+                        // $location.path('/users/' + user._id);
                     });
                 })
                 .catch(function(response) {
