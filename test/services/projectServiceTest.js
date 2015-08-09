@@ -160,7 +160,16 @@ describe ('Service: ProjectService', function () {
         it('should set userRole with the provided role and publish using NotificationService', function(){
            
             spyOn(NotificationService, "publish");
-            ProjectService.setUserProjectRole(user_roles.owner);
+         
+           var prr = {  _id: '55991e0943afbf8d23922ab9', 
+                    title : 'Project 10', 
+                    owners : [ { _id :'5599', displayName : 'samuel'} ],
+                    team : [ { _id :'5589', displayName : 'team member'} ], 
+                    supervisors : [ { _id :'5549', displayName : 'sam supervisor'} ] 
+                  };
+           ProjectService.setCurrentProject(prr);
+         
+            ProjectService.setUserRole(prr, { _id :'5599', displayName : 'samuel'});
             
             expect(ProjectService.getUserProjectRole()).toEqual(user_roles.owner);
             expect(NotificationService.publish).toHaveBeenCalled();
@@ -203,14 +212,14 @@ describe ('Service: ProjectService', function () {
         });
     });
     
-   function project (title, company, school, supervisors, team, status) { 
+   function project (title, company, school, supervisors, team, status, owners) { 
        _id: 1;
        title : title ||'Project 1';
        company : company || 'nimbli.org'; 
        coverPicture : 'http://imagestore.com/1.jpg'; 
        school : school || 'Aalto University';
        supervisors : supervisors || [ { id : 1, name : 'Mikko Koria'}, { id: 2, name: 'Eetu Kalevi'} ]; 
-       companyStaff : [ { id : 1, name : 'Jukka Pekka'}, { id: 2, name: 'Andre John'} ];
+       owners : owners || [ { _id : 1, name : 'Jukka Pekka'}, { _id: 2, name: 'Andre John'} ];
        team : team || [ ];
        description : 'This is good stuff';
        status : status || 'Private';

@@ -19,4 +19,15 @@ angular.module('nimbliApp').constant('AUTH_EVENTS', {
     notAuthorized : "notAuthorized",
     authorized : "authorized"
 });
- 
+
+angular.module('nimbliApp').constant('POST_VISIBILITY', {
+    toPublic: "public",
+    toConnection : "connection",
+    onlyTeam : "team"
+});
+
+angular.module('nimbliApp').constant('POST_TYPE', {
+    text: "text",
+    link : "link",
+    attachement : "attachement"
+});

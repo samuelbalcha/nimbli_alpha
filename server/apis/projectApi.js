@@ -24,7 +24,7 @@ var gfs = Grid(conn.db);
 exports.createProject = function(req, res){
     
     var pr = req.body;
-    Project.findOne({ title : pr.title}, function(err, existingProject){
+    Project.findOne({ title : pr.title }, function(err, existingProject){
         if (existingProject) {
            return res.status(409).send({ message: 'The project title is already taken' });
         }
@@ -79,7 +79,7 @@ exports.uploadCover = function(req, res){
                 } 
             });
          }
-        os = gfs.createWriteStream({ filename: req.params.id+'.'+ extension });
+        os = gfs.createWriteStream({ filename: filename });
         is.pipe(os);
         
         os.on('close', function (file) {
@@ -92,7 +92,7 @@ exports.uploadCover = function(req, res){
                     res.status(404).send({ message: 'Project not found' });
                 }
                 else{
-                    project.coverPicture = '/api/projects/' + project._id + '/cover';
+                    project.coverPicture = '/api/projects/cover/' + filename;
                     project.dateUpdated = Date.now();
                     project.save(function(err) {
                         if(err){
@@ -204,10 +204,10 @@ exports.deleteProject = function(req, res){
 exports.getProject = function(req, res) {
 
     Project.findOne({ '_id' : req.params.id}).populate('brief')
-                                             .populate('createdBy', 'displayName')
-                                             .populate('team', 'displayName')
-                                             .populate('supervisors', 'displayName')
-                                             .populate('owners', 'displayName')
+                                             .populate('createdBy', 'displayName, avatar')
+                                             .populate('team', 'displayName, avatar')
+                                             .populate('supervisors', 'displayName, avatar')
+                                             .populate('owners', 'displayName, avatar')
             .exec(function(err, project) {
                 if(err){
                     console.log(err);
@@ -224,7 +224,8 @@ exports.getProject = function(req, res) {
 
 exports.getProjectCover = function(req, res){
     res.set('Content-Type', 'image/jpeg');
-    var readstream = gfs.createReadStream({filename: req.params.id + '.jpg' });
+    console.log(req.params.filename);
+    var readstream = gfs.createReadStream({filename: req.params.filename });
     
     readstream.pipe(res); 
 };
@@ -265,7 +266,7 @@ exports.updateBrief = function(req, res){
  */ 
 exports.getUserProjects = function(req, res){
       
-    Project.find({createdBy : req.user }).populate('createdBy', 'displayName')
+    Project.find({createdBy : req.user }).populate('createdBy', 'displayName, avatar')
                                         .sort({ dateCreated : 'desc'})
            .exec(function(err, projects) {
                 if (err){

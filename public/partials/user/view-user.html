@@ -1,6 +1,7 @@
 <div ng-controller="UserDetailCtrl" class="col-md-12 panel" style="margin-bottom:5px">
-    <div class="row" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
-    <div ng-include="editMode && 'partials/user/edit-min.tpl.html' || 'partials/user/view-min.tpl.html' "></div>
+    <div ng-include="editMode && 'partials/user/edit-min.tpl.html' || 'partials/user/view-min.tpl.html' ">
+        
+    </div>
 </div>
 <br>
 <hr>

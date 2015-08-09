@@ -20,6 +20,7 @@ module.exports = function(config) {
       'public/vendors/core/satellizer.min.js',
       'public/vendors/angular-moment.js',
       'public/vendors/ng-file-upload.min.js',
+      'public/vendors/nya-bs-select.min.js',
       'public/directives/truncate.js',
       'public/angularApp.js',
       'public/services/*.js',

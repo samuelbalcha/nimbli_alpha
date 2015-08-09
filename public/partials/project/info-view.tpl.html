@@ -42,26 +42,27 @@
         <button ng-click="edit()" class="btn btn-primary"> Edit</button>
     </div>
 </div>
-<div id="main">
-    <div id="project-header" class="card">
-        <div class="card-height-indicator"></div>
-        <div class="card-content">
-            <div class="card-image" style="height:75%;">
-                <img  src="{{ project.coverPicture }}" alt="Loading image...">
-                <h3 ng-model="project.title" class="card-image-headline">
-                    {{ project.title }}
-                </h3>
-            </div>
-            <div ng-switch="userRole" class="card-body" style="height:5%;">
-                <div ng-switch-when="anonymous">
-                   <div ng-include="'partials/project/apply-follow.tpl.html'"></div>
+<div class="main">
+   <div class="col-md-12">
+        <div id="project-header" class="card">
+            <div class="card-height-indicator"></div>
+            <div class="card-content">
+                <div class="card-image" style="height:75%;">
+                    <img  src="{{ project.coverPicture }}" alt="Loading image...">
+                    <h3 ng-model="project.title" class="card-image-headline">
+                        {{ project.title }}
+                    </h3>
                 </div>
-                <div ng-switch-when="owner">
-                   <div ng-include="'partials/project/owner.tpl.html'"></div>
+                <div ng-switch="userRole" class="card-body" style="height:5%;">
+                    <div ng-switch-when="anonymous">
+                       <div ng-include="'partials/project/apply-follow.tpl.html'"></div>
+                    </div>
+                    <div ng-switch-when="owner">
+                       <div ng-include="'partials/project/owner.tpl.html'"></div>
+                    </div>
                 </div>
+                <footer class="card-footer"></footer>
             </div>
-            <footer class="card-footer">
-            </footer>
         </div>
-    </div>
+   </div>
 </div>

@@ -1,5 +1,5 @@
 angular.module('nimbliApp')
-    .controller('ProjectHeaderCtrl',  function($scope, $stateParams, ProjectService, AccountService, USER_ROLES, Upload)
+    .controller('ProjectHeaderCtrl',  function($scope, $stateParams, ProjectService, AccountService, USER_ROLES, Upload, NotificationService)
     {
         'use strict';
        
@@ -18,9 +18,9 @@ angular.module('nimbliApp')
             
             ProjectService.getProject($stateParams.id).then(function(project){
                 $scope.project = project;
-                setUserRole();
-                ProjectService.setUserProjectRole($scope.userRole);
-                $scope.$broadcast('parentControllerLoaded', project);
+                $scope.userRole = ProjectService.setUserRole(project, AccountService.getCurrentUser());
+                $scope.canEdit = ($scope.userRole === USER_ROLES.owner);
+                NotificationService.publish('parentControllerLoaded', project);
             });
         }
         
@@ -62,34 +62,5 @@ angular.module('nimbliApp')
             $scope.load();
         }
         
-        function setUserRole(){
-            var currentUser = AccountService.getCurrentUser();
-           
-            if(!currentUser){
-                return;      
-            }
-            
-            var i; 
-            for(i = 0; i < $scope.project.owners.length; i++ ){
-                if($scope.project.owners[i]._id === currentUser._id){
-                    $scope.canEdit = true;
-                    $scope.userRole = USER_ROLES.owner;
-                    return;
-                }
-            }
-            
-            for(i = 0; i < $scope.project.team.length; i++ ){
-                if($scope.project.team[i]._id === currentUser._id){
-                    $scope.userRole = USER_ROLES.teamMember;
-                    return;
-                }
-            }
-            
-            for(i = 0; i < $scope.project.supervisors.length; i++ ){
-                if($scope.project.supervisors[i]._id === currentUser._id){
-                    $scope.userRole = USER_ROLES.supervisor;
-                    return;
-                }
-            } 
-        }
+        
     });

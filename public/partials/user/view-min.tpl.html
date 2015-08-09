@@ -1,16 +1,21 @@
-<div class="row">
-    <center>
-        <img src="{{ user.avatar }}" 
-            name="aboutme" width="140" height="140" border="0" class="img-circle" ng-class="isOwner ? 'pull-image-neg' : 'pull-image-po'"></a>
-        <h3> {{ user.displayName }}  <small class="text-muted">{{ user.location }} </small></h3>
-        <hr class="divider" style="width:50%">
-        <p style="width:65%"> {{ user.about }} </p>
-        <p>
-         <span ng-repeat="skill in user.skills" class="label label-info">{{ skill.name }}</span>
-           |
-          <span class="glyphicon glyphicon-education"> {{ user.degree[0] }}</span> 
-        </p>
-        <br>
-        
-    </center>
+<div class="col-sm-6 col-md-4">
+    <img  src="{{ user.avatar }}" class="pull-left avatar"  alt="{{ user.displayName }}"  />
 </div>
+<div class="col-md-8">
+    <div class="row">
+        <ul class="nav nav-pills">
+            <li> <span class="tex-muted"> {{ user.school }}</span></li>
+            <li> <span class="tex-muted"> {{ user.school }}</span></li>
+        </ul>
+    </div>
+   <div class="row" style="width:90%">
+        <center>
+            <h2> {{ user.firstName }} {{ user.lastName }} </h2>
+            <p> {{ user.title }} </p>
+        </center>
+        <div class="about"> {{ user.about }}</div>  
+   </div>
+  
+    <div class="row" ng-include="isOwner && 'partials/project/templates/tools.tpl.html' || null"></div>
+</div>
+

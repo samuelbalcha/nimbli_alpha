@@ -14,7 +14,7 @@
             <div class="list-group">
                 <div class="list-group-item ">
                     <div class="row-picture">
-                        <img  src="http://lorempixel.com/56/56/people/1" alt="{{ tm.displayName }}">
+                        <img  src="{{ tm.avatar }}" alt="{{ tm.displayName }}">
                     </div>
                     <div class="row-content">
                         <h4 class="list-group-item-heading"> {{ tm.displayName }}</h4>
@@ -41,7 +41,7 @@
             <div class="list-group">
                 <div class="list-group-item ">
                     <div class="row-picture">
-                        <img  src="http://lorempixel.com/56/56/people/1" alt="{{ sup.displayName }}">
+                        <img  src="{{ sup.avatar }}" alt="{{ sup.displayName }}">
                     </div>
                     <div class="row-content">
                         <h4 class="list-group-item-heading"> {{ sup.displayName }}</h4>
@@ -56,7 +56,8 @@
              <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>          
         </div>
     </div>
-    <div id="main">
+    <div class="main">
+        <div class="col-md-12">
          <div id="project-header" class="card">
             <div class="card-height-indicator"></div>
             <div class="card-content">
@@ -66,7 +67,6 @@
                     <input type="text" class="form-control card-image-headline" 
                            ng-model="project.title" value="{{ project.title }}" style="width:90%;"
                            id="title" placeholder="Title" required>
-                   
                 </div>
                 <div class="card-body" style="height:3%;">
                   
@@ -81,5 +81,6 @@
                 </footer>
             </div>
         </div>
+     </div>
     </div>
 </form>

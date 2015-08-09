@@ -35,6 +35,7 @@ var userApi = require('./apis/userApi');
 var projectApi = require('./apis/projectApi');
 var auth = require('./apis/authentication');
 var projectRequestApi = require('./apis/projectRequestApi');
+var projectWallApi = require('./apis/projectWallApi');
 
 /*
  |--------------------------------------------------------------------------
@@ -73,11 +74,13 @@ app.post('/auth/google', auth.googleLogin(User));
 app.put('/api/me', ensureAuthenticated, userApi.updateProfile);
 app.get('/api/me', ensureAuthenticated, userApi.getProfile);
 app.get('/api/access', ensureAuthenticated, userApi.getAccess);
+app.put('/api/users/avatar/:id', ensureAuthenticated, upload.single('file'), userApi.uploadAvatar);
+app.get('/api/users/avatar/:filename', userApi.getAvatar);
 
 // Project
 app.get('/api/projects', projectApi.getProjects);
 app.get('/api/projects/:id', projectApi.getProject);
-app.get('/api/projects/:id/cover', projectApi.getProjectCover);
+app.get('/api/projects/cover/:filename', projectApi.getProjectCover);
 app.get('/api/projects/user/:id', projectApi.getUserProjects);
 
 app.post('/api/projects', ensureAuthenticated, projectApi.createProject);
@@ -95,6 +98,11 @@ app.get('/api/projectrequest/:projectId/:user', ensureAuthenticated, projectRequ
 app.put('/api/projectrequest/:id', ensureAuthenticated, projectRequestApi.updateProjectRequest);
 app.get('/api/projectrequests/:projectId/:user', ensureAuthenticated, projectRequestApi.getProjectRequests);
 app.delete('/api/projectrequest/:id', ensureAuthenticated, projectRequestApi.removeRequest);
+
+//ProjectWall
+app.get('/api/projectwall/:id', projectWallApi.getPosts);
+app.post('/api/projectwall/:id', ensureAuthenticated, projectWallApi.createPost);
+
 // Test APIs
 app.get('/api/users', userApi.users);
 app.get('/api/users/:id', userApi.user);

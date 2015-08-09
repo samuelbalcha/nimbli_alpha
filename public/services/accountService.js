@@ -3,6 +3,7 @@ angular.module('nimbliApp')
        'use strict';
        
         var currentUser;
+        var activeUser;
         
         return {
             getProfile: function() {
@@ -22,13 +23,10 @@ angular.module('nimbliApp')
                 return currentUser;  
             },
             getUser : function(id){
-                var deferred = $q.defer();
-                $http.get('/api/users/'+ id).success(function(data){
-                    deferred.resolve(data);
-                }).error(function(data){
-                    deferred.reject("user was not found");
-                });
-                return deferred.promise;
+                
+                return $http.get('/api/users/'+ id).then(function(response){
+                   return response.data;
+                }, handleError);
             },
             getProjectRequest : function(id){
                  return $http.get('/api/projectrequest/'+ id + '/' + currentUser._id);
@@ -36,6 +34,12 @@ angular.module('nimbliApp')
             
             getProjectRequests: function(id){
                   return $http.get('/api/projectrequests/'+ id + '/' + currentUser._id);
+            },
+            setActiveUser : function(user){
+                activeUser = user;
+            },
+            getActiveUser : function(){
+                return activeUser;
             }
             
         };

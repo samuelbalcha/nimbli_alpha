@@ -1,10 +1,20 @@
-<form>
+<div>
+    <form>
 	<div class="col-md-3">
-	   <img src="http://api.adorable.io/avatars/285/abott@adorable.io.png" class="img-thumbnail picture hidden-xs" />
-        <input  class="btn-file" type="file" id="avatar">
-        <p class="help-block">Update profile picture.</p>
+	    <div class="preview" >
+            <img class="pull-left avatar" 
+                 ngf-src="file" ng-show="file.type.indexOf('image') > -1" ngf-accept="'image/*'">
+        </div>
+         <img  ng-hide="file" src="{{ user.avatar }}" class="pull-left avatar"
+               alt="{{ user.displayName }}"  />
+
+        <div class="btn btn-flat btn-primary">
+            <span>Profile picture</span>
+            <input name="file" accept="image/*" ngf-select="" ng-model="$parent.file"  class="fileupload" type="file" id="avatar">
+        </div>
 	</div>
     <div class="col-md-7">
+        <h1></h1>
         <label for="displayName"> Display name</label>
         <input type="text" class="form-control" ng-model="user.displayName" id="displayName" required>
         <br>
@@ -19,7 +29,8 @@
         </textarea>
         <label for="location">Location</label>
         <input type="text" class="form-control" ng-model="user.location" id="location" required>
-          
+        <label for="title">Title</label>
+        <input type="text" class="form-control" ng-model="user.title" id="title" required>
         
         <p>
             <button type="submit"  
@@ -37,5 +48,5 @@
         </p>
     </div>
 </form>
-
+</div>
 

@@ -14,9 +14,10 @@ var discussionSchema = new mongoose.Schema({
     postedBy: { type: String, ref: 'User'},
     dateCreated : Date,
     dateUpdated : Date,
-    visibility : [ { type : String } ],
-    post : { type: String, trim: true },
-    postType : Number
+    visibility : String,
+    content : { type: String, trim: true },
+    contentType : Number,
+    caption : { type: String, trim: true }
 });
 
 discussionSchema.pre('save', function(next) {
@@ -24,3 +25,6 @@ discussionSchema.pre('save', function(next) {
     discussion.dateCreated = Date.now();
     next();
 });
+
+var Discussions = mongoose.model('ProjectDiscussion', discussionSchema);
+module.exports = { Discussions : Discussions };

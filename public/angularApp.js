@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'angular-storage', 'angularMoment', 'truncate', 'ngAnimate', 'ngFileUpload'])
-    .config(function($stateProvider, $urlRouterProvider, $authProvider, USER_ROLES, AUTH_EVENTS) {
+angular.module('nimbliApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStrap', 'satellizer', 'angular-storage', 'angularMoment', 'truncate', 'ngAnimate', 'ngFileUpload', 'nya.bootstrap.select'])
+    .config(function($stateProvider, $urlRouterProvider, $authProvider, USER_ROLES, AUTH_EVENTS, POST_VISIBILITY, POST_TYPE) {
         $stateProvider
             .state('home', {
                 url: '/',

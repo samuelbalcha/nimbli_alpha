@@ -54,11 +54,44 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
         getUserProjectRole : function(){
             return userRole;
         },
-        
-        setUserProjectRole : function(role){
-            userRole = role;
-            NotificationService.publish('userProjectRoleReady', role);
+        setUserRole : function(project, currentUser){
+           
+            if(!currentUser){
+                NotificationService.publish('userProjectRoleReady', userRole);
+                return;      
+            }
+            
+            var i; 
+            
+            if(project.owners){
+                for(i = 0; i < project.owners.length; i++ ){
+                    if(project.owners[i]._id === currentUser._id){
+                        userRole = USER_ROLES.owner; 
+                    }
+                }
+            }
+            
+            if(project.team){
+                for(i = 0; i < project.team.length; i++ ){
+                    if(project.team[i]._id === currentUser._id){
+                        userRole = USER_ROLES.teamMember; 
+                    }
+                }
+            }
+            
+           if(project.supervisors){
+                for(i = 0; i < project.supervisors.length; i++ ){
+                    if(project.supervisors[i]._id === currentUser._id){
+                        userRole = USER_ROLES.supervisor;
+                    }
+                } 
+           }
+            
+            NotificationService.publish('userProjectRoleReady', userRole);
+            return userRole;
         }
+        
+        
         /**
         saveBrief : function(brief){
             return $http.put(url + '/' + currentProject._id + '/brief', brief).then(function(response){

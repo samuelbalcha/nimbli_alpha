@@ -5,7 +5,13 @@ var User = require('../models/user');
 var auth = require('./authentication');
 var ProjectSchema = require('../models/project');
 var Project = ProjectSchema.Project;
-var faker = require('faker');
+
+var fs = require('fs');
+var mongoose = require('mongoose');
+var conn = mongoose.connection;
+var Grid = require('gridfs-stream');
+Grid.mongo = mongoose.mongo;
+var gfs = Grid(conn.db);
 
 exports.getAccess = function(req, res){
 
@@ -56,10 +62,6 @@ exports.getProfile = function(req, res) {
             res.status(401).send({ message: 'User not found' });
         }
         else{
-            user.email = '';
-            user.about = faker.lorem.sentence();
-            user.avatar = faker.image.avatar();
-            user.location = faker.address.streetAddress();
             res.status(200).send(user);
         }
     });
@@ -75,15 +77,16 @@ exports.updateProfile = function(req, res) {
             return res.status(401).send({ message: 'User not found' });
         }
         console.log(req.body); // returns id
-
+       
         user.displayName = req.body.displayName || user.displayName;
         user.email = req.body.email || user.email;
         user.skills = req.body.skills || user.skills;
         user.about = req.body.about || user.about;
         user.markModified('skills');
         user.location = req.body.location || user.location;
-        user.avatar = req.body.avatar || user.avatar;
-
+        user.firstName = req.body.firstName || user.firstName;
+        user.lastName = req.body.lastName || user.lastName;
+        user.title = req.body.title || user.title;
         user.save(function(err) {
             if(err){
                 console.log(err);
@@ -107,8 +110,8 @@ exports.users = function(req, res) {
 };
 
 exports.user =  function(req, res) {
-   
-    User.findOne({'_id' : req.params.id}).populate(({ path: 'Project' })).exec(function(err, user) {
+    
+    User.findOne({'_id' : req.params.id}, function(err, user) {
         if (err){
             res.status(401).send({ message: err});
         }
@@ -116,46 +119,35 @@ exports.user =  function(req, res) {
             res.status(401).send({ message : err });
         }
         else{
-           
+             var userProjects, teamMember, supervised;
              getUserProjects(user.roles.owner, function(data){
-             user.email = '';
-             user.about = faker.lorem.sentence();
-             user.avatar = faker.image.avatar();
-             user.location = faker.address.streetAddress();
-             res.status(200).send({ user: user, userProjects : data }); 
-         });
-        }
-    });
+                 userProjects = data;
+             }); 
+             getUserProjects(user.roles.teamMember, function(data){
+                 teamMember = data;
+             });
+             getUserProjects(user.roles.supervisor, function(data){
+                 supervised = data;
+                 res.status(200).send({ user: user, contributions : [ userProjects, teamMember, supervised ] });
+             }); 
+        }});    
    
 };
 
-
 function getUserProjects(pids, callback){
-    var userProjects = [];
     
-    Project.find({_id : { $in: pids } }, function(err, projects){
-        if(err){
-            console.log(err);
-        }
-        if(!projects){
-        }
-        else{
-            projects.forEach(function(project, idx){
-                userProjects.push({
-                    _id : project._id,
-                    title : project.title,
-                    coverPicture : project.coverPicture,
-                    description : project.description,
-                    status : project.status,
-                    dateCreated: project.dateCreated
-                });
-            });
-             
-            callback(userProjects);
-        }
+    Project.find({_id : { $in: pids } })
+           .sort({ dateCreated : 'desc'}).exec(function(err, projects){
+            if(err){
+                console.log(err);
+            }
+            if(!projects){
+                 console.log("no project found");
+            }
+            else{
+                callback (projects);
+            }
     });
-   
-   
 }
 
 exports.delUser =  function(req, res){
@@ -208,3 +200,62 @@ function getExpiryTime () {
     return '' + (_date.getFullYear()) + '-' + (_date.getMonth() + 1) + '-' +
         (_date.getDate() + 1) + 'T' + (_date.getHours() + 3) + ':' + '00:00.000Z';
 }
+
+exports.uploadAvatar = function(req, res){
+    if(req.file === null || req.file === undefined) return;
+    
+    var is, os;
+    var extension = req.file.originalname.split(/[. ]+/).pop();
+    var filename =  req.params.id +'.'+ extension;
+    
+    is = fs.createReadStream(req.file.path);
+    gfs.files.find({ filename:  filename }).toArray(function (err, files) {
+         if (err) {
+             res.send(500).send({ message : err });
+         }
+         if(files.length > 0){
+            //if file exists update with new file 
+            gfs.remove({ filename: filename }, function (err) {
+                if (err){ 
+                    console.log("could not remove image", filename);
+                    res.send(500).send({ message : err }); 
+                } 
+            });
+         }
+        os = gfs.createWriteStream({ filename: req.params.id+'.'+ extension });
+        is.pipe(os);
+        
+        os.on('close', function (file) {
+        //Update user avatar
+            User.findById(req.params.id, function(err, user) {
+                if(err){
+                    res.send(500).send({ message : err });
+                }
+                if (!user) {
+                    res.status(404).send({ message: 'User not found' });
+                }
+                else{
+                    user.avatar = '/api/users/avatar/' + filename;
+                    user.dateUpdated = Date.now();
+                    user.save(function(err) {
+                        if(err){
+                            console.log(err);
+                            res.status(500).send(err);
+                        }
+                        res.status(200).send(user);
+                    });
+                }
+            });
+            
+            //delete file from upload folder
+            fs.unlink(req.file.path, function() {});
+        });
+    });     
+};
+
+exports.getAvatar = function(req, res){
+   
+    res.set('Content-Type', 'image/jpeg');
+    var readstream = gfs.createReadStream({filename: req.params.filename });
+    readstream.pipe(res); 
+};

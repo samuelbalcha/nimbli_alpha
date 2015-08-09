@@ -35,8 +35,9 @@ describe('Controller: ProjectOwnerCtrl', function(){
            
             scope = $rootScope.$new();
            
-            ProjectService.setUserProjectRole(user_roles.owner);
+            
             ProjectService.setCurrentProject(project);
+            ProjectService.setUserRole(user_roles.owner);
             AccountService.setCurrentUser(owner);
             createController = function(){ 
                 $controller("ProjectOwnerCtrl", { 

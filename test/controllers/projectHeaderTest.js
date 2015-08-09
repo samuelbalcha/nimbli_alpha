@@ -22,25 +22,28 @@ describe('Controller: ProjectHeaderCtrl', function(){
                 spyOn(ProjectService, "getProject").and.returnValue(deferred.promise);
                 
                 scope = $rootScope.$new();
-                var controller = $controller("ProjectHeaderCtrl", { 
-                    AccountService: _AccountService_, 
-                    $scope: scope,
-                    ProjectService : _ProjectService_,
-                    USER_ROLES : USER_ROLES,
-                    $stateParams : stateparams
-                });   
-          });
+              
+                 createController = function(){ 
+                    $controller("ProjectHeaderCtrl", { 
+                        AccountService: _AccountService_, 
+                        $scope: scope,
+                        ProjectService : _ProjectService_,
+                        USER_ROLES : USER_ROLES,
+                        $stateParams : stateparams
+                    });
+                };   
+            });
+        
     });
     
     afterEach (function () {
         $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
-        
+        $httpBackend.verifyNoOutstandingRequest();  
     });
     
     describe('when controller is instanitiated ', function() {
         it('should call ProjectService.getProject ', function(){
-           
+            createController();
             $httpBackend.expectGET('partials/project/list-projects.html').respond('');
            
             deferred.resolve(project); // Resolve the promise.
@@ -52,6 +55,7 @@ describe('Controller: ProjectHeaderCtrl', function(){
         
         it('should set scope.project with value', function(){
            
+            createController();
             $httpBackend.expectGET('partials/project/list-projects.html').respond('');
          
             deferred.resolve(project); // Resolve the promise.
@@ -62,11 +66,14 @@ describe('Controller: ProjectHeaderCtrl', function(){
         });
         
         it('should set canEdit to true for currentUser if he is found in project.owners', function(){
-            $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
-            
             var user = { _id : '5599' , displayName : "samuel" };
             AccountService.setCurrentUser(user);
+            ProjectService.setCurrentProject(project);
+            createController();
+            $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
             
+           
+           
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
             $httpBackend.flush();
@@ -75,11 +82,13 @@ describe('Controller: ProjectHeaderCtrl', function(){
         });
         
         it('should set canEdit to false for currentUser if he is not found in project.owners', function(){
-            $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
-            
+           
             var user = { _id : '559967' , displayName : "samuel" };
             AccountService.setCurrentUser(user);
+            ProjectService.setCurrentProject(project);
+            createController();
             
+            $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
             $httpBackend.flush();
@@ -88,10 +97,11 @@ describe('Controller: ProjectHeaderCtrl', function(){
         });
         
         it('should set userRole to owner for currentUser if he is found in project.owners', function(){
-            $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
             
             var user = { _id : '5599' , displayName : "samuel" };
             AccountService.setCurrentUser(user);
+            createController();
+            $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
             
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
@@ -101,11 +111,11 @@ describe('Controller: ProjectHeaderCtrl', function(){
         });
         
         it('should set userRole to anonymous for currentUser if he is not found in project ', function(){
-            $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
-            
+           
             var user = { _id : '55997' , displayName : "samuel" };
             AccountService.setCurrentUser(user);
-            
+            createController();
+            $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
             $httpBackend.flush();
@@ -118,7 +128,7 @@ describe('Controller: ProjectHeaderCtrl', function(){
             
             var user = { _id : '5589' , displayName : "samuel" };
             AccountService.setCurrentUser(user);
-            
+            createController();
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
             $httpBackend.flush();
@@ -131,7 +141,7 @@ describe('Controller: ProjectHeaderCtrl', function(){
             
             var user = { _id : '5549' , displayName : "samuel" };
             AccountService.setCurrentUser(user);
-            
+            createController();
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
             $httpBackend.flush();
@@ -143,6 +153,7 @@ describe('Controller: ProjectHeaderCtrl', function(){
     
     describe('when edit method is called', function() {
         it('should set editMode to true', function(){
+            createController();
             $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
@@ -155,6 +166,7 @@ describe('Controller: ProjectHeaderCtrl', function(){
     
     describe('when cancel method is called', function() {
         it('should set editMode to false', function(){
+            createController();
             $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
@@ -168,10 +180,12 @@ describe('Controller: ProjectHeaderCtrl', function(){
     
     describe('when save method is called', function() {
         it('should call ProjectService.updateProject and set editMode to false', function(){
+            createController();           
             $httpBackend.when('GET', 'partials/project/list-projects.html').respond('');
             deferred.resolve(project); // Resolve the promise.
             scope.$digest();
             $httpBackend.flush();
+            ProjectService.setCurrentProject(project);
             spyOn(ProjectService, "updateProject").and.returnValue(deferred.promise);
             
             $httpBackend.whenPUT('/api/projects/55991e0943afbf8d23922ab9', project).respond(project);
