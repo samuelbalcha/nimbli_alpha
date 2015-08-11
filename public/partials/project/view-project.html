@@ -9,7 +9,7 @@
         <div class="panel panel-default">
             <hr class="divider">
             <div class="panel-body">
-                <form style="height:100px" enctype="multipart/form-data" name="postForm">
+                <form ng-hide="post.file" style="height:100px" name="postForm">
                     <textarea id="content"
                               ng-model="post.content"
                               class="form-control"
@@ -18,22 +18,60 @@
                               rows="3" style="margin-bottom:5px;" required>
                     </textarea> 
                 </form>
+                
+                <div class="col-md-12" ng-if="post.file">
+                    <div class="col-md-3">
+                       <img  style="margin-top:-20px; margin-left:-5px"  
+                           ngf-src="post.file" width="150px" height="100px" 
+                           ng-show="post.file.type.indexOf('image') > -1" ngf-accept="'image/*'">
+                    </div>
+                    <div class="col-md-8">
+                        <textarea 
+                              ng-model="post.content"
+                              class="form-control"
+                              name="content"
+                              placeholder="Write something..."
+                              rows="3" style="margin-bottom:5px;">
+                        </textarea> 
+                    </div>
+                </div>
+                
             </div>
             <div class="panel-footer" style="height:60px !important;">
-                <ul class="nav nav-pills pull-right"> 
-                    <li>
-                        <ol style="margin-top: 10px;margin-right: 10px;"  class="nya-bs-select btn-md btn-info" ng-model="post.visibileTo">
-                            <li nya-bs-option="option in options">
-                                <a>{{ option }}</a>
-                            </li>
-                        </ol>  
-                    </li>
-                    <li>
-                        <button type="submit" ng-click="createPost()" ng-disabled="postForm.$invalid"
-                                 class="btn btn-md btn-primary" style="margin-right: 10px;">POST
-                         </button> 
-                    </li>    
-                </ul>
+                <div class="pull-left">
+                    <ul class="nav nav-pills pull-left"> 
+                        <li>
+                           <div style="margin-top: 10px;">
+                                <span class="mdi-image-camera-alt btn-primary"></span>
+                                <input name="file" accept="image/*" ngf-select="" 
+                                 ng-model="post.file"  class=" fileupload" type="file" id="picturePost">
+                           </div>
+                        </li>
+                        <li>
+                             <a ng-click="setContentType(2)" style="cursor:pointer"><span class="mdi-file-attachment"></span></a>
+                        </li>
+                        <li>
+                             <a ng-click="setContentType(3)" style="cursor:pointer"><span class="mdi-av-play-circle-fill"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="pull-right">
+                     <ul class="nav nav-pills pull-right"> 
+                        <li>
+                            <ol style="margin-top: 10px;margin-right: 10px;"  class="nya-bs-select btn-md btn-info" ng-model="post.visibileTo">
+                                <li nya-bs-option="option in options">
+                                    <a>{{ option }}</a>
+                                </li>
+                            </ol>  
+                        </li>
+                        <li>
+                            <button type="submit" ng-click="createPost()" ng-disabled="postForm.$invalid"
+                                     class="btn btn-md btn-primary" style="margin-right: 10px;">POST
+                             </button> 
+                        </li>
+                    </ul>
+                </div>
+             
             </div>
         </div>
     </div>
@@ -44,11 +82,12 @@
     <li ng-repeat="po in posts">
         <div class="col-md-1">
             <div class="row-picture">
-                <img class="circle" ng-src="{{ po.postedBy.avatar }}" alt="icon">
+                <img class="circle" width="24" height="24" ng-src="{{ po.postedBy.avatar }}" alt="icon">
             </div>
         </div>
         <div class="col-md-11">
             <div class="panel panel-default">
+               
                 <div class="panel-body">
                  <div class="row panel-tools">
                     <div class="col-md-3">
@@ -74,7 +113,7 @@
                      </div>
                 
                     <div ng-if="formVisible" class="row">
-                        <img style="margin:10px" class="circle" src="http://lorempixel.com/24/24/people/3" alt="icon">
+                        <img style="margin:10px" width="24" height="24" class="circle" ng-src="{{ currentUser.avatar }}" alt="icon">
                         <textarea  placeholder="write comment" 
                                     class="form-control pull-right" rows="2"
                                     style="border:1px #ddd solid; width:85%; margin-right:10px">

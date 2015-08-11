@@ -27,7 +27,8 @@ angular.module('nimbliApp').constant('POST_VISIBILITY', {
 });
 
 angular.module('nimbliApp').constant('POST_TYPE', {
-    text: "text",
-    link : "link",
-    attachement : "attachement"
+    text: 0,
+    image : 1,
+    link : 2,
+    attachement : 3,
 });

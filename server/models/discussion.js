@@ -16,8 +16,10 @@ var discussionSchema = new mongoose.Schema({
     dateUpdated : Date,
     visibility : String,
     content : { type: String, trim: true },
-    contentType : Number,
-    caption : { type: String, trim: true }
+    postType : Number,
+    caption : { type: String, trim: true },
+    action : String,
+    img: { data: Buffer, contentType: String }
 });
 
 discussionSchema.pre('save', function(next) {

@@ -71,7 +71,7 @@ describe('Controller: ProjectWallCtrl', function(){
             $httpBackend.expectGET('partials/project/list-projects.html').respond('');
             $httpBackend.flush();
             
-           // expect(ProjectWallService.getPosts).toHaveBeenCalledWith(project._id, role, visibileTo); 
+            expect(visibileTo).toEqual(post_visibility.toConnection);
         });
         
         it('should hide postForm for anonymous user role', function() {
@@ -118,5 +118,11 @@ describe('Controller: ProjectWallCtrl', function(){
        });
     });
     
+    describe('when setContentType method is called', function() {
+        it('should set contentType value to selected type', function(){
+            //createController();
+            
+        });
+    });
     
 });

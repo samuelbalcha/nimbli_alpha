@@ -101,7 +101,7 @@ app.delete('/api/projectrequest/:id', ensureAuthenticated, projectRequestApi.rem
 
 //ProjectWall
 app.get('/api/projectwall/:id', projectWallApi.getPosts);
-app.post('/api/projectwall/:id', ensureAuthenticated, projectWallApi.createPost);
+app.post('/api/projectwall/:id', ensureAuthenticated, upload.single('file'), projectWallApi.createPost);
 
 // Test APIs
 app.get('/api/users', userApi.users);

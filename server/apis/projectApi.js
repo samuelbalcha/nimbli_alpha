@@ -2,9 +2,7 @@
 
 var ProjectSchema = require('../models/project');
 var User = require('../models/user');
-var faker = require('faker');
 var USER_ROLES = require('constants');
-
 var Project = ProjectSchema.Project;
 var Brief = ProjectSchema.Brief;
 //var ProjectRequest = ProjectSchema.ProjectRequest;
@@ -48,7 +46,7 @@ exports.createProject = function(req, res){
                 }
             });
             
-            addProjectToOwner(req.user, project._id);
+            addProjectToUser(req.user, project._id, 'owner');
             res.status(201).send(project);
         }
     });
