@@ -1,0 +1,8 @@
+<div class="row-picture">
+    <div ng-if="!hasImg" class="btn btn-default btn-fab btn-raised">
+         {{ name }}
+    </div>
+    <div ng-if="hasImg">
+        <img  ng-src="{{ user.avatar }}" class="medium-avatar"></img>
+    </div>
+</div>

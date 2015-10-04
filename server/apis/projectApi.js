@@ -5,6 +5,7 @@ var User = require('../models/user');
 var USER_ROLES = require('constants');
 var Project = ProjectSchema.Project;
 var Brief = ProjectSchema.Brief;
+var AboutProject = ProjectSchema.AboutProject;
 //var ProjectRequest = ProjectSchema.ProjectRequest;
 var fs = require('fs');
 var mongoose = require('mongoose');
@@ -12,7 +13,7 @@ var conn = mongoose.connection;
 var Grid = require('gridfs-stream');
 Grid.mongo = mongoose.mongo;
 var gfs = Grid(conn.db);
-
+var activityApi = require('./activitiesApi');
 
 /**
  * creats a new project and saves it to collection. 
@@ -30,15 +31,17 @@ exports.createProject = function(req, res){
             res.status(403).send({ message : err });
         }
         else{
-            var brf = createBrief();
+           
             var project = new Project({
                 title : pr.title,
                 company : pr.company,
-                description : pr.description,
                 createdBy : req.user,
-                brief : brf._id
+                visibileTo : pr.visibileTo,
+                location : pr.location,
+                school : pr.school,
+                drive : pr.drive
             });
-            
+           
             project.owners.push(req.user);
             project.save(function(err) {
                 if(err){
@@ -47,6 +50,7 @@ exports.createProject = function(req, res){
             });
             
             addProjectToUser(req.user, project._id, 'owner');
+            
             res.status(201).send(project);
         }
     });
@@ -97,6 +101,14 @@ exports.uploadCover = function(req, res){
                             console.log(err);
                             res.status(500).send(err);
                         }
+                        var act = {
+                            project : project._id,
+                            postedBy: req.user,
+                            visibileTo : ['*'],
+                            action : 'updated cover picture'
+                        };
+                        
+                        activityApi.createActivity(act);
                         res.status(200).send(project);
                     });
                 }
@@ -105,7 +117,8 @@ exports.uploadCover = function(req, res){
             //delete file from upload folder
             fs.unlink(req.file.path, function() {});
         });
-    });     
+    });
+    
 };
 
 /**
@@ -124,20 +137,30 @@ exports.updateProject = function(req, res){
         else{
                 project.title = pr.title || project.title;
                 project.company = pr.company || project.company;
-                project.driveLink = pr.driveLink || project.driveLink;
+                project.drive = pr.drive || project.drive;
                 project.dateUpdated = Date.now();
-                project.description = pr.description || project.description;
                 project.location = pr.location || project.location;
                 project.status = pr.status || project.status;
                 project.dateStarted = pr.dateStarted || project.dateStarted;
                 project.dateCancelled = pr.dateCancelled || project.dateCancelled;
                 project.dateCompleted = pr.dateCompleted || project.dateCompleted;
                 project.school = pr.school || project.school;
+                project.visibileTo = pr.visibileTo || project.visibileTo;
+                
                 project.save(function(err) {
                     if(err){
                         console.log(err);
                         res.status(500).send(err);
                     }
+                    //log activity
+                    var act = {
+                        project : project._id,
+                        postedBy: req.user,
+                        visibileTo : ['*'],
+                        action : 'updated project info'
+                    };
+                    activityApi.createActivity(act);
+                    
                     res.status(200).send(project);
                 });
         }
@@ -149,7 +172,7 @@ exports.updateProject = function(req, res){
  */
 exports.getProjects = function(req, res){
       
-    Project.find()
+    Project.find({ visibileTo : 'Public'})
            .sort({ dateCreated : 'desc'})
            .exec(function(err, projects) {
                 if (err){
@@ -177,13 +200,15 @@ exports.deleteProject = function(req, res){
             res.status(404).send(err);
         }
         
-        Brief.findOneAndRemove({ _id : pr.brief }, function(err, br){
+        AboutProject.findOneAndRemove({ _id : pr.aboutProject }, function(err, br){
             if(err){
-                console.log("could not remove brief");
+                console.log("could not remove about");
             }
-            console.log("removed brief" + br._id);
+            //console.log("removed brief" + br._id);
         });
         
+         //TODO romove cover image from gfs
+         
          //Remove project from the owners
          removeProjectFromUsers(pr.owners, pr._id, USER_ROLES.owner);
          //Remove from the team members
@@ -201,7 +226,7 @@ exports.deleteProject = function(req, res){
  */ 
 exports.getProject = function(req, res) {
 
-    Project.findOne({ '_id' : req.params.id}).populate('brief')
+    Project.findOne({ '_id' : req.params.id}).populate('methodCards')
                                              .populate('createdBy', 'displayName avatar')
                                              .populate('team', 'displayName avatar')
                                              .populate('supervisors', 'displayName avatar')
@@ -215,6 +240,7 @@ exports.getProject = function(req, res) {
                     res.status(401).send({ message: 'Project not found' });
                 }
                 else{
+                    //console.log(project);
                     res.status(200).send(project);
                 }
             });
@@ -222,50 +248,27 @@ exports.getProject = function(req, res) {
 
 exports.getProjectCover = function(req, res){
     res.set('Content-Type', 'image/jpeg');
-    console.log(req.params.filename);
+    //console.log(req.params.filename);
     var readstream = gfs.createReadStream({filename: req.params.filename });
     
     readstream.pipe(res); 
 };
 
-/**
- * updates the brief.
- */ 
-exports.updateBrief = function(req, res){
-    var br = req.body;
-    Brief.findById(br._id, function(err, brief){
-        if(err){
-            res.status(401).send({ message : err });
-        }
-        if(brief){
-            
-            brief.outcome = br.outcome  || brief.outcome; 
-            brief.objective = br.objective || brief.objective; 
-            brief.deliverable = br.deliverable || brief.deliverable;
-            brief.approach = br.approach || brief.approach;
-            brief.startDate = br.startDate || brief.startDate;
-            brief.endDate = br.endDate || brief.endDate;
-            brief.dateUpdated = Date.now();
-            brief.briefCreatedByUser = true;
 
-            brief.save(function(err){
-                if(err){
-                    console.log(err);
-                    res.status(401).send({ message : err});
-                }
-                res.status(200).send(brief);
-            });
-        }
-    });
-};
 
 /**
  * returns all projects created by user.
  */ 
 exports.getUserProjects = function(req, res){
-      
-    Project.find({createdBy : req.user }).populate('createdBy', 'displayName avatar')
-                                        .sort({ dateCreated : 'desc'})
+    
+    var conditions = { $or: [ { createdBy : req.user }, 
+                              { team : req.user }, { supervisors : req.user }, { owners : req.user} ]};
+    
+    Project.find(conditions)
+           .populate('createdBy', 'displayName avatar')
+           .populate('team', 'displayName avatar')
+           .populate('supervisors', 'displayName avatar')
+           .populate('owners', 'displayName avatar')
            .exec(function(err, projects) {
                 if (err){
                     res.status(404).send(err);
@@ -288,7 +291,7 @@ exports.addUserToProject = function(req, res){
         if (!project) {
             res.status(404).send({ message: 'Project not found' });
         }
-        console.log(pr);
+       
         if(pr.role === 'team' && project.team.indexOf(pr.userId) === -1){
             project.team.push(pr.userId);
             project.markModified('team');
@@ -309,6 +312,15 @@ exports.addUserToProject = function(req, res){
                 console.log(err);
                 res.status(500).send(err);
             }
+            
+            var act = {
+                        project : project._id,
+                        postedBy: req.user,
+                        visibileTo : ['*'],
+                        action : 'added new user to project'
+                    };
+            activityApi.createActivity(act);
+            
             res.status(200).send(project);
         });
     });
@@ -345,27 +357,130 @@ function addProjectToUser(userId, projectId, role){
     });
 }
 
-/**
- * creates brief with empty values and returns brief object to be used in createProject.
- */ 
-function createBrief(){
-    var brf = new  Brief({ 
-        briefCreatedByUser : false,
-        outcome   : '',
-        objective : '',
-        deliverable: '',
-        approach  : '',
-        startDate : '',
-        endDate : '',
-        formattedDate : ''
-    });
     
-    brf.save(function(err){
+
+/**
+ * updates aboutproject returns object.
+ */ 
+exports.updateAboutProject = function(req, res){ 
+    var pr = req.body;
+ 
+    Project.findById(req.params.id).populate('aboutProject').exec(function(err, project) {
+        if(err){
+            res.send(500).send({ message : err });
+        }
+        if (!project) {
+            res.status(404).send({ message: 'Project not found' });
+        }
+        var aboutProject = project.aboutProject;
+          
+        updateAbout(pr, req.user, aboutProject, function(about){
+           
+            project.hasAboutProject = true;
+            project.dateUpdated = Date.now();
+            project.save(function(err) {
+                if(err){
+                    console.log(err);
+                    res.status(500).send(err);
+                }
+                var act = {
+                            project : project._id,
+                            postedBy: req.user,
+                            visibileTo : ['*'],
+                            action : 'added project framing'
+                        };
+                        
+                activityApi.createActivity(act);
+            });
+        }); 
+         res.status(200).send(project);
+    });
+};
+
+function updateAbout(pr, user, aboutProject, callback){
+    console.log("I came here", pr)
+    //var aboutPr = new  AboutProject();
+    var name = pr.visibileTo.value === 0 ? 'Public' : 'Private';
+    // Description 
+    if(pr.name === 'description'){
+        console.log(pr);
+        aboutProject.description = {
+            createdBy : user,
+            text : pr.text,  
+            media : {
+                mediaType : pr.mediaType,
+                url : pr.media.url
+            },
+            visibileTo : {
+                value : pr.visibileTo.value,
+                name : name
+            }
+        };
+    }
+    // Objective
+    if(pr.name === 'objective'){
+        aboutProject.objective = {
+            createdBy : user,
+            text : pr.text,
+            media : {
+                mediaType : pr.mediaType,
+                url : pr.media.url
+            },
+            visibileTo : {
+                value : pr.visibileTo.value,
+                name : name
+            }
+        };
+    }
+    // Effort
+    if(pr.name === 'effort'){
+        console.log(pr);
+        aboutProject.effort = {
+            createdBy : user,
+            knowledge : { value : pr.knowledge.value },
+            feasibility : { value :pr.feasibility.value },
+            idea :{ value : pr.idea.value },
+            innovation : { value : pr.innovation.value },
+            presentation : { value : pr.presentation.value },
+            visibileTo : {
+                value : pr.visibileTo.value,
+                name : name
+            }
+        };
+    }
+    // Scope
+    if(pr.name === 'scope'){
+        aboutProject.scope = {
+            lastUpdatedBy : user,
+            howProjectCame : pr.howProjectCame,
+            whatToProduce : pr.whatToProduce,
+            whatItContains : pr.whatItContains,
+            whatItNotContain : pr.whatItNotContain,
+            particularIdea : pr.particularIdea,
+            primaryTarget : pr.primaryTarget,
+            whoIsInvolved : pr.whoIsInvolved,
+            whatItSaysAboutTou : pr.whatItSaysAboutTou,
+            milestone : {
+                projectLaunch : pr.milestone.projectLaunch,
+                concept : pr.milestone.concept,
+                initialDesign : pr.milestone.initialDesign,
+                finalDesign : pr.milestone.finalDesign
+            },
+            visibileTo : {
+                value : pr.visibileTo.value,
+                name : name
+            }
+        };
+    }
+    
+    aboutProject.save(function(err){
         if(err){
             console.log(err);
         }
+       
     });
-    return brf;
+    
+    return callback(aboutProject);
 }
 
 /**

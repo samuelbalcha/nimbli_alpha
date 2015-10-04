@@ -5,11 +5,6 @@ var USER_ROLES = require('constants');
 
 var ProjectRequest = ProjectRequestSchema.ProjectRequest;
 
-/**
- * creats a new project and saves it to collection. 
- * it creates a brief object and attaches it to the project.
- * it addes the projectid to the user.
- */
 exports.createProjectRequest = function(req, res){
     
     var pr = req.body;
@@ -26,7 +21,7 @@ exports.createProjectRequest = function(req, res){
                 senderUser : pr.senderUser,
                 project : pr.projectId,
                 role : pr.role === 0 ? 'team' : 'supervisor',
-                status : 'new',
+                status : 0,
                 note : pr.note,
                 toUser : pr.toUser
             });
@@ -44,13 +39,13 @@ exports.createProjectRequest = function(req, res){
 
 exports.getProjectRequest = function(req, res){
     var pr = req.params;
-    console.log(pr);
+    
     ProjectRequest.find({senderUser : pr.user, project : pr.projectId }, function(err, found){
         if(err){
             res.status(403).send({ message : err });
         }
         if(found){
-            console.log(found);
+           // console.log(found);
             res.status(200).send(found);
         }
         else res.status(200).send([]);
@@ -58,14 +53,13 @@ exports.getProjectRequest = function(req, res){
 };
 
 exports.updateProjectRequest = function(req, res){
-    var pr = req.params;
-   
+    
     ProjectRequest.findById(req.params.id , function(err, pReq){
         if(err){
             res.status(403).send({ message : err });
         }
         
-        pReq.status = 'Accepted';
+        pReq.status = 1;
         pReq.responseDate = Date.now();
         
         pReq.save(function(err){
@@ -80,7 +74,7 @@ exports.updateProjectRequest = function(req, res){
 exports.getProjectRequests = function(req, res){
     var pr = req.params;
     
-    ProjectRequest.find({ toUser : pr.user, project : pr.projectId, status : 'new' }).populate('senderUser', 'displayName avatar')
+    ProjectRequest.find({ toUser : pr.user, project : pr.projectId, status : 0 }).populate('senderUser', 'displayName avatar')
     .exec(function(err, prs){
         if(err){
             res.status(403).send({ message : err });
@@ -99,6 +93,25 @@ exports.removeRequest = function(req, res){
         }
         res.send(200);
     });
+};
+
+exports.getUserProjectRequests = function(req, res){
     
+    // Get active requests
+    console.log("requests", req.user);
     
+    ProjectRequest.find({ toUser : req.user, status : 0 })
+                  .sort({ dateRequested : 'desc'})
+                  .populate('senderUser', 'displayName avatar')
+                  .exec(function(err, requests) {
+                        if (err){
+                            res.status(404).send(err);
+                        }
+                        if(!requests){
+                            res.status(404).send();
+                        }
+                        else{
+                            res.status(200).send(requests);
+                        }   
+                   });
 };

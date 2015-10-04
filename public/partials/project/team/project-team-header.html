@@ -1,0 +1,88 @@
+<div ng-controller="TeamHeaderCtrl" class="card">                
+    <div class="col-md-12">
+        <!-- Nav tabs -->
+        <div class="post-tab">
+            <ul id="postTab" class="nav nav-tabs free" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="" ng-click="tabOperator(activeTab.post)" aria-controls="post" role="tab" data-toggle="tab">
+                        <i class="fi-pencil fi-icon-size"> </i> <span class="nimbli-icon-text"> Write post</span>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="" ng-click="tabOperator(activeTab.drive)" aria-controls="messages" role="tab" data-toggle="tab">
+                        <i class="fi-social-drive fi-icon-size"> </i><span class="nimbli-icon-text"> Drive </span>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="" ng-click="tabOperator(activeTab.calendar)" aria-controls="settings" role="tab" data-toggle="tab">
+                       <i class="fi-calendar fi-icon-size"></i><span class="nimbli-icon-text"> Calendar </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <form  style="height:90px" name="postForm" enctype="multipart/form-data">
+            <div class="col-md-2" ng-if="post.imageFile.type.indexOf('image') > -1"> 
+                <img ngf-accept="'image/*'"  ngf-src="post.imageFile" class="post-thumbnails"/>
+            </div>
+            <div class="col-md-2" ng-if="post.attachment !== null" ng-hide="post.imageFile.type.indexOf('image') > -1" > 
+                <img ngf-accept="'*'"  ngf-src="post.attachmentType.icon" class="post-thumbnails"/>
+                <p class="muted" style="font-size:12px">{{ post.attachmentType.name }}</p>                
+            </div>
+            <div class="col-md-10">
+                <textarea ng-show="selectedTab == activeTab.post"  ng-model="post.content" ng-focus="showTools(true)" 
+                      class="form-control status"
+                      name="content"
+                      placeholder="Write something..."
+                      contentType="post.content"
+                      rows="3" style="height:78px; resize: none;" required>
+                </textarea>
+            </div>
+        </form>
+    </div>
+    <div ng-if="showToolBar" class="col-md-12 light-gray">
+        <div class="row">
+            <ul class="nav nav-pills pull-left"> 
+               <li> 
+                    <div class="btn">
+                        <i class="fi-camera"></i>
+                        <input name="file" accept="image/*" ngf-select="" 
+                               ng-model="post.imageFile"  class="fileupload" type="file" id="picturePost" style="max-width:80px;">
+                    </div>
+               </li>
+               <li>
+                    <div class="btn">
+                       <i class="fi-paperclip"></i>
+                       <input name="attachement"  accept="*" ngf-select="" ng-model="post.attachment" 
+                              class="fileupload" type="file" id="attachmentPost" style="max-width:80px;">
+                    </div>
+               </li>
+                <li>
+                    <a class="btn" ng-click="setContentType(POST_TYPE.video)" style="cursor:pointer; width:70px; marging-left:10px"> 
+                       <i class="fi-video"></i>
+                    </a>
+               </li>
+            </ul>    
+            <ul class="nav nav-pills pull-right">
+                <li>
+                     <ol style="margin-right: 10px; margin-top:11px;"  class="nya-bs-select btn-md btn-default" 
+                         ng-model="newContent.visibileTo">
+                        <li nya-bs-option="option in visibilityOptions">
+                            <a ng-click="customizeClick(option)">
+                                 <span><span ng-class="option.icon"></span> {{ option.name }}</span>
+                            </a>
+                        </li>
+                     </ol>  
+                </li>
+                <li>
+                    <a class="btn btn-primary btn-raised" type="submit" ng-click="createPost()" 
+                        style="margin-right: 20px; width:100px;">POST
+                    </a> 
+                </li>
+            </ul>
+            
+        </div>
+    </div>
+</div>
+

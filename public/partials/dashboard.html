@@ -1,18 +1,3 @@
 <div ng-controller="DashboardCtrl" class="col-md-12 panel" style="margin-bottom:5px">
-    <div class="tab">
-        <ul class="nav nav-pills">
-            <li ng-repeat="tab in tabs" 
-                class="col-xs-3"
-                ng-class="{active:isActiveTab(tab.content)}" 
-                ng-click="onClickTab(tab)">
-              <a>
-                {{ tab.heading }}
-                <i id="{{ tab.id }}" class="glyphicon glyphicon-check"></i>
-              </a>
-            </li>
-        </ul>
-        <div id="tabView">
-            <div ng-include="currentTab"></div>
-        </div>
-    </div>
+  
 </div>    

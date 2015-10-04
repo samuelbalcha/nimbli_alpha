@@ -1,0 +1,297 @@
+<div ng-controller="ProjectFrameCtrl">
+    <div class="row" style="margin-right:0px; margin-bottom:12px">
+        <li ng-repeat="frameCard in frameCards" class="col-md-3 project-icons">
+            <div class="card">
+               <div class="card-height-indicator"></div>
+                <div class="card-content " >
+                    <a  class="dropdown-toggle" data-toggle="dropdown">
+                        <div class="card-image" style="height:195px; width:202px; margin-left:-9px "
+                                ng-init="cardSrc=  frameCard.src + '.png'" 
+                                ng-mouseover="cardSrc= frameCard.src + '-hover.png'" 
+                                ng-mouseout="cardSrc= frameCard.src + '.png'">
+                          <img  ng-src="{{ cardSrc }}" alt="{{ frameCard.title }}">
+                        </div>
+                        <h3 class="project-icons-text" style="cursor:pointer"> 
+                            <span class="glyphicon glyphicon-plus"></span> 
+                            <span class="pos-relative"> {{ frameCard.title }}</span>
+                        </h3>
+                       
+                        <ul class="dropdown-menu" data-toggle="dropdown" ng-class="{'leftPull' : frameCard.id > 2 }">
+                           <p class="frame-h3 space text-center" ng-if="frameCard.items.length < 1 ">
+                               Cards are coming soon...
+                           </p>
+                           <div ng-repeat="item in frameCard.items" ng-click="addCard(item)" 
+                                class="card-col col-md-4" style="cursor:pointer"
+                                ng-init="imgsrc = item.icon + '-inactive.png'"
+                                ng-mouseover="imgsrc= item.icon + '-hover.png'" 
+                                ng-mouseout="imgsrc= item.icon + '-inactive.png'">
+                              <a class="modal-heading capital"> 
+                                  <image ng-src="{{ imgsrc  }}" class="card-icon-img" /> 
+                                  <p class="card-icon-text"> {{ item.name }}</p>
+                              </a> 
+                            </div>
+                        </ul>
+                    </a>
+                </div>
+            </div>
+              
+        </li>
+    </div>
+        <!-- Content -->
+       
+    <div class="row card" style="margin-top:6px">
+        <toaster-container></toaster-container>
+        <div style="margin-left:35px; margin-top:18px; margin-right:35px;">
+                <div class="col-md-12">
+                     <h2 class="space capital frame-h1">about the project</h2>
+                </div>
+                <li ng-repeat="card in project.methodCards" id="{{ card.name }}">
+                    <!-- Description -->
+                    <div class="col-md-12 padding0" ng-if="card.name === 'description'" >
+                        <div class="col-md-1">
+                             <img ng-src="/images/project/frame/aboutProject/{{ card.name }}-inactive.png"></img>
+                        </div>
+                        <div class="col-md-11 card-text-col">
+                            <card-textarea  title="{{ card.name }}" additional="{{ project.title }}" 
+                               placeholder="Write short description" save="update(card)" remove="removeCard(card)"
+                               bind="card.text" model="card">
+                            </card-textarea>
+                        </div>
+                    </div>
+                    <!-- Objective -->
+                    <div class="col-md-12 padding0" ng-if="card.name === 'objective'">
+                        <div class="col-md-1">
+                             <img ng-src="/images/project/frame/aboutProject/{{ card.name }}-inactive.png"></img>
+                        </div>
+                        <div class="col-md-11 card-text-col">
+                            <card-textarea title="{{ card.name }}" remove="removeCard(card)"
+                                   placeholder="Write your objective" save="update(card)"
+                                   bind="card.text" model="card"></card-textarea>
+                        </div>
+                    </div>
+                    <!-- Effort -->
+                    <div class="col-md-12 padding0" ng-if="card.name === 'effort'">
+                        <div class="col-md-1">
+                             <img ng-src="/images/project/frame/aboutProject/{{ card.name }}-inactive.png"></img>
+                        </div>
+                        <div class="col-md-11 card-text-col">
+                            <p class="space frame-h2 capital">{{ card.name }}</p>
+                          
+                            <div class="reading" ng-class="{'editable-text-margin' : !effortEditMode }"  
+                                 ng-click="editEffort(card)">
+                               
+                                <div class="row">
+                                    <likert-scale name="knowledge" model="card" 
+                                              left="Base the outcome on the knowledge we have in the company" 
+                                              right="Base the outcome on the knowledge you gain from your research"
+                                              bind="card.knowledge">
+                                    </likert-scale>
+                                </div>
+                                <div class="row">
+                                    <likert-scale name="feasiblilty" model="card"
+                                              left="Outcome is expected to be feasible today" 
+                                              right="Outcome is feasible in the future"
+                                              bind="card.feasibility">
+                                    </likert-scale>
+                                </div>
+                                <div class="row">
+                                    <likert-scale name="idea" model="card"
+                                                  left="One carefully worked thorough idea" 
+                                                  right="Emphasis on multiple ideas"
+                                                  bind="card.idea">
+                                    </likert-scale>
+                                </div>
+                                <div class="row">
+                                    <likert-scale name="innovation" model="card"
+                                                  left="Incremental innovation" 
+                                                  right="Radical innovation"
+                                                   bind="card.innovation">
+                                    </likert-scale>
+                                </div>
+                                <div class="row">
+                                    <likert-scale name="presentation" model="card"
+                                                  left="Presentation of the outcome" 
+                                                  right="Quality and content of the idea"
+                                                  bind="card.presentation">
+                                    </likert-scale>
+                                </div>
+                            </div>
+                            <div class="col-md-12 space" ng-show="card.likertEdit">
+                              
+                                <ul class="nav nav-pills pull-right "> 
+                                    <li>
+                                        <p class="text-muted" style="margin-top:20px; margin-right:18px;">This information is</p>
+                                    </li>
+                                    <li>
+                                        <div class="radio radio-primary top5">
+                                            <span>Public</span>
+                                            <label class="padding30 top5">
+                                                <input type="radio" name="effortvisibility" value="0" ng-model="card.visibileTo.value">
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li style="margin-right:10px">  
+                                        <div class="radio radio-primary top5">
+                                            <label class="padding30 top5">
+                                                <input type="radio" name="effortvisibility" value="1" ng-model="card.visibileTo.value">
+                                            </label>
+                                        <span>Private</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-primary btn-sm" ng-click="update(card)" style="margin-top:17px">Save</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-default btn-sm" ng-click="cancelEffort(card)" style="margin-top:17px">cancel</button>
+                                    </li>
+                                    <li>
+                                        <a ng-click="removeCard(card)" style="margin-top:11px; cursor:pointer">Remove card</a>
+                                    </li>
+                                </ul>
+                            </div> 
+                        </div>
+                    </div>
+                    <!-- Travel -->
+                    <div class="col-md-12 padding0" ng-if="card.name === 'travel'">
+                        <div class="col-md-1">
+                             <img ng-src="/images/project/frame/aboutProject/{{ card.name }}-inactive.png"></img>
+                        </div>
+                        <div class="col-md-11 card-text-col">
+                            <card-textarea title="{{ card.name }}" remove="removeCard(card)"
+                                    placeholder="Add your project travel plans" save="update(card)"
+                                   bind="card.text" model="card"></card-textarea>
+                        </div>
+                    </div>
+                    <!-- Scope -->
+                    <div class="col-md-12 padding0" ng-if="card.name === 'scope'">
+                        <div class="col-md-1">
+                             <img ng-src="/images/project/frame/aboutProject/{{ card.name }}-inactive.png"></img>
+                        </div>
+                        <div class="col-md-11 card-text-col">
+                            <p class="space frame-h2 capital">{{ card.name }}</p>
+                            <cardtextarea-simple title="What will this project produce?" 
+                                                 cardname="card.name" remove="removeCard(card)"
+                                                 placeholder="Write what major components need to be created" bind="card.whatToProduce" 
+                                                 model="card" save="update(card)"> </cardtextarea-simple>
+                               
+                            <cardtextarea-simple title="What does this project contain?" remove="removeCard(card)"
+                                       placeholder="Write the list of outputs or activities included" bind="card.whatItContains" 
+                                       model="card" save="update(card)"> </cardtextarea-simple>
+                                       
+                            <cardtextarea-simple title="What does this project not contain?" 
+                                                 placeholder="Write the list of outputs or activities not included" 
+                                                 bind="card.whatItNotContain" remove="removeCard(card)"
+                                                 model="card" save="update(card)"> </cardtextarea-simple>
+                                       
+                            <cardtextarea-simple title="Describe your primary target demographics for this project" 
+                                       placeholder="Write their age range, gender, education..." 
+                                       bind="card.primaryTarget" remove="removeCard(card)"
+                                       model="card" save="update(card)"> </cardtextarea-simple>
+                        </div>
+                    </div>
+                    <!-- Background -->
+                    <div class="col-md-12 padding0" ng-if="card.name === 'background'">
+                        <div class="col-md-1">
+                             <img ng-src="/images/project/frame/aboutProject/{{ card.name }}-inactive.png"></img>
+                        </div>
+                        <div class="col-md-11 card-text-col">
+                            <p class="space frame-h2 capital">{{ card.name }}</p>
+                            <cardtextarea-simple title="How did the project come about?"  
+                                placeholder="Write how you got the idea" 
+                                bind="card.howProjectCame" 
+                                remove="removeCard(card)" save="update(card)"
+                                model="card"> 
+                            </cardtextarea-simple>
+                            <cardtextarea-simple title="Who is involved this project"
+                                placeholder="Write the stakeholders of this project " 
+                                bind="card.whoIsInvolved" 
+                                remove="removeCard(card)" save="update(card)"
+                                model="card"> 
+                            </cardtextarea-simple>
+                            <cardtextarea-simple title="What do you want this project to say about your organization?" 
+                                placeholder="Write specific design requirements your organization follows" 
+                                bind="card.whatItSaysAboutYou"
+                                remove="removeCard(card)" save="update(card)"
+                                model="card"> 
+                            </cardtextarea-simple>
+                            <cardtextarea-simple title="Is there an idea in particular that the team should explore?" 
+                                placeholder="Write a specific topic or idea" 
+                                bind="card.particularIdea" 
+                                remove="removeCard(card)" save="update(card)"
+                                model="card"> 
+                            </cardtextarea-simple>
+                        </div>
+                        
+                    </div>
+                    <!-- Milestone -->
+                    <div class="col-md-12 padding0" ng-if="card.name === 'milestone'">
+                        <div class="col-md-1">
+                             <img ng-src="/images/project/frame/aboutProject/{{ card.name }}-inactive.png"></img>
+                        </div>
+                        <div class="col-md-11 card-text-col">
+                            <p class="space frame-h2 capital">{{ card.name }}</p>
+                             <div ng-repeat="milestoneItem in card.items">
+                                <milestone-item bind="milestoneItem" model="card">
+                                </milestone-item>
+                             </div>
+                             <div class="col-md-12 space" ng-show="card.openEditor">
+                             <p>
+                                <button class="btn btn-sm btn-primary" ng-click="addmileStone(card)">Add milestone</button>
+                             </p> 
+                                <ul class="nav nav-pills pull-right "> 
+                                    <li>
+                                        <p class="text-muted" style="margin-top:20px; margin-right:18px;">This information is</p>
+                                    </li>
+                                    <li>
+                                        <div class="radio radio-primary top5">
+                                            <span>Public</span>
+                                            <label class="padding30 top5">
+                                                <input type="radio" name="milestoneVisibility" value="0" ng-model="card.visibileTo.value">
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li style="margin-right:10px">  
+                                        <div class="radio radio-primary top5">
+                                            <label class="padding30 top5">
+                                                <input type="radio" name="milestoneVisibility" value="1" ng-model="card.visibileTo.value">
+                                            </label>
+                                            <span>Private</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-primary btn-sm" ng-click="update(card)" style="margin-top:17px">Save</button>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-default btn-sm" ng-click="cancel(card)" style="margin-top:17px">cancel</button>
+                                    </li>
+                                    <li>
+                                        <a ng-click="removeCard(card)" style="margin-top:11px; cursor:pointer">Remove card</a>
+                                    </li>
+                                </ul>
+                            </div> 
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- Common -->
+                    <div id="{{card.name}}"></div>
+                    <spinner name="{{card.name}}Spinner" img-src="images/spinner.gif"  class="spinnerStyle"></spinner>
+                    <div class="frame-divider"></div>
+                </li>
+        </div>
+    </div>
+</div>
+
+ <!--  <h2 class=""> <span>{{ card.model.projectLaunch | amDateFormat:'DD.MM.YY'}}</span> </h2>
+                                  
+                            
+                         
+                            <li ng-repeat="todo in card.items">
+                                    <milestone-item bind="todo" model="card" 
+                                                    save="update(card)" 
+                                                    remove="removeMilestoneItem(todo)">
+                                    </milestone-item>
+                            </li>
+                         
+                        </div>
+                    </div> -->

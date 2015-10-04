@@ -1,0 +1,16 @@
+<div>
+    <div ng-if="showApplyBtn()" class="">
+        <project-apply></project-apply>
+    </div>
+     <div class="panel" ng-class="{ 'pull50Side' : view.wallView === false }">
+        <a class="side-view-btn" ng-click="view.wallView = !view.wallView" style="margin-left:3px; text-decoration:none;"> 
+           <img  ng-src="{{ view.wallView &&  view.wallIcon ||  view.processIcon }}" style="margin-left:-10px" />   
+           <span class="nimbli-icon-text">{{ view.wallView && 'Project view' || 'Wall' }} </span>
+        </a>
+        <a class="side-view-btn" ng-click="reflectionClicked()" style="margin-top:-16px;text-decoration:none;">
+            <img src="../images/project/reflection.png" style="margin-left:-10px" />
+            <span class="nimbli-icon-text" > Reflection </span>
+        </a>
+    </div>
+   <project-people></project-people>
+</div>

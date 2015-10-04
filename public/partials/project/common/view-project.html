@@ -1,0 +1,44 @@
+<div  ng-controller="ProjectDetailCtrl">
+  
+  <div ng-if="!privateWall">
+    <public-view></public-view>
+  </div>
+  
+  <!-- Project header -->
+  <div ng-if="privateWall">
+    <div ng-show="view.wallView" class="card project-cover-holder">
+  
+        <div  class="card-content">
+            <div class="card-image project-cover" style="height:100%">
+                 <img  ng-src="{{ project.coverPicture }}" alt="">
+                 <h3 ng-model="project.title" class="cover-title">{{ project.title }} </h3> 
+            </div>
+        </div>
+    </div>
+    <div ng-show="!view.wallView">
+        <h1 class="text-center" style="margin-top:1px; font-size:28px; color:#1A1A1A"><b> {{ project.title }} </b> </h1>
+    </div>
+     <!-- Main views -->
+    <section name="mainview" class="main pull-left" ng-class="{ 'pull50' : view.wallView === false }">
+        <div ng-if="!view.wallView" style="margin-top:-35px">
+            <team-process-view></team-process-view>
+        </div>
+        <div ng-if="view.wallView">
+           <team-header></team-header>
+           <team-wall></team-wall>  
+        </div> 
+    </section>
+    
+     <!-- Side views -->
+    <section name="side" class="pull-right" ng-class="{ 'push25' : view.wallView === false }"  style="width:274px;">
+        <div ng-if="!editMode">
+            <team-side></team-side> 
+        </div>
+        <div ng-if="editMode">
+            <admin-side></admin-side>
+        </div>
+    </section>
+  </div>
+</div>
+   
+  

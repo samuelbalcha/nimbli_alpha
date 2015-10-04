@@ -1,0 +1,24 @@
+<div class="row">
+    <span class="col-md-12 col-sm-offset-2" style="font-size:24px;padding:15px"> {{ project.title }} </span>
+</div>  
+
+<!-- Side -->
+<public-side></public-side>
+
+<!-- Project Process -->
+<div class="tab main pull-left">
+    <div class="post-tab" style="margin-bottom:10px">
+        <ul id="postTab" class="nav nav-tabs free" role="tablist">
+            <li ng-repeat="tab in tabs" role="presentation" ng-class="{active:isActiveTab(tab.content)}"  ng-click="onClickTab(tab)">
+                <a class="btn" style="marging-left:5px; marging-right:7px; width:140px">
+                   <span class="{{ tab.icon }}" style="font-size:30pt" ng-class="{'mdi-material-teal':isActiveTab(tab.content)}"></span><br>
+                   {{ tab.heading }} 
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- Views for tab -->
+    <div id="tabView">
+        <div ng-include="currentTab"></div>
+    </div>    
+</div>

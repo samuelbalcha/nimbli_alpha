@@ -6,7 +6,7 @@ angular.module('truncate', [])
             if (chars <= 0) return '';
             if (input && input.length > chars) {
                 input = input.substring(0, chars);
-
+             
                 if (!breakOnWord) {
                     var lastspace = input.lastIndexOf(' ');
                     //get last space

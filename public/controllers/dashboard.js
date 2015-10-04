@@ -1,37 +1,34 @@
-'use strict';
-
-angular.module('nimbliApp').controller('DashboardCtrl', function ($scope, AccountService, ProjectService, USER_ROLES) {
-  
- 
-  var templates = [];
-  
-  var briefTemplate = 'partials/project/templates/brief.tpl.html';
-  var teamTemplate = 'partials/project/templates/teamspace.tpl.html';
-  var processTemplate = 'partials/project/templates/process.tpl.html';
-  
-   var user = AccountService.getCurrentUser();
-  
-   if(user.userRole === USER_ROLES.owner){
-       templates = [ briefTemplate, teamTemplate, processTemplate];
+angular.module('nimbliApp')
+       .controller('DashboardCtrl', function ($scope, AccountService, DashboardService) 
+{
+    'use strict';
+     //load();
+     init();
+     function init(){
        
-        $scope.tabs = [
-                    { heading : 'Feed' , content : briefTemplate, id : 'tabBrief' },
-                    { heading : 'Reflections' , content : teamTemplate, id : 'tabTeamSpeace' },
-                    { heading : 'Projects' , content : processTemplate, id : 'tabProcess' }
-                ];
-                
+         
+         DashboardService.getActivities(AccountService.getCurrentUser()._id).then(function(response){
+             console.log(response.data);
+         }); 
+     }
+     
+    
+     function getActivity(projects){
+         
+        for(var i =0; i< projects.length; i++){
+           
+        }
         
-    }
-    
-    $scope.status = false; //controll notifiction icon 
-    $scope.currentTab = briefTemplate;
-   
-    $scope.onClickTab = function (tab) {
-        $scope.currentTab = tab.content;
-    }
-    
-    $scope.isActiveTab = function(tabUrl) {
-        return tabUrl == $scope.currentTab;
-    }
+         AccountService.getUser(AccountService.getCurrentUser()._id).then(function(data){
+                AccountService.setActiveUser(data);
+                if(data) {
+                    var ownProjects =  data.contributions[0];
+                    var teamProjects = data.contributions[1];
+                    var supervisedProjects = data.contributions[2];
+                }
+            }, function(err){
+                   console.log(err);
+            });
+     }
     
 });

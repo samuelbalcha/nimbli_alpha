@@ -1,0 +1,41 @@
+<div class="col-md-12 panel">
+    <div class="row">
+        <div class="col-md-2"> 
+           <img ng-src="{{ user.avatar }}" class="medium-avatar"></img>
+        </div>
+        <div class="col-md-10">
+            <form name="reflectionPost">
+                <textarea  class="form-control status" ng-model="reflection.content" style="height:135px" 
+                           placeholder="What are you thinking..."  rows="3"  required>
+                </textarea>
+            </form>
+        </div>
+    </div>
+    <div class="row light-gray">
+        <ul class="nav nav-pills pull-right">
+            <li>
+                <ol  class="nya-bs-select btn-raised btn-default" ng-model="reflection.moodObj"  
+                     style="margin-right: 20px; width:150px; margin-top: 11px;">
+                    <li nya-bs-option="moo in moods">
+                         <a> <span><span ng-class="moo.icon"></span> {{ moo.name }}</span></a>
+                    </li>
+                </ol>  
+            </li>
+            <li>
+                <ol  class="nya-bs-select btn-raised btn-default" ng-model="reflection.visibililty"  
+                     style="margin-right: 20px; width:150px; margin-top: 11px;">
+                    <li nya-bs-option="op in options">
+                        <a ng-click="customizeClick(op)">
+                            <span><span ng-class="op.icon"></span> {{ op.name }}</span>
+                        </a>
+                    </li>
+                </ol>
+            </li>
+            <li>
+                <a class="btn btn-primary btn-raised" type="submit" ng-disabled="reflectionPost.$invalid" ng-click="createPost()" 
+                    style="margin-right: 20px; width:100px;">POST
+                </a> 
+            </li>
+        </ul>
+    </div>
+</div>

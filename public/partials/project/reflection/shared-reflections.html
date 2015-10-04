@@ -1,0 +1,30 @@
+<div ng-controller="SharedReflectionsCtrl">
+    <li style="margin-top:10px"  ng-repeat="po in posts">
+        <div class="row">
+            <div class="col-md-2">
+               <img ng-src="{{ po.postedBy.avatar }}" class="medium-avatar"></img>
+            </div>
+            <div class="col-md-10 panel">
+                <div class="row panel-tools space">
+                    <div class="col-md-5">
+                        <a class="panel-heading" href="/#/users/{{ po.postedBy._id}}" style="padding:2px;">
+                            {{ po.postedBy.displayName }}
+                            <span am-time-ago="po.dateCreated" style="font-size:11px"></span>
+                        </a> 
+                    </div>
+                    <div class="col-md-5">
+                        <span class="muted" style="font-size:11px; margin-left:15px; margin-right:15px"> feeling {{ po.mood }}  </span>  
+                    </div>   
+                </div>
+                <!-- text -->
+                <div class="row space" style="margin:5px;">
+                    {{ po.content }}
+                </div>
+            </div>
+        </div>
+    </li>
+</div>
+
+
+
+

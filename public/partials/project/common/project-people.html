@@ -1,0 +1,72 @@
+<div class="panel" style=" padding:10px; margin-top:-7px">
+    <div ng-show="project.team.length > 0">
+        <h5 class="side-push11 side-h"> TEAM  </h5>
+        <li ng-repeat="tm in project.team">
+            <div class="list-group list-group10">
+                <div class="list-group-item side-list-item">
+                    <div class="">
+                         <a href="/#/users/{{tm._id}}">
+                            <img  ng-src="{{ tm.avatar }}" alt="{{ tm.displayName }}" class="tiny-avatar-square" />
+                            <span class="side-p"> {{ tm.displayName }}</span>
+                         </a>    
+                    </div>
+                </div>
+            </div>
+        </li>
+        <hr class="divider"></hr>
+    </div>
+    <h5 class="side-push11 side-h"> UNIVERSITY </h5>
+     <div class="side-push11">
+        <a  ng-click="userview({ id: owner._id })">
+            <img  src="../images/aalto-icon.jpg" alt="{{ project.school }}" class="side-list48"  />
+             <span class="side-p14 space"> {{ project.school }}</span>
+        </a>    
+    </div>
+    <div class="side-push11" ng-show="project.supervisors.length > 0"> 
+       
+        <li ng-repeat="sup in project.supervisors">
+            <div class="list-group list-group10">
+                <div class="list-group-item side-list-item" >
+                    <div class="">
+                        <a href="/#/users/{{sup._id}}">
+                           <img  ng-src="{{ sup.avatar }}" alt="{{ sup.displayName }}" class="tiny-avatar-square" />
+                           <span class="side-p"> {{ sup.displayName }}</span>
+                        </a>
+                    </div>
+                  
+                </div>
+            </div>
+        </li>
+        <div class="frame-divider"></div>
+    </div>
+    
+    <h5 class="side-push11 side-h"> ORGANIZATION </h5>
+    <div class="side-push11">
+        <a class="side-p14"  ng-click="userview({ id: owner._id })">
+            <img  ng-src="" alt="{{ project.company }}" class="side-list48"  />
+             <span class="side-p14 space"> {{ project.company }}</span>
+        </a>    
+    </div>
+     
+    <li  ng-repeat="owner in project.owners" class="side-push11">
+        <div class="list-group list-group10">
+            <div class="list-group-item side-list-item">
+                <div class="">
+                    <a  ng-click="userview({ id: owner._id })">
+                        <img  ng-src="{{ owner.avatar }}" alt="{{ owner.displayName }}" class="tiny-avatar-square" />
+                         <span class="side-p"> {{ owner.displayName }}</span>
+                    </a>    
+                </div>
+            </div>
+        </div>
+    </li>
+  
+    <div ng-show="isPrivate">
+        <hr class="divider"></hr>
+        <p class="mute"> <span class="glyphicon glyphicon-lock"> </span> This project is private.</p>
+    </div>
+  <!--  <div ng-if="canEdit">
+          <hr class="divider"></hr>
+        <button ng-click="edit()" class="btn btn-primary"> Edit</button>
+    </div> -->
+</div>

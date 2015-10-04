@@ -1,0 +1,58 @@
+<div ng-controller="UserTabsCtrl" class="col-md-12 panel" style="margin-bottom:5px">
+    <div class="tab">
+        <ul class="nav nav-pills">
+            <li ng-repeat="tab in tabs" 
+                class="col-xs-5"
+                ng-class="{active:isActiveTab(tab.content)}" 
+                ng-click="onClickTab(tab)">
+              <a>
+                {{ tab.heading }}
+                <i id="{{ tab.id }}" class="glyphicon glyphicon-check"></i>
+              </a>
+            </li>
+        </ul>
+        <div id="tabView">
+            <div ng-include="currentTab"></div>
+        </div>
+    </div>
+</div>  
+
+<div style="background-color: white;margin-bottom: 10px; padding: 0 5px;">
+    <!-- Nav tabs -->
+    <div class="post-tab">
+        <ul id="postTab" class="nav nav-tabs free" role="tablist">
+           
+            <li role="presentation" class="active">
+                <a ng-click="tabOperator(activeTab.current)" 
+                    class="btn" href="" aria-controls="current" role="tab" data-toggle="tab" style="marging-left:5px;marging-right:7px">
+                    Current 
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn" href="" ng-click="tabOperator(activeTab.reflection)"  
+                    aria-controls="reflection" role="tab" data-toggle="tab" style="margin-left:5px; marging-right:7px">
+                    Reflections
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn" href="" style="margin-left:5px; marging-right:7px"
+                    ng-click="tabOperator(activeTab.feed)" aria-controls="feed" role="tab" data-toggle="tab">
+                    Feeds
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn" href="" ng-click="tabOperator(activeTab.collection)" aria-controls="collection" role="tab" data-toggle="tab">
+                  Collections
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--
+ <li ng-repeat="tab in tabs">
+                 <a href="" ng-click="tabOperator(activeTab.post)" aria-controls="post" role="tab" data-toggle="tab">
+                    <i class="fi-pencil"> </i> Write post
+                </a>
+            </li>
+            -->

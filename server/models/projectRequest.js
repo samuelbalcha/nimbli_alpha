@@ -14,7 +14,7 @@ var requestSchema = new mongoose.Schema({
     project : { type: String, ref: 'Project'},
     role : String, 
     dateRequested : Date,
-    status : String,
+    status : Number,  //0 = new, 1 = accepted, 2 = rejected, 
     note : { type : String, trim : true },
     responseDate : Date,
     toUser : { type: String, ref: 'User'}

@@ -1,0 +1,58 @@
+<div ng-controller="ProjectTeamWallCtrl">
+    <div class=" col-md-12" >
+        <h3  class="text-muted">{{ posts.length > 0 | yes : "Group Activities" : "There is no activity"}}  </h3>
+    </div>
+    <div class="row" ng-if="posts.length > 0">
+        <li style="margin-top:10px"  ng-repeat="po in posts">
+           <div class="col-md-12">
+                <div class="col-md-2">
+                    <posted-by user="po.postedBy"></posted-by>
+                    <span am-time-ago="po.dateCreated" style="font-size:11px"></span>
+                </div>
+                <div class="col-md-10 panel">
+                    <div class="row panel-tools space">
+                        <div class=" col-md-5">
+                            <p style="font-size:17px;">
+                                <a class="panel-heading" href="/#/users/{{ po.postedBy._id}}" style="padding:2px;">
+                                    {{ po.postedBy.displayName }}</a> 
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                           <p style="font-size:11px"> {{ po.action }} </p>
+                        </div>
+                        <div class="col-md-1 pull-right" ng-if="po.postedBy._id === currentUser._id">
+                            <a class="glyphicon glyphicon-remove" ng-click="removePost(po)"></a>
+                        </div>
+                    </div>
+                <!-- text -->
+                    <div class="row space" style="margin:5px;">
+                        {{ po.content }}
+                    </div>
+                <!-- attachement -->
+                    <div class="row space" style="margin-left:5px;margin-bottom:10px;">
+                        <div ng-if="po.postType === 1">
+                            <a ng-href="{{ po.thumbnailUrl }}" target="_blank"> 
+                                <img  fallback-src="https://placehold.it/420x250?text=view image in Drive" ng-src="{{ po.thumbnailUrl }}" 
+                                     style="max-width:600px; max-height:500px"  />
+                            </a>
+                        </div>
+                        <div ng-if="po.postType === 3">
+                           <div class="col-md-2">
+                                <img  fallback-src="https://placehold.it/420x250?text=view image in Drive" ng-src="{{ po.thumbnailUrl }}" 
+                                     style="max-width:600px; max-height:500px"  />
+                           </div>
+                           <div class="col-md-6">
+                                <a ng-href="https://drive.google.com/uc?id={{ po.docId }}" target="_parent"> 
+                                    <h4>{{ po.caption }}</h4>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </div>
+</div>
+
+       
+      

@@ -46,7 +46,7 @@ var userSchema = new mongoose.Schema({
     
     userType :  [{
             type: String,
-            enum: ['Student', 'Teacher', 'Organization personnel'],
+            enum: ['Student', 'Teacher', 'Company contact'],
             default : 'Student'
         }],
    

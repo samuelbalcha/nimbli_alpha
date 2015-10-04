@@ -1,0 +1,16 @@
+<!-- Reflection view -->
+<div class="post-tab" style="margin-bottom:10px">
+    <ul id="postTab" class="nav nav-tabs free" role="tablist">
+        <li ng-repeat="tab in tabs" role="presentation" ng-class="{active:isActiveTab(tab.content)}"  ng-click="onClickTab(tab)">
+            <a class="btn tab-bar">
+               <span class="{{ tab.icon }}" style="font-size:14px" ng-class="{'mdi-material-teal':isActiveTab(tab.content)}"></span>
+               {{ tab.heading }} 
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Views for tab -->
+<div id="tabView">
+    <div ng-include="currentTab" class="col-md-12"></div>
+</div>    

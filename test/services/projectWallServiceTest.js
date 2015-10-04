@@ -1,5 +1,5 @@
 describe('Service: ProjectWallService', function(){
-     var $httpBackend, ProjectService, NotificationService, AccountService, ProjectWallService, user_roles, post_visibility;
+     var $httpBackend, ProjectService, AccountService, ProjectWallService, user_roles, post_visibility;
      var memb1 = {_id : 222 , displayName : "Memebr 1"};
      var memb2 = {_id : 333 , displayName : "Memebr 1"};
      var sup = {_id : 444 , displayName : "Supervisor 1"};
@@ -9,10 +9,10 @@ describe('Service: ProjectWallService', function(){
      
      beforeEach(function(){
         module('nimbliApp');
-        inject(function( _$httpBackend_, _ProjectService_, _AccountService_, _NotificationService_, _ProjectWallService_, USER_ROLES, POST_VISIBILITY) {
+        inject(function( _$httpBackend_, _ProjectService_, _AccountService_,  _ProjectWallService_, USER_ROLES, POST_VISIBILITY) {
             $httpBackend = _$httpBackend_;
             ProjectService = _ProjectService_;
-            NotificationService = _NotificationService_;
+           
             AccountService = _AccountService_;
             ProjectWallService = _ProjectWallService_;
             user_roles = USER_ROLES;
@@ -23,7 +23,7 @@ describe('Service: ProjectWallService', function(){
     });
     
     afterEach (function () {
-        //$httpBackend.verifyNoOutstandingExpectation ();
+        $httpBackend.verifyNoOutstandingExpectation ();
         $httpBackend.verifyNoOutstandingRequest();
     });
     
@@ -72,6 +72,29 @@ describe('Service: ProjectWallService', function(){
         });
     });
     
+    describe('when getVisibilityByRole method is called', function() {
+        it('should return different visibility values based on user role', function(){
+            
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
+            $httpBackend.flush();
+             
+            expect(ProjectWallService.getVisibilityByRole(user_roles.anonymous)).toBe(post_visibility.toPublic);
+            expect(ProjectWallService.getVisibilityByRole(user_roles.owner)).toBe(post_visibility.toConnection);
+            expect(ProjectWallService.getVisibilityByRole(user_roles.supervisor)).toBe(post_visibility.toConnection);
+            expect(ProjectWallService.getVisibilityByRole(user_roles.teamMember)).toBe(post_visibility.onlyTeam);
+        });
+    });
+    
+     describe('when removePost method is called', function() {
+        it('should send http.delete request with post._id to projectwall api', function(){
+           
+            $httpBackend.expectDELETE('/api/projectwall/' + 1).respond('');
+            $httpBackend.expectGET('partials/project/list-projects.html').respond('');
+            ProjectWallService.removePost(1);
+            $httpBackend.flush();
+            //expect(result).toEqual(post);
+        });
+    });
     
      function createPost(i, max, user, visibile, contentType){
         var post = [];
@@ -91,3 +114,4 @@ describe('Service: ProjectWallService', function(){
          return post;
    }
 });
+

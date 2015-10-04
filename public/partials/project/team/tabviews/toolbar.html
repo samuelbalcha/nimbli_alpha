@@ -1,0 +1,44 @@
+<div>
+    <ul ng-if="ngModel.media" class="nav nav-pills pull-left"> 
+        <li> 
+            <div class="btn">
+                <i class="fi-camera"></i>
+                <input name="file" accept="image/*" ngf-select="" 
+                       ng-model="ngModel.media.file"  class="fileupload" type="file" id="picturePost" style="max-width:80px;">
+            </div>
+        </li>
+        <li>
+            <a class="btn" ng-click="" style="cursor:pointer; width:70px; marging-left:10px"> 
+               <i class="fi-video"></i>
+            </a>
+        </li>
+    </ul> 
+    <ul class="nav nav-pills pull-right">
+        
+        <li style="margin-right:20px">
+            <div class="radio radio-primary">
+                Public
+                <label>
+                   <input type="radio" name="{{ ngModel.name }}" value="0" ng-model="ngModel.visibileTo.value">
+                </label>
+            </div>
+            <div class="radio radio-primary">
+                <label>
+                     <input type="radio" name="{{ ngModel.name }}" value="1" ng-model="ngModel.visibileTo.value">
+                    
+                </label>
+                Private
+            </div>
+        </li>
+        <li>
+            <a class="btn btn-default btn-raised" type="submit"  ng-click="cancel(ngModel)" 
+                style="margin-right: 20px; width:100px;">Cancel
+            </a>
+        </li>
+        <li>
+            <a class="btn btn-primary btn-raised" type="submit"  ng-click="save({ model : ngModel })" 
+                style="margin-right: 20px; width:100px;">Save
+            </a> 
+        </li>
+    </ul>
+</div>

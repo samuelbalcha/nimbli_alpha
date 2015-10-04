@@ -1,6 +1,6 @@
 angular.module('nimbliApp').service('ProjectWallService', function($http, $q, USER_ROLES, POST_VISIBILITY){
     'use strict';
-    
+    var channel;
     return {
         
         getVisibilityByRole : function(role){
@@ -17,29 +17,27 @@ angular.module('nimbliApp').service('ProjectWallService', function($http, $q, US
                    return POST_VISIBILITY.toPublic;
             }
         },
-        getPosts : function(projectId, role, visibileTo){
-            
-            return $http({
-                            method: 'GET',
-                            url :  '/api/projectwall/' + projectId,
-                            params: { 
-                                role : role, 
-                                visibileTo : visibileTo
-                            }
-                        })
-                       .then(function(response){
-                           return response.data;
-                       },handleError);
+        getPosts : function(projectId){
+            return $http.get('/api/projectwall/' + projectId); 
         },
         addPost : function(projectId, post){
             return $http.post('/api/projectwall/' + projectId, post).then(function(response){
                 return response.data;
-            }, handleError)
-        }, 
-       
+            }, handleError);
+        },
+        
+        removePost : function(id){
+            return $http.delete('/api/projectwall/' + id).then(function(response){
+                return response;
+            }, handleError);
+        },
+        setWallChannel : function(room){
+            channel = room;
+        },
+        getWallChannel : function(){
+            return channel;
+        }
     };
-    
-    
     
     function handleError(err){
         $q.reject(err);

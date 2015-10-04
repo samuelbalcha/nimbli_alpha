@@ -14,12 +14,16 @@ var discussionSchema = new mongoose.Schema({
     postedBy: { type: String, ref: 'User'},
     dateCreated : Date,
     dateUpdated : Date,
-    visibility : String,
+    visibileTo : [ { type: String, ref: 'User'} ],
     content : { type: String, trim: true },
     postType : Number,
     caption : { type: String, trim: true },
     action : String,
-    img: { data: Buffer, contentType: String }
+    thumbnailUrl : String,
+    img: { data: Buffer, contentType: String },
+    base64Img : String,
+    docId : String,
+    attachmentType : String
 });
 
 discussionSchema.pre('save', function(next) {

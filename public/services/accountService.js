@@ -4,6 +4,8 @@ angular.module('nimbliApp')
        
         var currentUser;
         var activeUser;
+        var currentUserFull;
+        var allUserProjects;
         
         return {
             getProfile: function() {
@@ -23,7 +25,6 @@ angular.module('nimbliApp')
                 return currentUser;  
             },
             getUser : function(id){
-                
                 return $http.get('/api/users/'+ id).then(function(response){
                    return response.data;
                 }, handleError);
@@ -40,8 +41,25 @@ angular.module('nimbliApp')
             },
             getActiveUser : function(){
                 return activeUser;
+            },
+            setCurrentUserFull : function(user){
+                currentUserFull = user;
+            },
+            getCurrentUserFull : function(){
+                return currentUserFull;
+            },
+            getAllUserProjects : function(){
+                return $http.get('/api/projects/user/' + currentUser._id);
+            },
+            setAllUserProjects : function(projects){
+                allUserProjects = projects;
+            },
+            getProjects : function(){
+                return allUserProjects;
+            },
+            getMe : function(){
+               return { _id: currentUser._id, name : currentUser.displayName, avatar : currentUser.avatar };
             }
-            
         };
          
         function handleSuccess(response){

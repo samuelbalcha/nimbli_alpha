@@ -3,7 +3,6 @@
 var mongoose = require('mongoose');
 var shortid = require('shortid');
 
-
 // ProjectSchema
 var projectSchema = new mongoose.Schema({
     _id: {
@@ -11,62 +10,63 @@ var projectSchema = new mongoose.Schema({
         unique: true,
         'default': shortid.generate
     },
+    
+    // Initial
     title : { type: String, trim : true, unique : true },
-    company : String,
+    description : { type: String, trim: true },
     coverPicture: { type: String, trim: true },
-    driveLink : String,
-    brief : { type: String, ref: 'Brief'},
+    drive : {
+        folderId : String,
+        owner : { type: String, ref: 'User'},
+        dateCreated : Date,
+        link : String
+    },
     location : { type: String, trim: true },
-    owners : [ { type: String, ref: 'User'}],
-    createdBy: { type: String, ref: 'User'},
+    
     likesCount : Number,
     viewsCount : Number,
+    
+    // Dates
     dateCreated : Date,
     dateStarted : Date,
     dateCompleted : Date,
     dateCancelled : Date,
     dateUpdated : Date,
+    
     status : {
+        type: [{
+            type: String,
+            enum: [ 'Not started', 'Private', 'Published', 'Started', 'InProgress', 'Completed', 'Accepted']
+        }],
+        default: 'Not started'
+    },
+        
+    visibileTo : {
             type: [{
                 type: String,
-                enum: [ 'Private', 'Published', 'Started', 'InProgress', 'Completed', 'Accepted']
+                enum: [ 'Public', 'Private']
             }],
-            default: 'Private'
+            allowed : [{ type: String, ref: 'User'}]
         },
-    description : { type: String, trim: true },
+        
+    // People
+    createdBy: { type: String, ref: 'User'},
+    owners : [ { type: String, ref: 'User'}],
     team : [ { type: String, ref: 'User'}],
     supervisors : [ { type: String, ref: 'User'}],
-    school : { type: String }
+    
+    // Organizations
+    school : { type: String },
+    company : String,
+    methodCards : [ { type : String, ref : 'MethodCard' }]  
 });
 
 projectSchema.pre('save', function(next) {
     var project = this;
     project.dateCreated = Date.now();
+    
     next();
 });
 
-// BriefSchema
-var briefSchema = new mongoose.Schema({
-    _id: {
-        type: String,
-        unique: true,
-        'default': shortid.generate
-    },
-    outcome : String,
-    objective : String,
-    deliverable : String,
-    approach : String,
-    performanceIndicators : String,
-    riskAssessment : String,
-    dateUpdated : Date,
-    startDate : Date,
-    endDate : Date,
-    briefCreatedByUser : Boolean
-});
-
-
-
 var Project = mongoose.model('Project', projectSchema);
-var Brief = mongoose.model('Brief', briefSchema);
-
-module.exports = { Project : Project, Brief : Brief };
+module.exports = { Project : Project };

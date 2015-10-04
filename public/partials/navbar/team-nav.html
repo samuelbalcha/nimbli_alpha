@@ -1,0 +1,155 @@
+<div class="container">
+    <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#dashboard">
+        <span class="sr-only">Toggle navigation</span> 
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/#/">
+        <img src="images/nimbli_logo.png">
+    </a>
+</div>
+<div class="collapse navbar-collapse" id="dashboard">
+   <div>
+        <ul class="nav navbar-nav">
+         <li><a href="/#/projects">Browse projects</a></li>
+        <li>
+            <a class="nimbliPrime" href="/#/dashboard"> 
+              My project
+             </a>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a class="nimbliPrime" href="/#/createproject">
+              <span class=""></span>
+              Create project
+            </a>
+        </li>
+        <li>
+            <a href="">
+              <span class=" glyphicon glyphicon-hdd"></span>
+              Toolkits
+            </a>
+        </li>
+        <li class="dropdown" ng-controller="ChatCtrl">
+            <a href="" ng-init="init()" class="dropdown-toggle nimbliPrime" data-toggle="dropdown">
+              <span ng-class="newContent.added ? 'mdi-communication-textsms mdi-material-red' : 'mdi-communication-textsms'"></span>
+            </a>
+            <ul class="dropdown-menu fadeIn"  ng-click="$event.stopPropagation()" style="width:310px">
+                <p class="text" ng-show="people.length === 0">
+                    There are no people in your network.
+                </p>
+                <div class="space" style="padding:10px;">
+                    <v-accordion class="vAccordion--default" onexpand="expandCallback(index)">
+                        <v-pane ng-repeat="person in people">
+                            <v-pane-header>
+                               <div class="row">
+                                    <div class="col-md-2">
+                                        <img ng-src="{{ person.avatar }}" alt="{{ person.name }}" class="tiny-avatar" >
+                                    </div>
+                                   <div class="col-md-7"> 
+                                        <span class="text" style="font-size:11px; "> {{ person.name }}</span>
+                                   </div>
+                                   <div class="col-md-1" ng-if="newContent.added && newContent.user === person._id">
+                                       <span class="mdi-action-info-outline"> </span>
+                                   </div>
+                               </div>
+                            </v-pane-header>
+                            <v-pane-content>
+                                <div style=" max-height:300px; overflow-y:auto;">
+                                    <li ng-repeat="conversation in person.conversations">
+                                         <div class="panel-chat msg_container_base">
+                                            <div ng-if="conversation.from._id !== currentUser._id" class="row msg_container base_sent">
+                                                <div class="col-md-10 col-xs-10">
+                                                    <div class="messages msg_sent">
+                                                        <p> {{ conversation.message }}</p>
+                                                        <time am-time-ago="conversation.dateSent"></time>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                     <img style="margin:5px; padding: 5px; border-radius: 50%; width:40px; height:40px" ng-src="{{ conversation.from.avatar }}">
+                                                </div>
+                                            </div>
+                                            <div ng-if="conversation.from._id === currentUser._id" class="row msg_container base_receive">
+                                                <div>
+                                                      <img style="margin:5px;padding: 5px; border-radius: 50%; width:40px; height:40px" ng-src="{{ conversation.from.avatar }}">
+                                                </div>
+                                                <div class="col-md-10 col-xs-10">
+                                                    <div class="messages msg_receive">
+                                                        <p> {{ conversation.message }}</p>
+                                                        <time am-time-ago="conversation.dateSent"></time>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         </div>
+                                    </li>
+                                    <hr class="divider">
+                                    <div smooth-scroll></div>
+                                    <div class="panel-footer">
+                                        <div class="form-group">
+                                             <input type="text" class="form-control" ng-model="chat.message" placeholder="Enter your message ..." style="margin-bottom:15px;">
+                                        </div>
+                                    
+                                        <div class="form-group" >
+                                            <button ng-click="send(person)" type="button" class="btn btn-primary pull-right" style="margin-top:20px">Send</button>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </v-pane-content>
+                        </v-pane>
+                    </v-accordion>
+                </div>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                <span class="mdi-social-notifications-none" ng-click="init(user._id)"></span>
+            </a>
+            <ul class="dropdown-menu fadeIn">
+                <p style="margin:10px; width:300px" class="text" ng-show="notes.length === 0">
+                    You don't have notifications
+                </p>
+                <li ng-hide="notes.length === 0" ng-repeat="note in notes">
+                    <div class="list-group" style="width:300px">
+                        <div class="list-group-item ">
+                            <div class="row-picture">
+                                <img ng-src="{{ note.senderUser.avatar }}" alt="{{ note.senderUser.displayName }}">
+                            </div>
+                            <div class="row-content">
+                                <h4 class="list-group-item-heading" style="font-size: 17px; line-height: 20px;"> {{ note.senderUser.displayName }}</h4>
+                                <p class="list-group-item-text"> {{ note.note }}</p>
+                                <p class="mute">as:  {{ note.role }}</p>
+                            </div>
+                            <div class="pull-right">
+                                <a class="btn  btn-raised btn-primary btn-xs"  ng-click="acceptUser(note)" style="margin-left:5px; cursor:pointer"> Accept  </a> 
+                                <a class="btn btn-raised btn-default btn-xs" ng-click="rejectUser(note._id)" href=""> Decline  </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="divider"></li>
+            </ul>
+        </li>
+       
+        <li style="margin-right:-7px;margin-top:-9px" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img  ng-src="{{ user.avatar }}" class="tiny-avatar"></img>
+                 <b class="caret"></b> 
+            </a>
+            <ul class="dropdown-menu fadeIn" style="margin-top:-5px;">
+               <li><a href="/#/users/{{ user._id }}"><span class="glyphicon glyphicon-user"></span>Profile</a></li>
+               <li><a href="/#/logout"><span class="glyphicon glyphicon-off"></span>Logout</a></li>
+               <li class="divider"></li>
+            </ul>
+        </li>
+    </ul>
+   </div>
+</div>
+</div>
+
+
+
+            

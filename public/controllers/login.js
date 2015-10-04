@@ -1,17 +1,13 @@
 angular.module('nimbliApp')
-       .controller('LoginCtrl', function($scope, $alert, $auth, $location, AccountService)
+       .controller('LoginCtrl', function($scope, $alert, $auth, AccountService)
     {
-
-        $scope.login = function() {
+        
+        $scope.login = function(theModal) {
             $auth.login({ email: $scope.email, password: $scope.password })
                 .then(function() {
-                    $alert({
-                        content: 'You have successfully logged in',
-                        animation: 'fadeZoomFadeDown',
-                        type: 'material',
-                        duration: 3
-                    });
+                    theModal.closeModal();
                     AccountService.getProfile().then(function(user){
+                        AccountService.setCurrentUserFull(user);
                         // $location.path('/users/' + user._id);
                     });
                 })
@@ -26,14 +22,16 @@ angular.module('nimbliApp')
 
                 });
         };
-        $scope.authenticate = function(provider) {
+        
+        $scope.authenticate = function(provider, theModal) {
+           
             $auth.authenticate(provider)
                 .then(function() {
-                    $alert({
-                        content: 'You have successfully logged in',
-                        animation: 'fadeZoomFadeDown',
-                        type: 'material',
-                        duration: 3
+                   
+                    theModal.closeModal();
+                    AccountService.getProfile().then(function(user){
+                          AccountService.setCurrentUserFull(user);
+                        // $location.path('/users/' + user._id);
                     });
                 })
                 .catch(function(response) {

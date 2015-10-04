@@ -1,31 +1,37 @@
-<div  class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fadeIn" tabindex="-1">
+    <div class="modal-dialog modal-pos">
         <div ng-show="canApply" class="modal-content">
-            <div class="modal-header" ng-model="title">
-                <h4 class="modal-title alert-info" style="text-align:center; padding:5px;"> {{ modalPurpose }}</h4>
+            <div class="modal-header">
+                <div class="anv">
+                     <h4 class="anw">{{ modalPurpose }}</h4>
+                </div>
             </div>
             <div class="modal-body">
               <p class="text-muted" style="text-align:center; padding:5px"> {{ modalTitle }}</p>
               <!-- Role -->
              <div class="form-group">
-                <label for="role" class="col-lg-2 control-label">Role</label>
+               
                 <div class="col-lg-10">
-                    <select class="form-control" id="role" 
-                            ng-options="role.name for role in projectRoles" 
-                            ng-model="$parent.selectedRoleItem" 
-                            ng-change="roleChanged(this)">
-                    </select>
+                    <li>
+                        <ol  class="nya-bs-select btn-md btn-raised" ng-model="projectRequest.role"  
+                             style="margin-right: 20px; max-width:220px; margin-top: 11px;">
+                            <li nya-bs-option="option in roles">
+                                <a>{{ option }}</a>
+                            </li>
+                        </ol>  
+                    </li>
                 </div>
             </div>
+            
              <!-- Note -->
             <div class="form-group">
-                <label for="note" class="col-lg-2 control-label">Note</label>
-                <div class="col-lg-10">
-                    <textarea id="description" 
+               
+                <div class="col-lg-10" style="margin-top:3px">
+                    <textarea id="description" placeholder="leave a note for the project owner" 
                               ng-model="$parent.projectRequest.note" class="form-control" rows="3" id="note"></textarea>
                     <span class="help-block">Tell us with few words, why you want to join this project.</span>
-                   <div ng-show="$parent.showError" class="alert-danger">
-                       You need to login to apply. 
+                   <div ng-show="$parent.showError" class="alert-danger" style="width:60%">
+                       You need to <a href="/#/login" ng-click="closeModal()"> login </a> to apply. 
                     </div>
        
                 </div>

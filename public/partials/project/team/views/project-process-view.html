@@ -1,0 +1,21 @@
+<!-- Process view -->
+<div class="post-tab" style="margin-bottom:10px">
+    <ul id="postTab" class="nav nav-tabs free" role="tablist">
+        <li ng-repeat="tab in tabs" role="presentation" 
+            ng-class="{active:isActiveTab(tab.content)}" 
+            ng-click="onClickTab(tab)">
+            <a class="tab-bar process-tabs" 
+               ng-init="imgsrc= tab.icon + '-inactive.png'" 
+               ng-mouseover="imgsrc= tab.icon + '-hover.png'" 
+               ng-mouseout="imgsrc= tab.icon + '-inactive.png'">
+               <image ng-src="{{ isActiveTab(tab.content) &&   tab.icon + '-active.png' ||  imgsrc }}" /> 
+               <span style="margin-left:5px" ng-class="{nimbliPrime:isActiveTab(tab.content)}"> {{ tab.heading }} </span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Views for tab -->
+<div id="tabView" style="margin-top:-10px">
+    <div ng-include="currentTab"></div>
+</div>    

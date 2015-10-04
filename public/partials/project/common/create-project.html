@@ -1,0 +1,129 @@
+<div class="container">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form enctype="multipart/form-data" name="createForm">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5">
+                                <h4>Project title</h4>
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="project.title"
+                                       id="title" placeholder="Project title" style="margin-bottom:15px;" required>
+                            </div>
+                        </div>
+                    </div>
+                   <!-- Company -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5">
+                                <h4>Organization</h4>
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="project.company"
+                                       id="company" placeholder="Company" style="margin-bottom:15px;" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- School -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5">
+                                <h4>University</h4>
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="project.school"
+                                       id="school" placeholder="University" style="margin-bottom:15px;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cover Picture -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5">
+                              <h4>Cover picture</h4>
+                             <div class="btn btn-flat btn-primary">
+                                   <span>Upload cover picture</span>
+                                  <input name="file" accept="image/*" ngf-select="" 
+                                         ng-model="file"  class=" fileupload" type="file" id="coverPicture" style="max-width:240px;">
+                             </div>
+                              <p class="help-block"></p>
+                            </div>
+                       </div>
+                    </div>
+                    <!-- Preview image -->
+                    <div class="container preview">
+                        <div ng-show="file.type.indexOf('image') > -1">
+                            <p>Preview image</p>
+                        </div>
+                        <img ngf-src="file" ng-show="file.type.indexOf('image') > -1" ngf-accept="'image/*'">
+                     </div>
+                    <!-- Visibility 
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5">
+                                <h4>Project visibility</h4>
+                                <li>
+                                    <ol  class="nya-bs-select btn-md btn-raised" ng-model="project.visibileTo"  
+                                         style="margin-right: 20px; width:150px; margin-top: 11px;">
+                                        <li nya-bs-option="option in options">
+                                            <a>{{ option }}</a>
+                                        </li>
+                                    </ol>  
+                                </li>
+                            </div>
+                        </div>
+                    </div> -->
+                    <br/>
+                    
+                    <!-- location -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-5 col-md-5">
+                                <h4>Location</h4>
+                                <input type="text"
+                                       class="form-control"
+                                       ng-model="project.location"
+                                       id="location" placeholder="Location" style="margin-bottom:15px;" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Google Drive Folder -->
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3">
+                                <a href=""  ng-click="driveDialog()" ng-disabled="googleDrive.created"  
+                                     class="btn btn-md btn-default" style="margin-right: 10px;">
+                                     <img src="../images/file_icons/drive16.png"></img>
+                                     Create Drive folder 
+                                </a>
+                            </div>
+                             <div class="col-sm-1" ng-if="googleDrive.created === true">
+                                 <span class="mdi-action-thumb-up mdi-material-lime" style="margin-top:13px"></span>
+                             </div>
+                        </div>
+                    </div>
+                    <!-- Buttons -->
+                    <div class="container">
+                        <div class="row">
+                           <div class="col-sm-5 col-md-5">
+                            <p>
+                                 <button type="submit"  ng-click="create()" ng-disabled="createForm.$invalid"
+                                         class="btn btn-md btn-primary" style="margin-right: 10px;">
+                                         <span class="glyphicon glyphicon-floppy-disk"></span>
+                                     Create
+                                 </button>
+                                 <a class="btn btn-md btn-default"  ng-click="cancel()" style="margin-left: 10px">
+                                   <span class=""></span>
+                                   Cancel
+                                 </a>
+                            </p>
+                          </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

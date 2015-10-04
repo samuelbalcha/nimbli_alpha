@@ -1,0 +1,28 @@
+<div  class="modal fadeIn" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-pos">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="anv">
+                    <h4 style="padding-left:20px"> 
+                       <i class="mdi-action-https"></i> Who can see this post?
+                    </h4>
+                </div>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-pills">
+                    <li ng-repeat="pp in project.people" class="space">
+                        <div class="checkbox">
+                            <label>
+                                 <input  ng-click="addPerson(pp._id, $event)" type="checkbox" checked> {{ pp.name }} 
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="closeModal()" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button ng-click="confirm()" type="button" class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>

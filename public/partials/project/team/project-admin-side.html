@@ -1,0 +1,88 @@
+<div class="panel pull-right" style="width:274px; padding:10px">
+    <form name="updateForm">
+     <!-- about -->
+     <h5> About project </h5>
+     <textarea id="description" 
+        ng-model="project.description" 
+        class="form-control" rows="3" 
+        id="description" required>
+        {{ project.description }}
+     </textarea>
+     <!-- team -->
+     <div ng-show="project.team.length > 0">
+        <h5 class="text-muted"> Team  </h5>
+         <li  ng-repeat="tm in project.team">
+            <div class="list-group">
+                <div class="list-group-item ">
+                    <div class="row-picture">
+                        <img  ng-src="{{ tm.avatar }}" alt="{{ tm.displayName }}">
+                    </div>
+                    <div class="row-content">
+                        <h4 class="list-group-item-heading"> {{ tm.displayName }}</h4>
+                    </div>
+                </div>
+            </div>
+        </li>
+     </div>
+    <!-- company -->
+    <h5 class="text-muted"> Company </h5>
+    <input type="text" class="form-control"  ng-model="project.company" value="{{ project.company }}"
+           id="company" placeholder="Company" required>
+        
+    <!-- school -->  
+    <h5 class="text-muted"> School </h5>
+    <input type="text" 
+               class="form-control" 
+               ng-model="project.school" value="{{ project.school }}"
+               id="school" placeholder="School" required>
+         
+    <li  ng-repeat="sup in project.supervisors">
+        <div class="list-group">
+            <div class="list-group-item ">
+                <div class="row-picture">
+                    <img  ng-src="{{ sup.avatar }}" alt="{{ sup.displayName }}">
+                </div>
+                <div class="row-content">
+                    <h4 class="list-group-item-heading"> {{ sup.displayName }}</h4>
+                    <p> {{ sup.title }}</p>
+                </div>
+            </div>
+        </div>
+    </li>
+               
+    <div class="form-group">
+         <button ng-disabled="updateForm.$invalid" type="submit" class="btn btn-primary" ng-click="save()">Save</button>
+         <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>          
+    </div>
+    
+    </div>
+    <div class="main">
+        <div class="col-md-12">
+         <div id="project-header" class="card">
+            <div class="card-height-indicator"></div>
+            <div class="card-content">
+                <div class="card-image" style="height:75%;">
+                    <img ngf-src="file" ng-show="file.type.indexOf('image') > -1" ngf-accept="'image/*'">     
+                    <img ng-hide="$parent.file" ng-src="{{ project.coverPicture }}" alt="{{ project.title }}">
+                    <input type="text" class="form-control card-image-headline" 
+                           ng-model="project.title" value="{{ project.title }}" style="width:90%;"
+                           id="title" placeholder="Title" required>
+                </div>
+                <div class="card-body" style="height:3%;">
+                  
+                </div>
+                
+                <footer class="card-footer">
+                     <div class="pull-up">
+                         <div class="btn btn-flat btn-primary">
+                            <span>Update cover</span>
+                            <input name="file" accept="image/*" ngf-select="" ng-model="$parent.file"  class="fileupload" type="file" id="coverPicture">
+                        </div>
+                     </div>
+                </footer>
+            </div>
+        </div>
+     </div>
+    </div>
+    </form>
+</div>

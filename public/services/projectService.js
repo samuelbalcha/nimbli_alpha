@@ -2,7 +2,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
     'use strict';
     var url = '/api/projects';
     var currentProject;
-    var currentBrief;
+    var effort;
     var currentProjectRequests;
     var projectCount = 0;
     var userRole = USER_ROLES.anonymous;
@@ -55,7 +55,8 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
             return userRole;
         },
         setUserRole : function(project, currentUser){
-           
+            userRole = USER_ROLES.anonymous;
+            
             if(!currentUser){
                 NotificationService.publish('userProjectRoleReady', userRole);
                 return;      
@@ -79,54 +80,21 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
                 }
             }
             
-           if(project.supervisors){
+            if(project.supervisors){
                 for(i = 0; i < project.supervisors.length; i++ ){
                     if(project.supervisors[i]._id === currentUser._id){
                         userRole = USER_ROLES.supervisor;
                     }
                 } 
-           }
+            }
             
             NotificationService.publish('userProjectRoleReady', userRole);
             return userRole;
-        }
-        
-        
-        /**
-        saveBrief : function(brief){
-            return $http.put(url + '/' + currentProject._id + '/brief', brief).then(function(response){
-                            return response.data;
-                        }, function(err){
-                            $q.reject(err);
-                    });
         },
-        getBrief : function(){
-            return currentBrief;
-        },
-        setBrief : function(br, isOwner){
-            currentBrief = br;
-            $rootScope.$broadcast('currentBriefChanged', [currentBrief, isOwner]);
+        updateAboutProject : function(about){
+            return $http.put('/api/projects/' + currentProject._id +'/about', about);
         },
         
-        
-        
-        getProjectRequests : function(id){
-            
-            return $http.get(url + '/' + id + '/request').then(function(response){
-                  currentProjectRequests = response.data;
-                return currentProjectRequests;
-            }, handleError);
-        },
-        getCurrentProjectRequests : function(){
-            return currentProjectRequests;
-        },
-        updateProjectRequest : function(id, projectRequest){
-            return $http.put(url + '/' + id + '/updaterequest', projectRequest).then(function(response) {
-                currentProjectRequests = response.data;
-                return currentProjectRequests;
-            }, handleError);
-        },
-        */,
         sendProjectRequestRequest : function(projectRequest){
             return $http.post('/api/projectrequests', projectRequest).then(function(response){
                 return response.data;
@@ -154,7 +122,7 @@ angular.module('nimbliApp').service('ProjectService', function ($http, $q, $root
         removeProjectRequest : function(id){
             return $http.delete('/api/projectrequest/' + id).then(function(response) {
                 return response.data;
-            })
+            });
         }
         
     });

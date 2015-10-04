@@ -4,13 +4,13 @@ angular.module('nimbliApp')
     'use strict';
     //$scope.load = load;
     $scope.applyClick = applyClick;
-    $scope.projectRoles = [{ name : 'Team member', value : 0 }, { name : 'Supervisor', value : 1 }];
     $scope.selectedRoleItem = null;
     $scope.projectRequest = { role : '' , note : ''};
-    $scope.roleChanged = roleChanged;
     $scope.sendApplication = sendRequest;
     $scope.canApply = true;
-  
+    $scope.roles = ['Team member', 'Supervisor'];
+    $scope.projectRequest.role = $scope.roles[0];
+    
     var theModal;
   
     load();
@@ -42,17 +42,9 @@ angular.module('nimbliApp')
         var template = 'partials/modal/modal-send-request.tpl.html';
         $scope.modalPurpose = 'Apply to project';
         $scope.modalTitle = "How do you want to contribute to this project?";
-        $scope.selectedRoleItem = $scope.projectRoles[0];
-        //$scope.projectRequest = $scope.projectRequest;
-        
-        theModal =  $modal({ scope: $scope, template: template, show: true }); 
-    }
-    
-    function roleChanged(ele){
-        if(!$scope.projectRequest){
-            $scope.projectRequest = { role : '' , note : ''};
-        }
-        $scope.projectRequest.role = ele.selectedRoleItem.value; 
+      
+        $scope.animationsEnabled = true;
+        theModal =  $modal({ scope: $scope, template: template, show: true,  animation: $scope.animationsEnabled }); 
     }
     
     function sendRequest(){
@@ -61,11 +53,11 @@ angular.module('nimbliApp')
             var pr = {
                 senderUser : currentUser._id,
                 projectId : $scope.$parent.project._id,
-                role : $scope.selectedRoleItem.value,
+                role : $scope.projectRequest.role,
                 note : $scope.projectRequest.note,
                 toUser : $scope.$parent.project.createdBy._id
             };   
-            
+            console.log(pr);
             ProjectService.sendProjectRequestRequest(pr).then(function(p){
                 $scope.projectRequest = p;
                 $scope.closeModal();

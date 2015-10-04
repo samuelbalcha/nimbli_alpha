@@ -14,7 +14,7 @@ Grid.mongo = mongoose.mongo;
 var gfs = Grid(conn.db);
 
 exports.getAccess = function(req, res){
-
+  console.log("getAccess called");
      User.findById(req.user, function(err, user) {
         if(err){
             console.log(err);
@@ -24,32 +24,53 @@ exports.getAccess = function(req, res){
             res.status(401).send({ message: 'User not found' });
         }
         else{
-                Project.find({ createdBy : req.user, $or : [{ team : req.user, supervisor : req.user }] }).distinct('_id', function(err, projects){
-                    if(err){
-                        console.log(err);
-                        res.status(401).send({ message: 'User has no projects' });
-                    }
-                    
-                    for (var i =0; i < projects.length; i++) {
-                        if(projects[i]._id !== undefined){
-                            if(projects[i].team.indexOf(req.user) !== -1){
-                                user.roles.teamMember.push(projects[i]._id);
-                            }
-                            if(projects[i].supervisor.indexOf(req.user) !== -1){
-                                user.roles.supervisor.push(projects[i]._id);
-                            }
-                            if(projects[i].owners.indexOf(req.user) !== -1){
-                                user.roles.owner.push(projects[i]._id);
-                            }
-                        }   
-                    } 
-                     console.log(user);
-                });
-               
+                getUserRoles(req.user, user, res);
                 res.send(user);
             }
      });
 };
+
+function getUserRoles(userId, user, res){
+    var people = [];
+            
+    Project.find({ createdBy : userId, $or : [{ team : userId, supervisor : userId }] }).distinct('_id', function(err, projects){
+        if(err){
+            console.log(err);
+            res.status(401).send({ message: 'User has no projects' });
+        }
+        
+        for (var i =0; i < projects.length; i++) {
+            if(projects[i]._id !== undefined){
+                if(projects[i].team.indexOf(userId) !== -1){
+                    user.roles.teamMember.push(projects[i]._id);
+                }
+                if(projects[i].supervisor.indexOf(userId) !== -1){
+                    user.roles.supervisor.push(projects[i]._id);
+                }
+                if(projects[i].owners.indexOf(userId) !== -1){
+                    user.roles.owner.push(projects[i]._id);
+                }
+                
+                people = addPeople(people, projects[i].team);
+                people = addPeople(people, projects[i].supervisors);
+                people = addPeople(people, projects[i].owners);
+            }   
+        } 
+        console.log("getUserRoles", people);
+    });
+}
+
+function addPeople(people, toAdd){
+    for(var i=0; i < toAdd.length; i++){
+        
+        var person = { _id: toAdd[i]._id, name : toAdd[i].displayName };
+        if(people.indexOf(person) == -1){
+            people.push(person);
+        } 
+    }
+    
+    return people;
+}
 
 exports.getProfile = function(req, res) {
 
@@ -62,6 +83,7 @@ exports.getProfile = function(req, res) {
             res.status(401).send({ message: 'User not found' });
         }
         else{
+            //console.log(user);
             res.status(200).send(user);
         }
     });
@@ -101,7 +123,7 @@ exports.updateProfile = function(req, res) {
 exports.users = function(req, res) {
 
     //get all users in the database
-    User.find().select('displayName about skills' ).exec(function(err, users) {
+    User.find().select('displayName about' ).exec(function(err, users) {
         
         if (err){
             res.status(401).send({ message : err});
@@ -132,12 +154,14 @@ exports.user =  function(req, res) {
                  res.status(200).send({ user: user, contributions : [ userProjects, teamMember, supervised ] });
              }); 
         }});    
-   
 };
 
 function getUserProjects(pids, callback){
     
     Project.find({_id : { $in: pids } })
+           .populate('team', 'displayName avatar')
+           .populate('supervisors', 'displayName avatar')
+           .populate('owners', 'displayName avatar')
            .sort({ dateCreated : 'desc'}).exec(function(err, projects){
             if(err){
                 console.log(err);

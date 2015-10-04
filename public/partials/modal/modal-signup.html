@@ -1,0 +1,90 @@
+<div ng-controller="SignupCtrl" class="modal fadeIn">
+    <div class="modal-dialog modal-pos">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="anv">
+                     <h4 class="anw">Sign up</h4>
+                </div>
+            </div>
+            <div class="modal-body card">
+                <div class="col-md-offset-1 col-md-5">
+                        <div class="row">
+                            <div ng-hide="emailSignup" class="col-sm-5 col-md-5">
+                                 <button class="btn btn-md" ng-click="authenticate('google', this)" style="background-color: #dd4b39;  border: 1px solid #d54331; color: #fff;">
+                                    <span class="fi-social-google-plus"></span> Sign up with Google
+                                 </button>
+                            </div>
+                        </div> 
+                        <div class="row" ng-hide="emailSignup">  
+                            <div class="signup-or-separator"> 
+                                <center style="margin-left:90px"> or</center>
+                            </div>
+                            <div class="col-sm-5 col-md-5">
+                                 <button class="btn btn-md btn-info" ng-click="emailSign()" >
+                                    <span class="fi-mail"></span> Sign up with Email
+                                 </button>
+                            </div>
+                        </div> 
+                        <div class="row">
+                             <span ng-if="unique" class="alert alert-danger" ng-model="signupInfo"> {{ signupInfo }} </span>
+                            <p></p>
+                        </div>
+                        <div ng-if="emailSignup" style="width:255px">
+                                 <form method="post"  name="signupForm" novalidate>
+                                    <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.displayName.$invalid && signupForm.displayName.$dirty }">
+                                        <input class="form-control input-lg" type="text" 
+                                                                             name="displayName" 
+                                                                             ng-minlength="4"
+                                                                             ng-maxlength="15"
+                                                                             ng-model="user.displayName"
+                                                                             placeholder="Name" required autofocus>
+                                        <span class="fi-torso form-control-feedback"></span>
+                                        <div class="help-block text-danger" ng-if="signupForm.displayName.touched" ng-messages="signupForm.displayName.$error">
+                                            <div ng-message="required">You must enter your name.</div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.email.$invalid && signupForm.email.$dirty }">
+                                        <input class="form-control input-lg" type="email" placeholder="Email"
+                                                                             id="email" name="email"
+                                                                             ng-model="user.email"
+                                                                             required 
+                                                                             ng-pattern="/^[A-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/">
+                                        <span class="fi-at-sign form-control-feedback"></span>
+                                       
+                                        <div class="help-block text-danger" ng-if="signupForm.email.touch" ng-messages="signupForm.email.$error">
+                                            <div ng-message="required">Your email address is required.</div>
+                                            <div ng-message="pattern">Your email address is invalid.</div>
+                                             
+                                        </div>
+                                    </div>
+                
+                                    <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.password.$invalid && signupForm.password.$dirty }">
+                                        <input password-strength class="form-control input-lg" type="password" name="password" ng-model="user.password" placeholder="Password" required>
+                                        <span class="fi-key form-control-feedback"></span>
+                                        <div class="help-block text-danger" ng-if="signupForm.password.$dirty" ng-messages="signupForm.password.$error">
+                                            <div ng-message="required">Password is required.</div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="form-group has-feedback" ng-class="{ 'has-error' : signupForm.confirmPassword.$invalid && signupForm.confirmPassword.$dirty }">
+                                        <input password-match="user.password" class="form-control input-lg" type="password" name="confirmPassword" ng-model="confirmPassword" placeholder="Confirm Password">
+                                        <span class="fi-key form-control-feedback"></span>
+                                        <div class="help-block text-danger" ng-if="signupForm.confirmPassword.$dirty" ng-messages="signupForm.confirmPassword.$error">
+                                            <div ng-message="compareTo">Password must match.</div>
+                                        </div>
+                                    </div>
+                                    <button ng-click="signup(this)" type="button" ng-disabled="signupForm.$invalid" class="btn btn-lg btn-block btn-primary">Sign up</button>
+                                    <br/>
+                                    <p class="text-center text-muted">Already have an account? <a href="/#/login">Log in now</a></p>
+                                </form>
+                            </div>
+                        <div class="text-center text-muted" style="width:255px">
+                            <small>By clicking on Sign up, you agree to <a href="#">terms & conditions</a> and <a href="#">privacy policy</a></small>
+                        </div>
+                </div>
+            </div>
+        </div>     
+    </div>
+</div>
+       

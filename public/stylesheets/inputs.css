@@ -1,0 +1,167 @@
+.checkbox {
+    transform: translateZ(0px);
+}
+.checkbox label {
+    cursor: pointer;
+    padding-left: 0;
+}
+.checkbox input[type="checkbox"] {
+    height: 0;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+    z-index: -1;
+}
+.checkbox .checkbox-material {
+    position: relative;
+    top: 3px;
+    vertical-align: middle;
+}
+.checkbox .checkbox-material:before {
+    background-color: rgba(0, 0, 0, 0.84);
+    border-radius: 100%;
+    content: "";
+    display: block;
+    height: 20px;
+    left: 0;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    transform: scale3d(2.3, 2.3, 1);
+    width: 20px;
+    z-index: 1;
+}
+.checkbox .checkbox-material .check {
+    border: 2px solid;
+    border-radius: 2px;
+    display: inline-block;
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+    width: 20px;
+    z-index: 1;
+}
+.checkbox .checkbox-material .check:before {
+    animation: 0.3s ease 0s normal forwards 1 checkbox-off;
+    box-shadow: 0 0 0 0px, 0 0 0 0px, 0 0 0 0px, 0 0 0 0px, 0 0 0 0px, 0 0 0 0px, 0 0 0 0 inset;
+    content: "";
+    display: block;
+    height: 0;
+    margin-left: 6px;
+    margin-top: -4px;
+    position: absolute;
+    transform: rotate(45deg);
+    width: 0;
+}
+.checkbox input[type="checkbox"]:focus + .checkbox-material .check:after {
+    opacity: 0.2;
+}
+.checkbox input[type="checkbox"]:checked + .checkbox-material .check:before {
+    animation: 0.3s ease 0s normal forwards 1 checkbox-on;
+    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0 0 20px, 0 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
+}
+.checkbox input[type="checkbox"]:not(:checked) + .checkbox-material:before {
+    animation: 500ms ease 0s normal none 1 rippleOff;
+}
+.checkbox input[type="checkbox"]:checked + .checkbox-material:before {
+    animation: 500ms ease 0s normal none 1 rippleOn;
+}
+.checkbox input[type="checkbox"]:not(:checked) + .checkbox-material .check:after {
+    animation: 500ms ease 0s normal forwards 1 rippleOff;
+}
+.checkbox input[type="checkbox"]:checked + .checkbox-material .check:after {
+    animation: 500ms ease 0s normal forwards 1 rippleOn;
+}
+.checkbox input[type="checkbox][disabled"]:not(:checked) ~ .checkbox-material .check:before, .checkbox input[type="checkbox][disabled"] + .circle {
+    opacity: 0.5;
+}
+.checkbox input[type="checkbox][disabled"] + .checkbox-material .check:after {
+    background-color: rgba(0, 0, 0, 0.84);
+    transform: rotate(-45deg);
+}
+
+/** Radio  */
+.radio {
+  display: inline-block;
+ 
+  font-size: 13px;
+  line-height: 30px;
+  cursor: pointer;
+}
+
+.radio:hover .inner {
+  -webkit-transform: scale(0.5);
+  -ms-transform: scale(0.5);
+  transform: scale(0.5);
+  opacity: .5;
+}
+
+.radio input {
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.radio input:checked + .outer .inner {
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  opacity: 1;
+}
+
+.radio-primary input[type=radio]:checked ~ .circle {
+    border-color: #00CECE;
+}
+
+.radio-primary input[type=radio]:checked ~ .check {
+    background-color: #00CECE;
+}
+
+.radio input:focus + .outer .inner {
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  opacity: 1;
+  background-color: #e67012;
+}
+
+.radio .outer {
+  width: 20px;
+  height: 20px;
+  display: block;
+  float: left;
+  margin: 10px 9px 10px 10px;
+  border: 3px solid #0c70b4;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.radio .inner {
+  -webkit-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+  width: 14px;
+  height: 14px;
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  transform: scale(0);
+  display: block;
+  margin: 2px;
+  border-radius: 50%;
+  background-color: #f08b3b;
+  opacity: 0;
+}
+
+.radio label .circle {
+    border: 1px solid #00CECE;
+    height: 15px;
+    width: 15px;
+    border-radius: 100%;
+}
+
+.radio input[type=radio][disabled] ~ .circle {
+    border-color: #00CECE;
+}
